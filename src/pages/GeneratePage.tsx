@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageRenderer from "@/components/PageRenderer";
 import { generatePage, brandKitFromForm } from "@/lib/generate";
+import { savePage, slugify } from "@/lib/pages";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
@@ -36,6 +37,13 @@ export default function GeneratePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sections, setSections] = useState<Section[] | null>(null);
+
+  // Save / publish
+  const [slug, setSlug] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<
+    { ok: true; slug: string; status: string } | { ok: false; text: string } | null
+  >(null);
 
   const buyBox: BuyBoxConfig = {
     productName,
@@ -72,10 +80,39 @@ export default function GeneratePage() {
         buyBox,
       });
       setSections(result.sections);
+      setSaveMsg(null);
+      if (!slug) setSlug(slugify(productName || name));
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleSave(status: "draft" | "published") {
+    if (!sections) return;
+    const finalSlug = slugify(slug || productName || name);
+    if (!finalSlug) {
+      setSaveMsg({ ok: false, text: "Please enter a page address (slug)." });
+      return;
+    }
+    setSaving(true);
+    setSaveMsg(null);
+    try {
+      await savePage({
+        slug: finalSlug,
+        title: productName || name,
+        status,
+        brandKit: brandKitFromForm({ name, wordmark: name, primary, accent }),
+        buyBox,
+        sections,
+        competitorUrl: competitorUrl.trim() || undefined,
+      });
+      setSaveMsg({ ok: true, slug: finalSlug, status });
+    } catch (e) {
+      setSaveMsg({ ok: false, text: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -248,6 +285,51 @@ export default function GeneratePage() {
 
         {/* ---------------- Preview ---------------- */}
         <div className="min-w-0">
+          {previewPage && (
+            <div className="mb-4 rounded-xl border border-neutral-200 bg-white p-4">
+              <div className="flex flex-wrap items-end gap-3">
+                <div className="flex-1">
+                  <label className={LABEL}>Page address (slug)</label>
+                  <div className="mt-1 flex items-center gap-1 text-sm">
+                    <span className="text-neutral-400">/p/</span>
+                    <input
+                      className="flex-1 rounded-lg border border-neutral-300 px-3 py-2 focus:border-neutral-900 focus:outline-none"
+                      value={slug}
+                      onChange={(e) => setSlug(e.target.value)}
+                      placeholder="your-page"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleSave("draft")}
+                  disabled={saving}
+                  className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-800 hover:bg-neutral-50 disabled:opacity-50"
+                >
+                  Save draft
+                </button>
+                <button
+                  onClick={() => handleSave("published")}
+                  disabled={saving}
+                  className="rounded-lg bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+                >
+                  {saving ? "Saving…" : "Publish"}
+                </button>
+              </div>
+              {saveMsg?.ok && (
+                <p className="mt-3 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
+                  {saveMsg.status === "published" ? "Published! Live at " : "Saved as draft: "}
+                  <Link to={`/p/${saveMsg.slug}`} className="font-semibold underline">
+                    /p/{saveMsg.slug}
+                  </Link>
+                </p>
+              )}
+              {saveMsg && !saveMsg.ok && (
+                <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {saveMsg.text}
+                </p>
+              )}
+            </div>
+          )}
           <div className="overflow-hidden rounded-xl border border-neutral-300 bg-white">
             {loading && (
               <div className="flex h-96 items-center justify-center text-neutral-400">

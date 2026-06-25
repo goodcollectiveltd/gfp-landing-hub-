@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listPages } from "@/lib/pages";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 import type { LandingPage } from "@/types/page";
 
 // Admin console at "/". The control panel where the owner will eventually upload
@@ -10,6 +11,7 @@ import type { LandingPage } from "@/types/page";
 // from Supabase). The generator inputs are stubbed until the edge functions exist.
 
 export default function AdminConsole() {
+  const { session, signOut } = useAuth();
   const [pages, setPages] = useState<LandingPage[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,15 +33,26 @@ export default function AdminConsole() {
             <h1 className="text-lg font-bold">GFP Landing Hub</h1>
             <p className="text-sm text-neutral-500">Advertorial generator · admin console</p>
           </div>
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              isSupabaseConfigured
-                ? "bg-green-100 text-green-800"
-                : "bg-amber-100 text-amber-800"
-            }`}
-          >
-            {isSupabaseConfigured ? "● Supabase connected" : "Sample data · not connected"}
-          </span>
+          <div className="flex items-center gap-3">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                isSupabaseConfigured
+                  ? "bg-green-100 text-green-800"
+                  : "bg-amber-100 text-amber-800"
+              }`}
+            >
+              {isSupabaseConfigured ? "● Supabase connected" : "Sample data · not connected"}
+            </span>
+            {session && (
+              <button
+                onClick={signOut}
+                className="text-sm text-neutral-500 underline hover:text-neutral-800"
+                title={session.user.email ?? undefined}
+              >
+                Sign out
+              </button>
+            )}
+          </div>
         </div>
       </header>
 

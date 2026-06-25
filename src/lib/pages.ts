@@ -69,6 +69,78 @@ export async function getPublishedPage(slug: string): Promise<LandingPage | null
   return slug === samplePage.slug ? samplePage : null;
 }
 
+/** Turn a title/product name into a URL-safe slug. */
+export function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60);
+}
+
+export interface SavePageInput {
+  slug: string;
+  title: string;
+  status: "draft" | "published";
+  brandKit: BrandKit;
+  buyBox: BuyBoxConfig;
+  sections: Section[];
+  competitorUrl?: string;
+}
+
+/**
+ * Save (insert or update) a landing page. Upserts the brand kit by name first
+ * (the brand is fixed, so we reuse one row), then upserts the page by slug.
+ * Requires an authenticated session (RLS allows writes only to the owner).
+ */
+export async function savePage(input: SavePageInput): Promise<{ slug: string }> {
+  // 1) Brand kit: find by name, else create. Keep colors/fonts fresh.
+  const { data: existing } = await supabase
+    .from("brand_kits")
+    .select("id")
+    .eq("name", input.brandKit.name)
+    .maybeSingle();
+
+  let brandKitId: string;
+  const bkFields = {
+    name: input.brandKit.name,
+    wordmark: input.brandKit.wordmark,
+    colors: input.brandKit.colors,
+    fonts: input.brandKit.fonts,
+  };
+  if (existing) {
+    brandKitId = existing.id as string;
+    const { error } = await supabase.from("brand_kits").update(bkFields).eq("id", brandKitId);
+    if (error) throw new Error(`Saving brand kit: ${error.message}`);
+  } else {
+    const { data: ins, error } = await supabase
+      .from("brand_kits")
+      .insert(bkFields)
+      .select("id")
+      .single();
+    if (error) throw new Error(`Saving brand kit: ${error.message}`);
+    brandKitId = ins.id as string;
+  }
+
+  // 2) Page: upsert by slug.
+  const { error } = await supabase.from("landing_pages").upsert(
+    {
+      slug: input.slug,
+      title: input.title,
+      status: input.status,
+      brand_kit_id: brandKitId,
+      sections: input.sections,
+      buy_box: input.buyBox,
+      competitor_url: input.competitorUrl ?? null,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "slug" }
+  );
+  if (error) throw new Error(`Saving page: ${error.message}`);
+  return { slug: input.slug };
+}
+
 /** List pages for the admin console. Falls back to [sample] when DB is empty. */
 export async function listPages(): Promise<LandingPage[]> {
   if (!isSupabaseConfigured) return [samplePage];
