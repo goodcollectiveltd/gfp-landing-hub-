@@ -12,6 +12,23 @@ export interface BrandSwatch {
   label: string;
   hex: string;
 }
+export interface BrandImage {
+  url: string;
+  tag: string; // one of IMAGE_TAGS
+  label: string;
+}
+
+/** Image categories the generator matches placeholders against. */
+export const IMAGE_TAGS = [
+  "product",
+  "dog",
+  "vet",
+  "before",
+  "after",
+  "lifestyle",
+  "ingredient",
+  "other",
+] as const;
 
 export interface Brand {
   id?: string;
@@ -31,6 +48,7 @@ export interface Brand {
   accent: string;
   palette: BrandSwatch[];
   logos: BrandLogo[];
+  images: BrandImage[];
   headingFont: string;
   bodyFont: string;
   visualStyle: string;
@@ -83,6 +101,7 @@ export function emptyBrand(): Brand {
     accent: "#e8a13a",
     palette: [],
     logos: [],
+    images: [],
     headingFont: "Georgia",
     bodyFont: "",
     visualStyle: "",
@@ -133,7 +152,7 @@ export function brandVoiceBrief(b: Brand): string {
 }
 
 const SELECT =
-  "id,name,wordmark,store_domain,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos,heading_font,body_font,visual_style";
+  "id,name,wordmark,store_domain,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos,images,heading_font,body_font,visual_style";
 
 function rowToBrand(r: any): Brand {
   const colors = (r.colors ?? {}) as Partial<BrandKit["colors"]>;
@@ -155,6 +174,7 @@ function rowToBrand(r: any): Brand {
     accent: colors.accent ?? "#e8a13a",
     palette: r.palette ?? [],
     logos: r.logos ?? [],
+    images: r.images ?? [],
     headingFont: r.heading_font ?? "",
     bodyFont: r.body_font ?? "",
     visualStyle: r.visual_style ?? "",
@@ -178,6 +198,7 @@ function brandToRow(b: Brand) {
     colors: makeColors(b.primary, b.accent),
     palette: b.palette,
     logos: b.logos,
+    images: b.images,
     fonts: makeFonts(b.headingFont, b.bodyFont),
     heading_font: b.headingFont,
     body_font: b.bodyFont,
@@ -225,13 +246,16 @@ export async function deleteBrand(id: string): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
-/** Upload a logo file to the public brand-assets bucket; returns its public URL. */
-export async function uploadBrandLogo(file: File): Promise<string> {
+/** Upload a file to a folder in the public brand-assets bucket; returns its URL. */
+async function uploadBrandAsset(file: File, folder: string): Promise<string> {
   const ext = file.name.split(".").pop() || "png";
-  const path = `logos/${crypto.randomUUID()}.${ext}`;
+  const path = `${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage
     .from("brand-assets")
     .upload(path, file, { upsert: true, contentType: file.type });
   if (error) throw new Error(error.message);
   return supabase.storage.from("brand-assets").getPublicUrl(path).data.publicUrl;
 }
+
+export const uploadBrandLogo = (file: File) => uploadBrandAsset(file, "logos");
+export const uploadBrandImage = (file: File) => uploadBrandAsset(file, "images");

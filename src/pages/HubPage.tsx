@@ -4,11 +4,14 @@ import {
   type Brand,
   type BrandLogo,
   type BrandSwatch,
+  type BrandImage,
+  IMAGE_TAGS,
   emptyBrand,
   listBrands,
   saveBrand,
   deleteBrand,
   uploadBrandLogo,
+  uploadBrandImage,
 } from "@/lib/brand";
 
 const FIELD =
@@ -46,6 +49,10 @@ export default function HubPage() {
   const [accent, setAccent] = useState("#e8a13a");
   const [palette, setPalette] = useState<BrandSwatch[]>([]);
   const [logos, setLogos] = useState<BrandLogo[]>([]);
+  const [images, setImages] = useState<BrandImage[]>([]);
+  const [imageTag, setImageTag] = useState<string>("product");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imgInput = useRef<HTMLInputElement>(null);
   const [headingFont, setHeadingFont] = useState("Georgia");
   const [bodyFont, setBodyFont] = useState("");
   const [visualStyle, setVisualStyle] = useState("");
@@ -67,6 +74,7 @@ export default function HubPage() {
     setAccent(b.accent);
     setPalette(b.palette);
     setLogos(b.logos);
+    setImages(b.images);
     setHeadingFont(b.headingFont);
     setBodyFont(b.bodyFont);
     setVisualStyle(b.visualStyle);
@@ -116,6 +124,7 @@ export default function HubPage() {
       accent,
       palette,
       logos,
+      images,
       headingFont: headingFont.trim(),
       bodyFont: bodyFont.trim(),
       visualStyle: visualStyle.trim(),
@@ -171,6 +180,27 @@ export default function HubPage() {
     } finally {
       setUploading(false);
       if (fileInput.current) fileInput.current.value = "";
+    }
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    setUploadingImage(true);
+    setError(null);
+    try {
+      for (const file of files) {
+        const url = await uploadBrandImage(file);
+        setImages((xs) => [
+          ...xs,
+          { url, tag: imageTag, label: file.name.replace(/\.[^.]+$/, "") },
+        ]);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setUploadingImage(false);
+      if (imgInput.current) imgInput.current.value = "";
     }
   }
 
@@ -310,6 +340,85 @@ export default function HubPage() {
                 <p className="text-xs text-neutral-400">
                   The first logo shows in the page header. Add as many variants as you like.
                 </p>
+              </div>
+
+              {/* Image library */}
+              <div className="space-y-3 border-t border-neutral-100 pt-5">
+                <h2 className="text-base font-semibold">Image library</h2>
+                <p className="text-xs text-neutral-400">
+                  Upload and tag your reusable images (vet, product, dog, before/after…).
+                  The generator pulls from these to fill page image placeholders.
+                </p>
+
+                <div className="flex flex-wrap items-end gap-3">
+                  <div>
+                    <label className={LABEL}>Tag for new uploads</label>
+                    <select
+                      className="mt-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm capitalize"
+                      value={imageTag}
+                      onChange={(e) => setImageTag(e.target.value)}
+                    >
+                      {IMAGE_TAGS.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <label className="cursor-pointer rounded-lg border border-dashed border-neutral-300 px-4 py-2 text-sm text-neutral-600 hover:border-neutral-400">
+                    {uploadingImage ? "Uploading…" : "＋ Upload images"}
+                    <input
+                      ref={imgInput}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                </div>
+
+                {images.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {images.map((img, i) => (
+                      <div key={i} className="rounded-lg border border-neutral-200 p-2">
+                        <div className="flex h-24 items-center justify-center overflow-hidden rounded bg-neutral-50">
+                          <img src={img.url} alt={img.label} className="max-h-24 max-w-full object-contain" />
+                        </div>
+                        <select
+                          className="mt-2 w-full rounded border border-neutral-200 px-2 py-1 text-xs capitalize"
+                          value={img.tag}
+                          onChange={(e) =>
+                            setImages((xs) =>
+                              xs.map((x, j) => (j === i ? { ...x, tag: e.target.value } : x))
+                            )
+                          }
+                        >
+                          {IMAGE_TAGS.map((t) => (
+                            <option key={t} value={t}>
+                              {t}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          className="mt-1 w-full rounded border border-neutral-200 px-2 py-1 text-xs"
+                          value={img.label}
+                          onChange={(e) =>
+                            setImages((xs) =>
+                              xs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x))
+                            )
+                          }
+                        />
+                        <button
+                          onClick={() => setImages((xs) => xs.filter((_, j) => j !== i))}
+                          className="mt-1 text-xs text-red-600 underline"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Colors */}
