@@ -16,6 +16,7 @@ const LABEL = "block text-sm font-medium text-neutral-700";
 export default function GeneratePage() {
   // Pre-filled with the sample so the owner can click Generate immediately.
   const [competitorUrl, setCompetitorUrl] = useState("");
+  const [productPageUrl, setProductPageUrl] = useState("");
   const [name, setName] = useState("RestWell");
   const [voice, setVoice] = useState("Calm, warm, reassuring, evidence-led. No hype.");
   const [allowedClaims, setAllowedClaims] = useState(
@@ -55,6 +56,7 @@ export default function GeneratePage() {
     try {
       const result = await generatePage({
         competitorUrl: competitorUrl.trim(),
+        productUrl: productPageUrl.trim() || undefined,
         brandKit: {
           name,
           voice,
@@ -121,6 +123,19 @@ export default function GeneratePage() {
             />
             <p className="mt-1 text-xs text-neutral-400">
               We analyze its structure & persuasion flow — never copy its words.
+            </p>
+          </div>
+
+          <div>
+            <label className={LABEL}>Your product page URL</label>
+            <input
+              className={FIELD}
+              placeholder="https://yourstore.com/products/your-product"
+              value={productPageUrl}
+              onChange={(e) => setProductPageUrl(e.target.value)}
+            />
+            <p className="mt-1 text-xs text-neutral-400">
+              Optional but recommended — we pull real facts & product photos from it.
             </p>
           </div>
 

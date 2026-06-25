@@ -12,6 +12,13 @@ export default function Offer({
     <section className="px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <div className="rounded-2xl border border-black/5 bg-white p-8 shadow-md sm:p-10">
+          {data.image && (
+            <img
+              src={data.image}
+              alt=""
+              className="mx-auto mb-6 max-h-56 w-auto rounded-xl object-contain"
+            />
+          )}
           <h2 className="lp-heading text-center text-2xl font-bold sm:text-3xl">
             {data.headline}
           </h2>

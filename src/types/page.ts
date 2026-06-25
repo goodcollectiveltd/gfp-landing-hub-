@@ -65,6 +65,9 @@ export interface HeroSection {
     ctaLabel: string;
     /** Small trust line under the CTA, e.g. "Free shipping · 60-day guarantee". */
     trustLine?: string;
+    /** Real product image URL (scraped from the product page). Falls back to a
+     *  gradient placeholder when absent. */
+    image?: string;
   };
 }
 
@@ -109,6 +112,8 @@ export interface OfferSection {
     bullets: string[];
     /** Reassurance line, e.g. "60-night money-back guarantee". */
     guarantee?: string;
+    /** Real product packshot URL (scraped from the product page). Optional. */
+    image?: string;
   };
 }
 

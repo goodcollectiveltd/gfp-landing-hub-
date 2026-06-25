@@ -5,6 +5,8 @@ import type { BrandKit, BuyBoxConfig, Section } from "@/types/page";
 
 export interface GenerateInput {
   competitorUrl: string;
+  /** The owner's own product page — scraped for real facts + images. Optional. */
+  productUrl?: string;
   brandKit: {
     name: string;
     voice: string;
@@ -16,6 +18,7 @@ export interface GenerateInput {
 
 export interface GenerateResult {
   analysis: unknown;
+  productFacts: unknown;
   sections: Section[];
 }
 

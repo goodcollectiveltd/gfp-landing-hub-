@@ -21,18 +21,27 @@ export default function Hero({
           {data.subheadline}
         </p>
 
-        {/* Sample hero visual — a product image slot. Swap for a real asset. */}
-        <div
-          className="mx-auto mt-10 flex h-56 max-w-md items-center justify-center rounded-2xl border border-black/5 sm:h-72"
-          style={{
-            background:
-              "linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%)",
-          }}
-        >
-          <span className="text-sm font-medium uppercase tracking-wide text-white/80">
-            Product image
-          </span>
-        </div>
+        {/* Hero visual: real scraped product image if we have one, else a
+            branded gradient placeholder. */}
+        {data.image ? (
+          <img
+            src={data.image}
+            alt=""
+            className="mx-auto mt-10 max-h-80 w-auto rounded-2xl border border-black/5 object-contain"
+          />
+        ) : (
+          <div
+            className="mx-auto mt-10 flex h-56 max-w-md items-center justify-center rounded-2xl border border-black/5 sm:h-72"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%)",
+            }}
+          >
+            <span className="text-sm font-medium uppercase tracking-wide text-white/80">
+              Product image
+            </span>
+          </div>
+        )}
 
         <div className="mt-10">
           <CtaButton label={data.ctaLabel} href={productUrl} />
