@@ -137,6 +137,64 @@ export interface FinalCtaSection {
   };
 }
 
+/**
+ * An image slot. When `url` is set it renders the image; otherwise it renders a
+ * labelled placeholder ("upload a vet photo here") the owner fills from their
+ * image library. `role` describes what belongs there.
+ */
+export interface ImageSlot {
+  url?: string;
+  role?: string;
+}
+
+// --- Flexible blocks (let a page mirror an arbitrary competitor structure) ---
+
+/** Editorial / article text — heading + paragraphs. */
+export interface RichTextSection {
+  type: "richText";
+  data: { eyebrow?: string; heading?: string; paragraphs: string[] };
+}
+
+/** Image beside text (alternating media sections). */
+export interface ImageTextSection {
+  type: "imageText";
+  data: {
+    heading?: string;
+    body: string;
+    image: ImageSlot;
+    imagePosition?: "left" | "right";
+  };
+}
+
+/** "Us vs them" comparison table. */
+export interface ComparisonSection {
+  type: "comparison";
+  data: {
+    heading?: string;
+    usLabel: string;
+    themLabel: string;
+    rows: { feature: string; us: string; them: string }[];
+  };
+}
+
+/** Before / after with two image slots. */
+export interface BeforeAfterSection {
+  type: "beforeAfter";
+  data: { heading?: string; caption?: string; before: ImageSlot; after: ImageSlot };
+}
+
+/** Authority / testimonial quote with an optional portrait (e.g. the vet). */
+export interface QuoteSection {
+  type: "quote";
+  data: { quote: string; attribution?: string; image?: ImageSlot };
+}
+
+/** A standalone image (or placeholder) with an optional caption. */
+export interface ImageSection {
+  type: "image";
+  data: { image: ImageSlot; caption?: string };
+}
+
 /** Any section. Discriminate on `.type`. */
 export type Section =
   | HeroSection
@@ -145,7 +203,13 @@ export type Section =
   | ProofSection
   | OfferSection
   | FaqSection
-  | FinalCtaSection;
+  | FinalCtaSection
+  | RichTextSection
+  | ImageTextSection
+  | ComparisonSection
+  | BeforeAfterSection
+  | QuoteSection
+  | ImageSection;
 
 export type SectionType = Section["type"];
 

@@ -1,6 +1,13 @@
 import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BrandKit, BuyBoxConfig, LandingPage, Section } from "@/types/page";
 import { samplePage } from "@/data/samplePage";
+import { sampleBlocks } from "@/data/sampleBlocks";
+
+// Local-only preview pages served from the fallback (no DB row needed).
+const localSamples: Record<string, LandingPage> = {
+  [samplePage.slug]: samplePage,
+  [sampleBlocks.slug]: sampleBlocks,
+};
 
 // Read layer for landing pages. The renderer talks to Supabase through here.
 // Everything falls back to the hardcoded sample so the app keeps working even
@@ -51,7 +58,7 @@ function rowToLandingPage(row: PageRow): LandingPage {
 /** Fetch one published page by slug. Falls back to the sample page if missing. */
 export async function getPublishedPage(slug: string): Promise<LandingPage | null> {
   if (!isSupabaseConfigured) {
-    return slug === samplePage.slug ? samplePage : null;
+    return localSamples[slug] ?? null;
   }
 
   const { data, error } = await supabase
@@ -66,8 +73,8 @@ export async function getPublishedPage(slug: string): Promise<LandingPage | null
   }
   if (data) return rowToLandingPage(data as unknown as PageRow);
 
-  // Not in the DB yet — keep the sample slug working for the demo.
-  return slug === samplePage.slug ? samplePage : null;
+  // Not in the DB yet — keep local preview slugs working for the demo.
+  return localSamples[slug] ?? null;
 }
 
 /** Turn a title/product name into a URL-safe slug. */

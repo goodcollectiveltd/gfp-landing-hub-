@@ -9,6 +9,12 @@ import Offer from "@/components/sections/Offer";
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
 import BuyBox from "@/components/sections/BuyBox";
+import RichText from "@/components/sections/RichText";
+import ImageText from "@/components/sections/ImageText";
+import Comparison from "@/components/sections/Comparison";
+import BeforeAfter from "@/components/sections/BeforeAfter";
+import Quote from "@/components/sections/Quote";
+import ImageBlock from "@/components/sections/ImageBlock";
 
 /**
  * Renders a full landing page from its JSON. Brand kit → CSS variables, then the
@@ -77,6 +83,18 @@ export default function PageRenderer({
                   productUrl={buyBox.productUrl}
                 />
               );
+            case "richText":
+              return <RichText key={i} data={section.data} />;
+            case "imageText":
+              return <ImageText key={i} data={section.data} />;
+            case "comparison":
+              return <Comparison key={i} data={section.data} />;
+            case "beforeAfter":
+              return <BeforeAfter key={i} data={section.data} />;
+            case "quote":
+              return <Quote key={i} data={section.data} />;
+            case "image":
+              return <ImageBlock key={i} data={section.data} />;
             default:
               // Exhaustiveness guard: a new section type without a renderer
               // becomes a compile error here.
