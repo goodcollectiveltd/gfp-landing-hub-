@@ -48,21 +48,15 @@ export default function AdminConsole() {
         <section className="rounded-2xl border border-dashed border-neutral-300 bg-white p-8">
           <h2 className="text-xl font-semibold">Generate a new advertorial</h2>
           <p className="mt-1 text-sm text-neutral-500">
-            Upload an ad creative, paste a competitor landing page, pick a brand kit.
-            (Wired up in a later step — these inputs are placeholders for now.)
+            Paste a competitor landing page and your brand details — the AI builds an
+            on-brand advertorial you can preview instantly.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <StubInput label="Ad creative" hint="Image / video upload" />
-            <StubInput label="Competitor URL" hint="https://…" />
-            <StubInput label="Brand kit" hint="Select a brand" />
-          </div>
-          <button
-            disabled
-            className="mt-6 cursor-not-allowed rounded-lg bg-neutral-300 px-5 py-2.5 text-sm font-semibold text-neutral-600"
-            title="Available once the generation pipeline is built"
+          <Link
+            to="/new"
+            className="mt-6 inline-block rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-700"
           >
-            Generate page
-          </button>
+            + New advertorial
+          </Link>
         </section>
 
         {/* Existing pages */}
@@ -97,15 +91,6 @@ export default function AdminConsole() {
           </ul>
         </section>
       </main>
-    </div>
-  );
-}
-
-function StubInput({ label, hint }: { label: string; hint: string }) {
-  return (
-    <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-      <p className="text-sm font-medium text-neutral-700">{label}</p>
-      <p className="mt-1 text-xs text-neutral-400">{hint}</p>
     </div>
   );
 }

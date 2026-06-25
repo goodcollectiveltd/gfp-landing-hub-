@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AdminConsole from "@/pages/AdminConsole";
+import GeneratePage from "@/pages/GeneratePage";
 import PublicPage from "@/pages/PublicPage";
 import NotFound from "@/pages/NotFound";
 
@@ -10,6 +11,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<AdminConsole />} />
+      <Route path="/new" element={<GeneratePage />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -16,7 +16,14 @@ import BuyBox from "@/components/sections/BuyBox";
  * the "template + fill the slots" approach: the generator can reorder/populate
  * sections but never touches layout.
  */
-export default function PageRenderer({ page }: { page: LandingPage }) {
+export default function PageRenderer({
+  page,
+  embedded = false,
+}: {
+  page: LandingPage;
+  /** Render for an in-admin preview (buy bar sticks to the container, not the viewport). */
+  embedded?: boolean;
+}) {
   const { brandKit, buyBox, sections } = page;
 
   // Brand kit drives every color/font via CSS variables (see index.css helpers).
@@ -74,7 +81,7 @@ export default function PageRenderer({ page }: { page: LandingPage }) {
         })}
       </main>
 
-      <BuyBox buyBox={buyBox} />
+      <BuyBox buyBox={buyBox} embedded={embedded} />
     </div>
   );
 }
