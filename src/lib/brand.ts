@@ -16,6 +16,8 @@ export interface BrandImage {
   url: string;
   tag: string; // one of IMAGE_TAGS
   label: string;
+  /** AI vision caption describing what's in the image (for smart placement). */
+  caption: string;
 }
 
 /** Image categories the generator matches placeholders against. */
@@ -176,7 +178,12 @@ function rowToBrand(r: any): Brand {
     accent: colors.accent ?? "#e8a13a",
     palette: r.palette ?? [],
     logos: r.logos ?? [],
-    images: r.images ?? [],
+    images: (r.images ?? []).map((x: any) => ({
+      url: x.url,
+      tag: x.tag ?? "other",
+      label: x.label ?? "",
+      caption: x.caption ?? "",
+    })),
     headingFont: r.heading_font ?? "",
     bodyFont: r.body_font ?? "",
     visualStyle: r.visual_style ?? "",

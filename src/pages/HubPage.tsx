@@ -14,6 +14,7 @@ import {
   uploadBrandLogo,
   uploadBrandImage,
 } from "@/lib/brand";
+import { analyzeImage } from "@/lib/imageAnalysis";
 
 const FIELD =
   "mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-900 focus:outline-none";
@@ -53,6 +54,7 @@ export default function HubPage() {
   const [images, setImages] = useState<BrandImage[]>([]);
   const [imageTag, setImageTag] = useState<string>("product");
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [analyzing, setAnalyzing] = useState<string | null>(null);
   const imgInput = useRef<HTMLInputElement>(null);
   const [headingFont, setHeadingFont] = useState("Georgia");
   const [bodyFont, setBodyFont] = useState("");
@@ -206,17 +208,51 @@ export default function HubPage() {
       const added: BrandImage[] = [];
       for (const file of files) {
         const url = await uploadBrandImage(file);
-        added.push({ url, tag: imageTag, label: file.name.replace(/\.[^.]+$/, "") });
+        added.push({ url, tag: imageTag, label: file.name.replace(/\.[^.]+$/, ""), caption: "" });
       }
       const next = [...images, ...added];
       setImages(next);
       await persistAssets({ images: next });
+      // Auto-caption the new images with vision (durable per image).
+      void runAnalysis(next, added.map((a) => a.url));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setUploadingImage(false);
       if (imgInput.current) imgInput.current.value = "";
     }
+  }
+
+  // Vision-caption a set of images (by url), persisting after each so progress
+  // is never lost. Only fills the tag when it's still the default "other".
+  async function runAnalysis(base: BrandImage[], urls: string[]) {
+    if (!urls.length) return;
+    let working = [...base];
+    let done = 0;
+    for (const url of urls) {
+      setAnalyzing(`Analyzing ${++done}/${urls.length}…`);
+      try {
+        const a = await analyzeImage(url);
+        working = working.map((x) =>
+          x.url === url
+            ? {
+                ...x,
+                caption: a.caption || x.caption,
+                tag: x.tag === "other" && a.tag ? a.tag : x.tag,
+              }
+            : x
+        );
+        setImages(working);
+        await persistAssets({ images: working });
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      }
+    }
+    setAnalyzing(null);
+  }
+
+  function handleAnalyzeAll() {
+    void runAnalysis(images, images.filter((x) => !x.caption).map((x) => x.url));
   }
 
   function removeImage(i: number) {
@@ -229,6 +265,10 @@ export default function HubPage() {
     const next = images.map((x, j) => (j === i ? { ...x, tag } : x));
     setImages(next);
     void persistAssets({ images: next });
+  }
+
+  function changeImageCaption(i: number, caption: string) {
+    setImages((xs) => xs.map((x, j) => (j === i ? { ...x, caption } : x)));
   }
 
   return (
@@ -403,7 +443,23 @@ export default function HubPage() {
                       onChange={handleImageUpload}
                     />
                   </label>
+                  {images.some((x) => !x.caption) && (
+                    <button
+                      onClick={handleAnalyzeAll}
+                      disabled={!!analyzing}
+                      className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-700 disabled:bg-neutral-300"
+                    >
+                      ✨ Auto-caption all
+                    </button>
+                  )}
+                  {analyzing && (
+                    <span className="text-sm text-neutral-500">{analyzing}</span>
+                  )}
                 </div>
+                <p className="text-xs text-neutral-400">
+                  New uploads are auto-captioned by AI. The caption describes what's in
+                  each image so the generator can place it accurately.
+                </p>
 
                 {images.length > 0 && (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -425,12 +481,21 @@ export default function HubPage() {
                         </select>
                         <input
                           className="mt-1 w-full rounded border border-neutral-200 px-2 py-1 text-xs"
+                          placeholder="label"
                           value={img.label}
                           onChange={(e) =>
                             setImages((xs) =>
                               xs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x))
                             )
                           }
+                          onBlur={() => void persistAssets({ images })}
+                        />
+                        <textarea
+                          className="mt-1 h-16 w-full resize-y rounded border border-neutral-200 px-2 py-1 text-[11px] leading-snug"
+                          placeholder={analyzing ? "…" : "AI caption (what's in the image)"}
+                          value={img.caption}
+                          onChange={(e) => changeImageCaption(i, e.target.value)}
+                          onBlur={() => void persistAssets({ images })}
                         />
                         <button
                           onClick={() => removeImage(i)}
