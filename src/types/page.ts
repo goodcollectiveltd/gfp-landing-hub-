@@ -12,6 +12,8 @@ export interface BrandKit {
   name: string;
   /** Short wordmark shown in the header if no logo image is provided. */
   wordmark: string;
+  /** Optional logo image URL; shown in the header instead of the wordmark text. */
+  logoUrl?: string;
   colors: {
     /** Primary brand color — buttons, accents, sticky buy bar. */
     primary: string;

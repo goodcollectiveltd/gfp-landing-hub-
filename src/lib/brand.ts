@@ -1,28 +1,62 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { BrandKit } from "@/types/page";
 
-// The single master brand (one fixed brand across every page). Stored as one row
-// in brand_kits and edited in the Hub — NOT re-entered per page.
+// Multiple comprehensive brands. Each is a row in brand_kits; the generator
+// picks one. Logos live in the public "brand-assets" storage bucket.
 
-export interface MasterBrand {
-  id: string;
+export interface BrandLogo {
+  label: string;
+  url: string;
+}
+export interface BrandSwatch {
+  label: string;
+  hex: string;
+}
+
+export interface Brand {
+  id?: string;
   name: string;
   wordmark: string;
+  tagline: string;
+  about: string;
+  audience: string;
   voice: string;
+  toneDos: string[];
+  toneDonts: string[];
+  examplePhrases: string[];
   allowedClaims: string[];
   bannedWords: string[];
   primary: string;
   accent: string;
+  palette: BrandSwatch[];
+  logos: BrandLogo[];
 }
 
-const DEFAULT_PRIMARY = "#1f6f5c";
-const DEFAULT_ACCENT = "#e8a13a";
 const FONTS = {
   heading: "'Georgia', 'Times New Roman', serif",
   body: "system-ui, -apple-system, 'Segoe UI', sans-serif",
 };
 
-/** Full brand color object from the two editable colors. */
+export function emptyBrand(): Brand {
+  return {
+    name: "",
+    wordmark: "",
+    tagline: "",
+    about: "",
+    audience: "",
+    voice: "",
+    toneDos: [],
+    toneDonts: [],
+    examplePhrases: [],
+    allowedClaims: [],
+    bannedWords: [],
+    primary: "#1f6f5c",
+    accent: "#e8a13a",
+    palette: [],
+    logos: [],
+  };
+}
+
 export function makeColors(primary: string, accent: string): BrandKit["colors"] {
   return {
     primary,
@@ -34,71 +68,129 @@ export function makeColors(primary: string, accent: string): BrandKit["colors"] 
   };
 }
 
-/** Build the renderer's BrandKit from the master brand. */
-export function brandKitFromMaster(b: MasterBrand): BrandKit {
+/** Renderer BrandKit from a Brand (first logo, if any, becomes the header logo). */
+export function brandKitFromBrand(b: Brand): BrandKit {
   return {
     name: b.name,
     wordmark: b.wordmark || b.name,
     colors: makeColors(b.primary, b.accent),
     fonts: FONTS,
+    logoUrl: b.logos[0]?.url,
   };
 }
 
-/** Load the master brand (the single brand_kits row), or null if none set yet. */
-export async function getMasterBrand(): Promise<MasterBrand | null> {
-  const { data, error } = await supabase
-    .from("brand_kits")
-    .select("id,name,wordmark,voice,allowed_claims,banned_words,colors")
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+/**
+ * Compose the rich brand context into the single `voice` string the generator
+ * sends to the edge function — so tone/positioning/audience all influence copy
+ * without needing a function change.
+ */
+export function brandVoiceBrief(b: Brand): string {
+  return [
+    b.voice,
+    b.about ? `About the brand: ${b.about}` : "",
+    b.audience ? `Target audience: ${b.audience}` : "",
+    b.toneDos.length ? `Tone do's: ${b.toneDos.join("; ")}` : "",
+    b.toneDonts.length ? `Tone don'ts: ${b.toneDonts.join("; ")}` : "",
+    b.examplePhrases.length
+      ? `On-brand example phrasings: ${b.examplePhrases.join(" | ")}`
+      : "",
+  ]
+    .filter(Boolean)
+    .join(". ");
+}
 
-  if (error) {
-    console.error("[brand] getMasterBrand:", error.message);
-    return null;
-  }
-  if (!data) return null;
-  const colors = (data.colors ?? {}) as Partial<BrandKit["colors"]>;
+const SELECT =
+  "id,name,wordmark,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos";
+
+function rowToBrand(r: any): Brand {
+  const colors = (r.colors ?? {}) as Partial<BrandKit["colors"]>;
   return {
-    id: data.id as string,
-    name: data.name as string,
-    wordmark: (data.wordmark as string) || (data.name as string),
-    voice: (data.voice as string) ?? "",
-    allowedClaims: (data.allowed_claims as string[]) ?? [],
-    bannedWords: (data.banned_words as string[]) ?? [],
-    primary: colors.primary ?? DEFAULT_PRIMARY,
-    accent: colors.accent ?? DEFAULT_ACCENT,
+    id: r.id,
+    name: r.name ?? "",
+    wordmark: r.wordmark || r.name || "",
+    tagline: r.tagline ?? "",
+    about: r.about ?? "",
+    audience: r.audience ?? "",
+    voice: r.voice ?? "",
+    toneDos: r.tone_dos ?? [],
+    toneDonts: r.tone_donts ?? [],
+    examplePhrases: r.example_phrases ?? [],
+    allowedClaims: r.allowed_claims ?? [],
+    bannedWords: r.banned_words ?? [],
+    primary: colors.primary ?? "#1f6f5c",
+    accent: colors.accent ?? "#e8a13a",
+    palette: r.palette ?? [],
+    logos: r.logos ?? [],
   };
 }
 
-/** Create or update the master brand. Requires an authenticated session. */
-export async function saveMasterBrand(
-  b: Omit<MasterBrand, "id">
-): Promise<MasterBrand> {
-  const fields = {
+function brandToRow(b: Brand) {
+  return {
     name: b.name,
     wordmark: b.wordmark || b.name,
+    tagline: b.tagline,
+    about: b.about,
+    audience: b.audience,
     voice: b.voice,
+    tone_dos: b.toneDos,
+    tone_donts: b.toneDonts,
+    example_phrases: b.examplePhrases,
     allowed_claims: b.allowedClaims,
     banned_words: b.bannedWords,
     colors: makeColors(b.primary, b.accent),
+    palette: b.palette,
+    logos: b.logos,
     fonts: FONTS,
+    logo_url: b.logos[0]?.url ?? null, // public renderer reads logo_url
+    updated_at: new Date().toISOString(),
   };
+}
 
-  const existing = await getMasterBrand();
-  if (existing) {
-    const { error } = await supabase
+export async function listBrands(): Promise<Brand[]> {
+  const { data, error } = await supabase
+    .from("brand_kits")
+    .select(SELECT)
+    .order("created_at", { ascending: true });
+  if (error) {
+    console.error("[brand] listBrands:", error.message);
+    return [];
+  }
+  return (data ?? []).map(rowToBrand);
+}
+
+export async function saveBrand(b: Brand): Promise<Brand> {
+  const row = brandToRow(b);
+  if (b.id) {
+    const { data, error } = await supabase
       .from("brand_kits")
-      .update(fields)
-      .eq("id", existing.id);
+      .update(row)
+      .eq("id", b.id)
+      .select(SELECT)
+      .single();
     if (error) throw new Error(error.message);
-    return { ...b, id: existing.id };
+    return rowToBrand(data);
   }
   const { data, error } = await supabase
     .from("brand_kits")
-    .insert(fields)
-    .select("id")
+    .insert(row)
+    .select(SELECT)
     .single();
   if (error) throw new Error(error.message);
-  return { ...b, id: data.id as string };
+  return rowToBrand(data);
+}
+
+export async function deleteBrand(id: string): Promise<void> {
+  const { error } = await supabase.from("brand_kits").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+/** Upload a logo file to the public brand-assets bucket; returns its public URL. */
+export async function uploadBrandLogo(file: File): Promise<string> {
+  const ext = file.name.split(".").pop() || "png";
+  const path = `logos/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage
+    .from("brand-assets")
+    .upload(path, file, { upsert: true, contentType: file.type });
+  if (error) throw new Error(error.message);
+  return supabase.storage.from("brand-assets").getPublicUrl(path).data.publicUrl;
 }

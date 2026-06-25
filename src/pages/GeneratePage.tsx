@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import PageRenderer from "@/components/PageRenderer";
 import { generatePage } from "@/lib/generate";
 import { savePage, slugify } from "@/lib/pages";
-import { getMasterBrand, brandKitFromMaster, type MasterBrand } from "@/lib/brand";
+import {
+  listBrands,
+  brandKitFromBrand,
+  brandVoiceBrief,
+  type Brand,
+} from "@/lib/brand";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
@@ -15,7 +20,8 @@ const FIELD =
 const LABEL = "block text-sm font-medium text-neutral-700";
 
 export default function GeneratePage() {
-  const [brand, setBrand] = useState<MasterBrand | null>(null);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [brandId, setBrandId] = useState<string>("");
   const [brandLoading, setBrandLoading] = useState(true);
 
   const [competitorUrl, setCompetitorUrl] = useState("");
@@ -40,10 +46,15 @@ export default function GeneratePage() {
   >(null);
 
   useEffect(() => {
-    getMasterBrand()
-      .then(setBrand)
+    listBrands()
+      .then((bs) => {
+        setBrands(bs);
+        if (bs.length && bs[0].id) setBrandId(bs[0].id);
+      })
       .finally(() => setBrandLoading(false));
   }, []);
+
+  const brand = brands.find((b) => b.id === brandId) ?? null;
 
   const buyBox: BuyBoxConfig = {
     productName,
@@ -68,7 +79,7 @@ export default function GeneratePage() {
         productUrl: productPageUrl.trim() || undefined,
         brandKit: {
           name: brand.name,
-          voice: brand.voice,
+          voice: brandVoiceBrief(brand),
           allowedClaims: brand.allowedClaims,
           bannedWords: brand.bannedWords,
         },
@@ -85,7 +96,7 @@ export default function GeneratePage() {
   }
 
   async function handleSave(status: "draft" | "published") {
-    if (!sections || !brand) return;
+    if (!sections || !brand?.id) return;
     const finalSlug = slugify(slug || productName || brand.name);
     if (!finalSlug) {
       setSaveMsg({ ok: false, text: "Please enter a page address (slug)." });
@@ -117,7 +128,7 @@ export default function GeneratePage() {
           slug: "preview",
           status: "draft",
           title: `${brand.name} — generated preview`,
-          brandKit: brandKitFromMaster(brand),
+          brandKit: brandKitFromBrand(brand),
           buyBox,
           sections,
         }
@@ -148,23 +159,36 @@ export default function GeneratePage() {
             </p>
           )}
 
-          {/* Master brand status */}
-          {!brandLoading && !brand && (
+          {/* Brand picker */}
+          {!brandLoading && brands.length === 0 && (
             <p className="rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-800">
-              No brand set up yet.{" "}
+              No brands yet.{" "}
               <Link to="/hub" className="font-semibold underline">
-                Set up your brand in the Hub
+                Create a brand in the Hub
               </Link>{" "}
-              first — the generator uses it automatically.
+              first.
             </p>
           )}
-          {brand && (
-            <p className="rounded-lg bg-neutral-100 px-3 py-2 text-sm text-neutral-600">
-              Brand: <span className="font-semibold">{brand.name}</span> ·{" "}
-              <Link to="/hub" className="underline">
-                edit in Hub
-              </Link>
-            </p>
+          {brands.length > 0 && (
+            <div>
+              <label className={LABEL}>Build in the style of</label>
+              <div className="mt-1 flex items-center gap-2">
+                <select
+                  className={FIELD}
+                  value={brandId}
+                  onChange={(e) => setBrandId(e.target.value)}
+                >
+                  {brands.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+                </select>
+                <Link to="/hub" className="shrink-0 text-sm text-neutral-600 underline">
+                  edit
+                </Link>
+              </div>
+            </div>
           )}
 
           <div>

@@ -40,11 +40,15 @@ export default function PageRenderer({
 
   return (
     <div className="lp-root min-h-screen" style={brandVars}>
-      {/* Minimal brand header */}
-      <header className="border-b border-black/5 px-6 py-4 text-center">
-        <span className="lp-heading lp-accent-text text-xl font-bold">
-          {brandKit.wordmark}
-        </span>
+      {/* Minimal brand header: logo image if available, else the wordmark text. */}
+      <header className="flex items-center justify-center border-b border-black/5 px-6 py-4">
+        {brandKit.logoUrl ? (
+          <img src={brandKit.logoUrl} alt={brandKit.name} className="h-9 w-auto" />
+        ) : (
+          <span className="lp-heading lp-accent-text text-xl font-bold">
+            {brandKit.wordmark}
+          </span>
+        )}
       </header>
 
       {/* Ordered sections. pb-24 leaves room for the sticky buy bar. */}

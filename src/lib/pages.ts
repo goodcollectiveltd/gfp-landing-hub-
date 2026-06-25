@@ -34,6 +34,7 @@ function rowToLandingPage(row: PageRow): LandingPage {
   const brandKit: BrandKit = {
     name: bk?.name ?? samplePage.brandKit.name,
     wordmark: bk?.wordmark || bk?.name || samplePage.brandKit.wordmark,
+    logoUrl: bk?.logo_url ?? undefined,
     colors: bk?.colors ?? samplePage.brandKit.colors,
     fonts: bk?.fonts ?? samplePage.brandKit.fonts,
   };
