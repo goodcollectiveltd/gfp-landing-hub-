@@ -1,17 +1,11 @@
 // Supabase Edge Function: list-products
-// Returns a brand's products with EVERY buy option (variant, and — when a
-// Shopify Storefront token is configured — subscription / selling-plan pricing).
+// Returns a brand's products with EVERY buy option (each variant, plus any
+// Subscribe & Save / selling-plan options with their real discounted price).
 //
-// Two modes:
-//  - Storefront API (preferred): set secrets SHOPIFY_STOREFRONT_TOKEN and
-//    SHOPIFY_STORE_DOMAIN (the *.myshopify.com domain). Gets accurate variant +
-//    subscription prices and real checkout links.
-//  - Public fallback: no token → reads /products.json (all variants, no
-//    subscription pricing).
-//
-// Each option carries a ready checkout URL (cart permalink, with selling_plan
-// when it's a subscription). The public cart domain comes from the request's
-// storeDomain (e.g. goodforpets.co) so checkout stays on the custom domain.
+// No Shopify app or token required: we read the store's public storefront JSON
+// (/products.json for the handle list, then /products/<handle>.js per product,
+// which includes accurate prices + selling_plan_groups). Runs server-side, so
+// no browser cross-origin issues. Each option carries a ready checkout link.
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,9 +18,12 @@ function json(body: unknown, status = 200) {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
-const normDomain = (d: string) =>
-  d.replace(/^https?:\/\//i, "").replace(/\/.*$/, "").trim();
-const numericId = (gid: string) => gid.split("/").pop() ?? gid;
+const UA = { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" };
+const normDomain = (d: string) => d.replace(/^https?:\/\//i, "").replace(/\/.*$/, "").trim();
+const httpsify = (u: string | null | undefined) =>
+  !u ? null : u.startsWith("//") ? "https:" + u : u;
+const money = (cents: number | null | undefined) =>
+  cents == null ? null : (cents / 100).toFixed(2);
 
 interface Option {
   label: string;
@@ -34,96 +31,13 @@ interface Option {
   compareAtPrice: string | null;
   checkoutUrl: string;
 }
-interface Product {
-  title: string;
-  handle: string;
-  url: string;
-  image: string | null;
-  options: Option[];
-}
 
-// ---- Storefront API mode -------------------------------------------------
-const STOREFRONT_QUERY = `
-query Products {
-  products(first: 50) {
-    edges { node {
-      title handle
-      featuredImage { url }
-      variants(first: 100) { edges { node {
-        id title availableForSale
-        price { amount }
-        compareAtPrice { amount }
-        sellingPlanAllocations(first: 10) { edges { node {
-          sellingPlan { id name }
-          priceAdjustments { perDeliveryPrice { amount } price { amount } }
-        }}}
-      }}}
-    }}
-  }
-}`;
-
-async function fromStorefront(
-  apiDomain: string,
-  token: string,
-  cartDomain: string
-): Promise<Product[]> {
-  const res = await fetch(`https://${apiDomain}/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": token,
-    },
-    body: JSON.stringify({ query: STOREFRONT_QUERY }),
-  });
-  if (!res.ok) throw new Error(`Shopify Storefront API error (HTTP ${res.status}).`);
-  const data = await res.json();
-  if (data.errors) throw new Error(`Shopify: ${JSON.stringify(data.errors).slice(0, 200)}`);
-
-  return (data.data?.products?.edges ?? []).map((pe: any) => {
-    const p = pe.node;
-    const options: Option[] = [];
-    for (const ve of p.variants?.edges ?? []) {
-      const v = ve.node;
-      const vid = numericId(v.id);
-      const isDefault = v.title === "Default Title";
-      const base = `https://${cartDomain}/cart/${vid}:1`;
-      // One-time purchase option.
-      options.push({
-        label: isDefault ? "One-time" : v.title,
-        price: v.price?.amount ?? null,
-        compareAtPrice: v.compareAtPrice?.amount ?? null,
-        checkoutUrl: base,
-      });
-      // Subscription / selling-plan options (real per-delivery price).
-      for (const ae of v.sellingPlanAllocations?.edges ?? []) {
-        const a = ae.node;
-        const adj = (a.priceAdjustments ?? [])[0];
-        const subPrice = adj?.perDeliveryPrice?.amount ?? adj?.price?.amount ?? v.price?.amount;
-        const planId = numericId(a.sellingPlan.id);
-        options.push({
-          label: `${isDefault ? "" : v.title + " — "}${a.sellingPlan.name}`,
-          price: subPrice ?? null,
-          compareAtPrice: v.price?.amount ?? null, // show one-time price as the "was"
-          checkoutUrl: `${base}?selling_plan=${planId}`,
-        });
-      }
-    }
-    return {
-      title: p.title,
-      handle: p.handle,
-      url: `https://${cartDomain}/products/${p.handle}`,
-      image: p.featuredImage?.url ?? null,
-      options,
-    };
-  });
-}
-
-// ---- Public products.json fallback (all variants) ------------------------
-async function fromPublicFeed(domain: string): Promise<Product[]> {
-  const products: Product[] = [];
+// All product handles (from the lightweight products.json list).
+async function fetchHandles(domain: string): Promise<string[]> {
+  const handles: string[] = [];
   for (let page = 1; page <= 5; page++) {
     const res = await fetch(`https://${domain}/products.json?limit=250&page=${page}`, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" },
+      headers: UA,
     });
     if (!res.ok) {
       if (page === 1) throw new Error(`Could not read products from ${domain} (HTTP ${res.status}).`);
@@ -132,24 +46,65 @@ async function fromPublicFeed(domain: string): Promise<Product[]> {
     const data = await res.json();
     const batch: any[] = data.products ?? [];
     if (!batch.length) break;
-    for (const p of batch) {
-      const options: Option[] = (p.variants ?? []).map((v: any) => ({
-        label: v.title === "Default Title" ? "One-time" : v.title,
-        price: v.price ?? null,
-        compareAtPrice: v.compare_at_price ?? null,
-        checkoutUrl: `https://${domain}/cart/${v.id}:1`,
-      }));
-      products.push({
-        title: p.title,
-        handle: p.handle,
-        url: `https://${domain}/products/${p.handle}`,
-        image: (p.images ?? [])[0]?.src ?? null,
-        options,
-      });
-    }
+    for (const p of batch) handles.push(p.handle);
     if (batch.length < 250) break;
   }
-  return products;
+  return handles;
+}
+
+// Build buy options (variants + subscription plans) from a product's .js data.
+function buildOptions(domain: string, p: any): Option[] {
+  const opts: Option[] = [];
+  const groups: any[] = p.selling_plan_groups ?? [];
+  for (const v of p.variants ?? []) {
+    const base = `https://${domain}/cart/${v.id}:1`;
+    const isDefault = v.title === "Default Title";
+    const vt = isDefault ? "" : v.title;
+    // One-time purchase.
+    opts.push({
+      label: isDefault ? "One-time" : v.title,
+      price: money(v.price),
+      compareAtPrice: money(v.compare_at_price),
+      checkoutUrl: base,
+    });
+    // Subscription / selling-plan options (real discounted per-delivery price).
+    for (const g of groups) {
+      for (const sp of g.selling_plans ?? []) {
+        const adj = (sp.price_adjustments ?? [])[0];
+        let cents = v.price;
+        if (adj) {
+          if (adj.value_type === "percentage") cents = Math.round(v.price * (1 - adj.value / 100));
+          else if (adj.value_type === "fixed_amount") cents = v.price - adj.value;
+          else if (adj.value_type === "price") cents = adj.value;
+        }
+        opts.push({
+          label: `${vt ? vt + " — " : ""}${sp.name}`,
+          price: money(cents),
+          compareAtPrice: money(v.price), // one-time price as the "was"
+          checkoutUrl: `${base}?selling_plan=${sp.id}`,
+        });
+      }
+    }
+  }
+  return opts;
+}
+
+async function fetchProduct(domain: string, handle: string, country: string) {
+  // ?country= forces Shopify Markets pricing for that market, so the price is
+  // deterministic regardless of where this server runs (e.g. GB → UK prices).
+  const res = await fetch(
+    `https://${domain}/products/${handle}.js?country=${encodeURIComponent(country)}`,
+    { headers: UA }
+  );
+  if (!res.ok) return null;
+  const p = await res.json();
+  return {
+    title: p.title,
+    handle: p.handle,
+    url: `https://${domain}/products/${p.handle}`,
+    image: httpsify(p.featured_image ?? (p.images ?? [])[0]),
+    options: buildOptions(domain, p),
+  };
 }
 
 Deno.serve(async (req: Request) => {
@@ -162,18 +117,23 @@ Deno.serve(async (req: Request) => {
   } catch {
     return json({ error: "Body must be JSON." }, 400);
   }
-  const cartDomain = normDomain(String(body?.storeDomain ?? ""));
-  if (!cartDomain) return json({ error: "storeDomain is required." }, 400);
-
-  const token = Deno.env.get("SHOPIFY_STOREFRONT_TOKEN");
-  const apiDomain = Deno.env.get("SHOPIFY_STORE_DOMAIN");
+  const domain = normDomain(String(body?.storeDomain ?? ""));
+  if (!domain) return json({ error: "storeDomain is required." }, 400);
+  // Market country for pricing (default GB). Keeps prices deterministic.
+  const country = String(body?.country || "GB").toUpperCase().slice(0, 2);
 
   try {
-    const products =
-      token && apiDomain
-        ? await fromStorefront(normDomain(apiDomain), token, cartDomain)
-        : await fromPublicFeed(cartDomain);
-    return json({ products, mode: token && apiDomain ? "storefront" : "public" });
+    const handles = (await fetchHandles(domain)).slice(0, 80); // cap for speed
+    const products: any[] = [];
+    // Fetch product details in small concurrent batches.
+    for (let i = 0; i < handles.length; i += 8) {
+      const chunk = handles.slice(i, i + 8);
+      const results = await Promise.all(
+        chunk.map((h) => fetchProduct(domain, h, country).catch(() => null))
+      );
+      for (const r of results) if (r) products.push(r);
+    }
+    return json({ products });
   } catch (err) {
     return json({ error: String(err instanceof Error ? err.message : err) }, 500);
   }
