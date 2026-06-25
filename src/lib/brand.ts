@@ -25,6 +25,7 @@ export const IMAGE_TAGS = [
   "vet",
   "before",
   "after",
+  "ugc",
   "lifestyle",
   "ingredient",
   "other",
