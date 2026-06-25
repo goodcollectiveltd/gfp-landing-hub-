@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+  Brand-driven helpers for the public landing-page renderer.
+  Colors/fonts come from CSS variables set per-page in PageRenderer from the
+  brand kit, so the same components re-skin to any brand with zero code changes.
+*/
+@layer components {
+  .lp-root {
+    background: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: var(--font-body);
+  }
+  .lp-heading {
+    font-family: var(--font-heading);
+  }
+  .lp-eyebrow {
+    color: var(--brand-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .lp-muted {
+    color: var(--brand-muted);
+  }
+  .lp-btn {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+    transition: filter 0.15s ease, transform 0.05s ease;
+  }
+  .lp-btn:hover {
+    filter: brightness(1.07);
+  }
+  .lp-btn:active {
+    transform: translateY(1px);
+  }
+  .lp-accent-bg {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+  }
+  .lp-accent-text {
+    color: var(--brand-primary);
+  }
+}
