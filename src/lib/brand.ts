@@ -31,12 +31,39 @@ export interface Brand {
   accent: string;
   palette: BrandSwatch[];
   logos: BrandLogo[];
+  headingFont: string;
+  bodyFont: string;
+  visualStyle: string;
 }
 
-const FONTS = {
-  heading: "'Georgia', 'Times New Roman', serif",
-  body: "system-ui, -apple-system, 'Segoe UI', sans-serif",
-};
+// Fonts that don't need loading from Google (system / web-safe).
+const SYSTEM_FONTS = new Set([
+  "",
+  "system-ui",
+  "Georgia",
+  "Times New Roman",
+  "Arial",
+  "Helvetica",
+]);
+const HEADING_FALLBACK = "Georgia, 'Times New Roman', serif";
+const BODY_FALLBACK = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+
+/** Build the CSS font stacks for the renderer from the brand's font names. */
+export function makeFonts(headingFont: string, bodyFont: string) {
+  const stack = (family: string, fallback: string) =>
+    family && !SYSTEM_FONTS.has(family) ? `'${family}', ${fallback}` : family ? `'${family}', ${fallback}` : fallback;
+  return {
+    heading: stack(headingFont, HEADING_FALLBACK),
+    body: stack(bodyFont, BODY_FALLBACK),
+  };
+}
+
+/** Which font families must be loaded from Google Fonts (non-system ones). */
+export function googleFontFamilies(headingFont: string, bodyFont: string): string[] {
+  const out: string[] = [];
+  for (const f of [headingFont, bodyFont]) if (f && !SYSTEM_FONTS.has(f)) out.push(f);
+  return [...new Set(out)];
+}
 
 export function emptyBrand(): Brand {
   return {
@@ -56,6 +83,9 @@ export function emptyBrand(): Brand {
     accent: "#e8a13a",
     palette: [],
     logos: [],
+    headingFont: "Georgia",
+    bodyFont: "",
+    visualStyle: "",
   };
 }
 
@@ -76,7 +106,8 @@ export function brandKitFromBrand(b: Brand): BrandKit {
     name: b.name,
     wordmark: b.wordmark || b.name,
     colors: makeColors(b.primary, b.accent),
-    fonts: FONTS,
+    fonts: makeFonts(b.headingFont, b.bodyFont),
+    fontFamilies: googleFontFamilies(b.headingFont, b.bodyFont),
     logoUrl: b.logos[0]?.url,
   };
 }
@@ -102,7 +133,7 @@ export function brandVoiceBrief(b: Brand): string {
 }
 
 const SELECT =
-  "id,name,wordmark,store_domain,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos";
+  "id,name,wordmark,store_domain,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos,heading_font,body_font,visual_style";
 
 function rowToBrand(r: any): Brand {
   const colors = (r.colors ?? {}) as Partial<BrandKit["colors"]>;
@@ -124,6 +155,9 @@ function rowToBrand(r: any): Brand {
     accent: colors.accent ?? "#e8a13a",
     palette: r.palette ?? [],
     logos: r.logos ?? [],
+    headingFont: r.heading_font ?? "",
+    bodyFont: r.body_font ?? "",
+    visualStyle: r.visual_style ?? "",
   };
 }
 
@@ -144,7 +178,10 @@ function brandToRow(b: Brand) {
     colors: makeColors(b.primary, b.accent),
     palette: b.palette,
     logos: b.logos,
-    fonts: FONTS,
+    fonts: makeFonts(b.headingFont, b.bodyFont),
+    heading_font: b.headingFont,
+    body_font: b.bodyFont,
+    visual_style: b.visualStyle,
     logo_url: b.logos[0]?.url ?? null, // public renderer reads logo_url
     updated_at: new Date().toISOString(),
   };

@@ -46,6 +46,9 @@ export default function HubPage() {
   const [accent, setAccent] = useState("#e8a13a");
   const [palette, setPalette] = useState<BrandSwatch[]>([]);
   const [logos, setLogos] = useState<BrandLogo[]>([]);
+  const [headingFont, setHeadingFont] = useState("Georgia");
+  const [bodyFont, setBodyFont] = useState("");
+  const [visualStyle, setVisualStyle] = useState("");
 
   function loadIntoForm(b: Brand) {
     setName(b.name);
@@ -64,6 +67,9 @@ export default function HubPage() {
     setAccent(b.accent);
     setPalette(b.palette);
     setLogos(b.logos);
+    setHeadingFont(b.headingFont);
+    setBodyFont(b.bodyFont);
+    setVisualStyle(b.visualStyle);
   }
 
   function selectBrand(id: string | "new") {
@@ -110,6 +116,9 @@ export default function HubPage() {
       accent,
       palette,
       logos,
+      headingFont: headingFont.trim(),
+      bodyFont: bodyFont.trim(),
+      visualStyle: visualStyle.trim(),
     };
   }
 
@@ -366,6 +375,53 @@ export default function HubPage() {
                   >
                     ＋ Add color
                   </button>
+                </div>
+              </div>
+
+              {/* Visual style */}
+              <div className="space-y-4 border-t border-neutral-100 pt-5">
+                <h2 className="text-base font-semibold">Visual style</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={LABEL}>Heading font</label>
+                    <input
+                      className={FIELD}
+                      placeholder="e.g. Playfair Display, Georgia"
+                      value={headingFont}
+                      onChange={(e) => setHeadingFont(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className={LABEL}>Body font</label>
+                    <input
+                      className={FIELD}
+                      placeholder="e.g. Inter (blank = system default)"
+                      value={bodyFont}
+                      onChange={(e) => setBodyFont(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <p className="-mt-2 text-xs text-neutral-400">
+                  Any{" "}
+                  <a
+                    href="https://fonts.google.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline"
+                  >
+                    Google Font
+                  </a>{" "}
+                  name works (it loads automatically). Web-safe names like Georgia/Arial
+                  also work.
+                </p>
+                <div>
+                  <label className={LABEL}>Visual style guidelines</label>
+                  <textarea
+                    className={`${FIELD} h-28 resize-y`}
+                    placeholder="Overall aesthetic, photography style, button shape, spacing, imagery do's & don'ts — anything the generator should follow visually."
+                    value={visualStyle}
+                    onChange={(e) => setVisualStyle(e.target.value)}
+                  />
                 </div>
               </div>
 

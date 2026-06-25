@@ -2,6 +2,7 @@ import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BrandKit, BuyBoxConfig, LandingPage, Section } from "@/types/page";
 import { samplePage } from "@/data/samplePage";
 import { sampleBlocks } from "@/data/sampleBlocks";
+import { makeFonts, googleFontFamilies } from "@/lib/brand";
 
 // Local-only preview pages served from the fallback (no DB row needed).
 const localSamples: Record<string, LandingPage> = {
@@ -28,11 +29,12 @@ interface BrandKitRow {
   wordmark: string | null;
   logo_url: string | null;
   colors: BrandKit["colors"];
-  fonts: BrandKit["fonts"];
+  heading_font: string | null;
+  body_font: string | null;
 }
 
 const SELECT =
-  "slug,status,title,sections,buy_box,brand_kits(name,wordmark,logo_url,colors,fonts)";
+  "slug,status,title,sections,buy_box,brand_kits(name,wordmark,logo_url,colors,heading_font,body_font)";
 
 /** Map a joined DB row into the LandingPage shape the components render. */
 function rowToLandingPage(row: PageRow): LandingPage {
@@ -43,7 +45,8 @@ function rowToLandingPage(row: PageRow): LandingPage {
     wordmark: bk?.wordmark || bk?.name || samplePage.brandKit.wordmark,
     logoUrl: bk?.logo_url ?? undefined,
     colors: bk?.colors ?? samplePage.brandKit.colors,
-    fonts: bk?.fonts ?? samplePage.brandKit.fonts,
+    fonts: makeFonts(bk?.heading_font ?? "", bk?.body_font ?? ""),
+    fontFamilies: googleFontFamilies(bk?.heading_font ?? "", bk?.body_font ?? ""),
   };
   return {
     slug: row.slug,

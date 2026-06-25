@@ -18,9 +18,10 @@ export const sampleBlocks: LandingPage = {
       muted: "#6B6B6B",
     },
     fonts: {
-      heading: "'Georgia', 'Times New Roman', serif",
-      body: "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      heading: "'Playfair Display', Georgia, serif",
+      body: "'Inter', system-ui, sans-serif",
     },
+    fontFamilies: ["Playfair Display", "Inter"],
   },
   buyBox: {
     productName: "5 Strain Probiotic+",

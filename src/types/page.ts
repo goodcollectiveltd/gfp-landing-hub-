@@ -34,6 +34,8 @@ export interface BrandKit {
     /** CSS font-family stack for body copy. */
     body: string;
   };
+  /** Non-system font family names to load from Google Fonts (e.g. ["Inter"]). */
+  fontFamilies?: string[];
 }
 
 /** The Shopify-native buy box config (sticky bar + section CTAs share this). */

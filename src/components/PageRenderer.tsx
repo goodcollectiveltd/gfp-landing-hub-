@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import type { LandingPage } from "@/types/page";
 
 import Hero from "@/components/sections/Hero";
@@ -31,6 +31,25 @@ export default function PageRenderer({
   embedded?: boolean;
 }) {
   const { brandKit, buyBox, sections } = page;
+
+  // Load any non-system brand fonts from Google Fonts.
+  const familyKey = (brandKit.fontFamilies ?? []).join(",");
+  useEffect(() => {
+    const families = brandKit.fontFamilies ?? [];
+    if (!families.length) return;
+    const href =
+      "https://fonts.googleapis.com/css2?" +
+      families.map((f) => `family=${encodeURIComponent(f).replace(/%20/g, "+")}`).join("&") +
+      "&display=swap";
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [familyKey]);
 
   // Brand kit drives every color/font via CSS variables (see index.css helpers).
   const brandVars = {
