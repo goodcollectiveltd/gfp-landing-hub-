@@ -111,6 +111,14 @@ create policy "public inserts events"
 -- ad_assets and all writes are intentionally NOT exposed to anon — only the
 -- service-role key (edge functions) can touch them.
 
+-- Table-level grants. RLS (above) filters WHICH rows; these grants are what let
+-- the anon/authenticated roles touch the tables at all. (Supabase usually adds
+-- these automatically, but we set them explicitly so it works on any project.)
+grant select on public.landing_pages to anon, authenticated;
+grant select on public.brand_kits   to anon, authenticated;
+grant insert on public.page_events  to anon, authenticated;
+-- ad_assets: deliberately no anon grant.
+
 -- ---------------------------------------------------------------------------
 -- Storage bucket for ad creatives. (You can also create this in the dashboard:
 -- Storage → New bucket → name "ad-assets" → keep it Private.)
