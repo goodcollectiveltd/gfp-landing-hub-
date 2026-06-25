@@ -226,11 +226,17 @@ export default function HubPage() {
   // Vision-caption a set of images (by url), persisting after each so progress
   // is never lost. Only fills the tag when it's still the default "other".
   async function runAnalysis(base: BrandImage[], urls: string[]) {
-    if (!urls.length) return;
+    // Hard guard: never touch an image that already has a caption, regardless
+    // of caller — only analyze ones still missing one.
+    const todo = urls.filter((url) => {
+      const img = base.find((x) => x.url === url);
+      return img && !img.caption;
+    });
+    if (!todo.length) return;
     let working = [...base];
     let done = 0;
-    for (const url of urls) {
-      setAnalyzing(`Analyzing ${++done}/${urls.length}…`);
+    for (const url of todo) {
+      setAnalyzing(`Analyzing ${++done}/${todo.length}…`);
       try {
         const a = await analyzeImage(url);
         working = working.map((x) =>
