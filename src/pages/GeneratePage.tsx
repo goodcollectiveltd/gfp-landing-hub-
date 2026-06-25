@@ -9,6 +9,7 @@ import {
   brandVoiceBrief,
   type Brand,
 } from "@/lib/brand";
+import { listProducts, formatPrice, type StoreProduct } from "@/lib/products";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
@@ -26,6 +27,11 @@ export default function GeneratePage() {
 
   const [competitorUrl, setCompetitorUrl] = useState("");
   const [productPageUrl, setProductPageUrl] = useState("");
+
+  // Live products from the selected brand's store.
+  const [products, setProducts] = useState<StoreProduct[]>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [productsError, setProductsError] = useState<string | null>(null);
 
   // Buy box (per product / per page).
   const [productName, setProductName] = useState("");
@@ -55,6 +61,31 @@ export default function GeneratePage() {
   }, []);
 
   const brand = brands.find((b) => b.id === brandId) ?? null;
+  const storeDomain = brand?.storeDomain ?? "";
+
+  // Load the selected brand's live products whenever the store changes.
+  useEffect(() => {
+    if (!storeDomain) {
+      setProducts([]);
+      return;
+    }
+    setProductsLoading(true);
+    setProductsError(null);
+    listProducts(storeDomain)
+      .then(setProducts)
+      .catch((e) => setProductsError(e instanceof Error ? e.message : String(e)))
+      .finally(() => setProductsLoading(false));
+  }, [storeDomain]);
+
+  function selectProduct(handle: string) {
+    const p = products.find((x) => x.handle === handle);
+    if (!p) return;
+    setProductName(p.title);
+    setPrice(formatPrice(p.price));
+    setCompareAtPrice(p.compareAtPrice ? formatPrice(p.compareAtPrice) : "");
+    setProductUrl(p.url);
+    setProductPageUrl(p.url);
+  }
 
   const buyBox: BuyBoxConfig = {
     productName,
@@ -221,6 +252,41 @@ export default function GeneratePage() {
             <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">
               Buy box (Shopify)
             </legend>
+
+            {storeDomain && (
+              <div>
+                <label className={LABEL}>Select a product</label>
+                <select
+                  className={FIELD}
+                  defaultValue=""
+                  onChange={(e) => selectProduct(e.target.value)}
+                >
+                  <option value="" disabled>
+                    {productsLoading
+                      ? "Loading products…"
+                      : products.length
+                      ? "Choose a product…"
+                      : "No products found"}
+                  </option>
+                  {products.map((p) => (
+                    <option key={p.handle} value={p.handle}>
+                      {p.title}
+                      {p.price ? ` — ${formatPrice(p.price)}` : ""}
+                    </option>
+                  ))}
+                </select>
+                {productsError && (
+                  <p className="mt-1 text-xs text-red-600">
+                    Couldn't load products: {productsError}
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-neutral-400">
+                  Live from {storeDomain} — auto-fills the fields below (and the
+                  product page URL for scraping). You can still edit them.
+                </p>
+              </div>
+            )}
+
             <div>
               <label className={LABEL}>Product name</label>
               <input

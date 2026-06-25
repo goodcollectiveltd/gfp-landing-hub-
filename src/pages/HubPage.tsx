@@ -32,6 +32,7 @@ export default function HubPage() {
   // Form fields
   const [name, setName] = useState("");
   const [wordmark, setWordmark] = useState("");
+  const [storeDomain, setStoreDomain] = useState("");
   const [tagline, setTagline] = useState("");
   const [about, setAbout] = useState("");
   const [audience, setAudience] = useState("");
@@ -49,6 +50,7 @@ export default function HubPage() {
   function loadIntoForm(b: Brand) {
     setName(b.name);
     setWordmark(b.wordmark);
+    setStoreDomain(b.storeDomain);
     setTagline(b.tagline);
     setAbout(b.about);
     setAudience(b.audience);
@@ -94,6 +96,7 @@ export default function HubPage() {
       id: selectedId === "new" ? undefined : selectedId,
       name: name.trim(),
       wordmark: wordmark.trim(),
+      storeDomain: storeDomain.trim(),
       tagline: tagline.trim(),
       about: about.trim(),
       audience: audience.trim(),
@@ -226,6 +229,15 @@ export default function HubPage() {
                       onChange={(e) => setWordmark(e.target.value)}
                     />
                   </div>
+                </div>
+                <div>
+                  <label className={LABEL}>Store domain (for the live product list)</label>
+                  <input
+                    className={FIELD}
+                    placeholder="e.g. goodforpets.co"
+                    value={storeDomain}
+                    onChange={(e) => setStoreDomain(e.target.value)}
+                  />
                 </div>
                 <div>
                   <label className={LABEL}>Tagline</label>

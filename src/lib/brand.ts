@@ -17,6 +17,7 @@ export interface Brand {
   id?: string;
   name: string;
   wordmark: string;
+  storeDomain: string;
   tagline: string;
   about: string;
   audience: string;
@@ -41,6 +42,7 @@ export function emptyBrand(): Brand {
   return {
     name: "",
     wordmark: "",
+    storeDomain: "",
     tagline: "",
     about: "",
     audience: "",
@@ -100,7 +102,7 @@ export function brandVoiceBrief(b: Brand): string {
 }
 
 const SELECT =
-  "id,name,wordmark,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos";
+  "id,name,wordmark,store_domain,tagline,about,audience,voice,tone_dos,tone_donts,example_phrases,allowed_claims,banned_words,colors,palette,logos";
 
 function rowToBrand(r: any): Brand {
   const colors = (r.colors ?? {}) as Partial<BrandKit["colors"]>;
@@ -108,6 +110,7 @@ function rowToBrand(r: any): Brand {
     id: r.id,
     name: r.name ?? "",
     wordmark: r.wordmark || r.name || "",
+    storeDomain: r.store_domain ?? "",
     tagline: r.tagline ?? "",
     about: r.about ?? "",
     audience: r.audience ?? "",
@@ -128,6 +131,7 @@ function brandToRow(b: Brand) {
   return {
     name: b.name,
     wordmark: b.wordmark || b.name,
+    store_domain: b.storeDomain,
     tagline: b.tagline,
     about: b.about,
     audience: b.audience,
