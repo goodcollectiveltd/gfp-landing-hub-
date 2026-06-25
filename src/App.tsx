@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AdminConsole from "@/pages/AdminConsole";
 import GeneratePage from "@/pages/GeneratePage";
+import HubPage from "@/pages/HubPage";
 import PublicPage from "@/pages/PublicPage";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -28,6 +29,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <GeneratePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hub"
+        element={
+          <ProtectedRoute>
+            <HubPage />
           </ProtectedRoute>
         }
       />

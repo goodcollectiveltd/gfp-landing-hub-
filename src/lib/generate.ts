@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { BrandKit, BuyBoxConfig, Section } from "@/types/page";
+import type { BuyBoxConfig, Section } from "@/types/page";
 
 // Calls the generate-page edge function: competitor URL + brand kit -> sections.
 
@@ -44,29 +44,4 @@ export async function generatePage(
     throw new Error(detail);
   }
   return data as GenerateResult;
-}
-
-/** Assemble a full BrandKit (with colors/fonts) from the lighter form inputs. */
-export function brandKitFromForm(form: {
-  name: string;
-  wordmark: string;
-  primary: string;
-  accent: string;
-}): BrandKit {
-  return {
-    name: form.name,
-    wordmark: form.wordmark || form.name,
-    colors: {
-      primary: form.primary,
-      onPrimary: "#ffffff",
-      accent: form.accent,
-      background: "#fbfaf7",
-      text: "#1c2b27",
-      muted: "#5d6b66",
-    },
-    fonts: {
-      heading: "'Georgia', 'Times New Roman', serif",
-      body: "system-ui, -apple-system, 'Segoe UI', sans-serif",
-    },
-  };
 }

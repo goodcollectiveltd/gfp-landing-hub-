@@ -34,6 +34,12 @@ export default function AdminConsole() {
             <p className="text-sm text-neutral-500">Advertorial generator · admin console</p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              to="/hub"
+              className="text-sm font-medium text-neutral-700 underline hover:text-neutral-900"
+            >
+              Brand &amp; Hub
+            </Link>
             <span
               className={`rounded-full px-3 py-1 text-xs font-medium ${
                 isSupabaseConfigured

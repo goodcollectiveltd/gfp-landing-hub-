@@ -83,53 +83,24 @@ export interface SavePageInput {
   slug: string;
   title: string;
   status: "draft" | "published";
-  brandKit: BrandKit;
+  /** The master brand's id (managed in the Hub, not per page). */
+  brandKitId: string;
   buyBox: BuyBoxConfig;
   sections: Section[];
   competitorUrl?: string;
 }
 
 /**
- * Save (insert or update) a landing page. Upserts the brand kit by name first
- * (the brand is fixed, so we reuse one row), then upserts the page by slug.
+ * Save (insert or update) a landing page by slug, linked to the master brand.
  * Requires an authenticated session (RLS allows writes only to the owner).
  */
 export async function savePage(input: SavePageInput): Promise<{ slug: string }> {
-  // 1) Brand kit: find by name, else create. Keep colors/fonts fresh.
-  const { data: existing } = await supabase
-    .from("brand_kits")
-    .select("id")
-    .eq("name", input.brandKit.name)
-    .maybeSingle();
-
-  let brandKitId: string;
-  const bkFields = {
-    name: input.brandKit.name,
-    wordmark: input.brandKit.wordmark,
-    colors: input.brandKit.colors,
-    fonts: input.brandKit.fonts,
-  };
-  if (existing) {
-    brandKitId = existing.id as string;
-    const { error } = await supabase.from("brand_kits").update(bkFields).eq("id", brandKitId);
-    if (error) throw new Error(`Saving brand kit: ${error.message}`);
-  } else {
-    const { data: ins, error } = await supabase
-      .from("brand_kits")
-      .insert(bkFields)
-      .select("id")
-      .single();
-    if (error) throw new Error(`Saving brand kit: ${error.message}`);
-    brandKitId = ins.id as string;
-  }
-
-  // 2) Page: upsert by slug.
   const { error } = await supabase.from("landing_pages").upsert(
     {
       slug: input.slug,
       title: input.title,
       status: input.status,
-      brand_kit_id: brandKitId,
+      brand_kit_id: input.brandKitId,
       sections: input.sections,
       buy_box: input.buyBox,
       competitor_url: input.competitorUrl ?? null,
