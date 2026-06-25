@@ -1,19 +1,41 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import PageRenderer from "@/components/PageRenderer";
-import { samplePage } from "@/data/samplePage";
+import { getPublishedPage } from "@/lib/pages";
+import type { LandingPage } from "@/types/page";
 
 // Public landing page at /p/:slug — the page real Meta-ad traffic will hit.
-// For now there's only the one hardcoded sample; once Supabase is wired in this
-// will look the page up by slug. Click-ID (fbclid/utm) passthrough also lands
-// here later (milestone 8).
-
-const pagesBySlug: Record<string, typeof samplePage> = {
-  [samplePage.slug]: samplePage,
-};
+// Reads the published page from Supabase by slug (falling back to the sample
+// page so the demo keeps working before the DB is seeded). Click-ID
+// (fbclid/utm) passthrough lands here later (milestone 8).
 
 export default function PublicPage() {
   const { slug } = useParams<{ slug: string }>();
-  const page = slug ? pagesBySlug[slug] : undefined;
+  const [page, setPage] = useState<LandingPage | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    getPublishedPage(slug ?? "")
+      .then((p) => {
+        if (active) setPage(p);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50 text-neutral-400">
+        Loading…
+      </div>
+    );
+  }
 
   if (!page) {
     return (

@@ -1,14 +1,28 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { samplePage } from "@/data/samplePage";
+import { listPages } from "@/lib/pages";
+import { isSupabaseConfigured } from "@/integrations/supabase/client";
+import type { LandingPage } from "@/types/page";
 
 // Admin console at "/". The control panel where the owner will eventually upload
 // an ad creative, paste a competitor URL, pick a brand kit, generate, preview,
-// and publish. For now it's the shell + a list of existing pages (just the
-// sample). The generator inputs are stubbed until the edge functions exist.
-
-const pages = [samplePage];
+// and publish. For now it's the shell + the list of existing pages (read live
+// from Supabase). The generator inputs are stubbed until the edge functions exist.
 
 export default function AdminConsole() {
+  const [pages, setPages] = useState<LandingPage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    listPages()
+      .then((p) => active && setPages(p))
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-900">
       <header className="border-b border-neutral-200 bg-white">
@@ -17,8 +31,14 @@ export default function AdminConsole() {
             <h1 className="text-lg font-bold">GFP Landing Hub</h1>
             <p className="text-sm text-neutral-500">Advertorial generator · admin console</p>
           </div>
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
-            Bare-bones preview · no AI yet
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              isSupabaseConfigured
+                ? "bg-green-100 text-green-800"
+                : "bg-amber-100 text-amber-800"
+            }`}
+          >
+            {isSupabaseConfigured ? "● Supabase connected" : "Sample data · not connected"}
           </span>
         </div>
       </header>
@@ -50,6 +70,9 @@ export default function AdminConsole() {
           <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
             Landing pages
           </h2>
+          {loading && (
+            <p className="mt-4 text-sm text-neutral-400">Loading pages…</p>
+          )}
           <ul className="mt-4 space-y-3">
             {pages.map((page) => (
               <li
