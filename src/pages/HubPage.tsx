@@ -10,6 +10,7 @@ import {
   listBrands,
   saveBrand,
   deleteBrand,
+  updateBrandAssets,
   uploadBrandLogo,
   uploadBrandImage,
 } from "@/lib/brand";
@@ -167,6 +168,17 @@ export default function HubPage() {
     }
   }
 
+  // Persist asset arrays immediately (durable on upload/remove/tag), so a page
+  // reload can never lose uploaded files. No-op for an unsaved (new) brand.
+  async function persistAssets(fields: { images?: BrandImage[]; logos?: BrandLogo[] }) {
+    if (selectedId === "new") return;
+    try {
+      await updateBrandAssets(selectedId, fields);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }
+
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -174,7 +186,9 @@ export default function HubPage() {
     setError(null);
     try {
       const url = await uploadBrandLogo(file);
-      setLogos((ls) => [...ls, { label: file.name.replace(/\.[^.]+$/, ""), url }]);
+      const next = [...logos, { label: file.name.replace(/\.[^.]+$/, ""), url }];
+      setLogos(next);
+      await persistAssets({ logos: next });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -189,19 +203,32 @@ export default function HubPage() {
     setUploadingImage(true);
     setError(null);
     try {
+      const added: BrandImage[] = [];
       for (const file of files) {
         const url = await uploadBrandImage(file);
-        setImages((xs) => [
-          ...xs,
-          { url, tag: imageTag, label: file.name.replace(/\.[^.]+$/, "") },
-        ]);
+        added.push({ url, tag: imageTag, label: file.name.replace(/\.[^.]+$/, "") });
       }
+      const next = [...images, ...added];
+      setImages(next);
+      await persistAssets({ images: next });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setUploadingImage(false);
       if (imgInput.current) imgInput.current.value = "";
     }
+  }
+
+  function removeImage(i: number) {
+    const next = images.filter((_, j) => j !== i);
+    setImages(next);
+    void persistAssets({ images: next });
+  }
+
+  function changeImageTag(i: number, tag: string) {
+    const next = images.map((x, j) => (j === i ? { ...x, tag } : x));
+    setImages(next);
+    void persistAssets({ images: next });
   }
 
   return (
@@ -388,11 +415,7 @@ export default function HubPage() {
                         <select
                           className="mt-2 w-full rounded border border-neutral-200 px-2 py-1 text-xs capitalize"
                           value={img.tag}
-                          onChange={(e) =>
-                            setImages((xs) =>
-                              xs.map((x, j) => (j === i ? { ...x, tag: e.target.value } : x))
-                            )
-                          }
+                          onChange={(e) => changeImageTag(i, e.target.value)}
                         >
                           {IMAGE_TAGS.map((t) => (
                             <option key={t} value={t}>
@@ -410,7 +433,7 @@ export default function HubPage() {
                           }
                         />
                         <button
-                          onClick={() => setImages((xs) => xs.filter((_, j) => j !== i))}
+                          onClick={() => removeImage(i)}
                           className="mt-1 text-xs text-red-600 underline"
                         >
                           Remove

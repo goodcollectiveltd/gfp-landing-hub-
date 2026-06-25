@@ -25,6 +25,7 @@ export const IMAGE_TAGS = [
   "vet",
   "before",
   "after",
+  "before-after",
   "ugc",
   "lifestyle",
   "ingredient",
@@ -240,6 +241,25 @@ export async function saveBrand(b: Brand): Promise<Brand> {
     .single();
   if (error) throw new Error(error.message);
   return rowToBrand(data);
+}
+
+/**
+ * Persist just the asset arrays (images/logos) for a brand immediately — used
+ * right after an upload/remove so uploaded files are never lost if the page
+ * reloads before a full "Save brand". No-op for unsaved (id-less) brands.
+ */
+export async function updateBrandAssets(
+  id: string,
+  fields: { images?: BrandImage[]; logos?: BrandLogo[] }
+): Promise<void> {
+  const row: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  if (fields.images) row.images = fields.images;
+  if (fields.logos) {
+    row.logos = fields.logos;
+    row.logo_url = fields.logos[0]?.url ?? null;
+  }
+  const { error } = await supabase.from("brand_kits").update(row).eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
 export async function deleteBrand(id: string): Promise<void> {
