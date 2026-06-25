@@ -183,7 +183,13 @@ Deno.serve(async (req: Request) => {
       analysisResp.content?.find((b: any) => b.type === "text")?.text ?? "{}";
     let analysis: unknown;
     try {
-      analysis = JSON.parse(analysisText);
+      // Models sometimes wrap JSON in ```json fences — strip them, and if there's
+      // any stray prose, grab the outermost { ... } block before parsing.
+      let cleaned = analysisText.replace(/```json/gi, "").replace(/```/g, "").trim();
+      const first = cleaned.indexOf("{");
+      const last = cleaned.lastIndexOf("}");
+      if (first !== -1 && last !== -1) cleaned = cleaned.slice(first, last + 1);
+      analysis = JSON.parse(cleaned);
     } catch {
       analysis = { raw: analysisText };
     }
