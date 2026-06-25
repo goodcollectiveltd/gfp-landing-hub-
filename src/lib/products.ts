@@ -1,15 +1,22 @@
 import { supabase } from "@/integrations/supabase/client";
 
-// Live product list from a brand's Shopify store, via the list-products edge
-// function (server-side fetch of /products.json).
+// Live products (with every buy option) from a brand's Shopify store, via the
+// list-products edge function. Each option = a variant or subscription choice,
+// with its real price and a ready checkout URL.
+
+export interface ProductOption {
+  label: string;
+  price: string | null;
+  compareAtPrice: string | null;
+  checkoutUrl: string;
+}
 
 export interface StoreProduct {
   title: string;
   handle: string;
   url: string;
-  price: string | null;
-  compareAtPrice: string | null;
   image: string | null;
+  options: ProductOption[];
 }
 
 export async function listProducts(storeDomain: string): Promise<StoreProduct[]> {

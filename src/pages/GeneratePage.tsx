@@ -9,7 +9,12 @@ import {
   brandVoiceBrief,
   type Brand,
 } from "@/lib/brand";
-import { listProducts, formatPrice, type StoreProduct } from "@/lib/products";
+import {
+  listProducts,
+  formatPrice,
+  type StoreProduct,
+  type ProductOption,
+} from "@/lib/products";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
@@ -77,14 +82,24 @@ export default function GeneratePage() {
       .finally(() => setProductsLoading(false));
   }, [storeDomain]);
 
-  function selectProduct(handle: string) {
+  const [selectedHandle, setSelectedHandle] = useState("");
+  const selectedProduct = products.find((p) => p.handle === selectedHandle) ?? null;
+
+  function applyOption(p: StoreProduct, opt: ProductOption) {
+    setProductName(p.title);
+    setPrice(formatPrice(opt.price));
+    setCompareAtPrice(opt.compareAtPrice ? formatPrice(opt.compareAtPrice) : "");
+    setProductUrl(opt.checkoutUrl);
+    setProductPageUrl(p.url);
+  }
+
+  function onSelectProduct(handle: string) {
+    setSelectedHandle(handle);
     const p = products.find((x) => x.handle === handle);
     if (!p) return;
     setProductName(p.title);
-    setPrice(formatPrice(p.price));
-    setCompareAtPrice(p.compareAtPrice ? formatPrice(p.compareAtPrice) : "");
-    setProductUrl(p.url);
     setProductPageUrl(p.url);
+    if (p.options.length === 1) applyOption(p, p.options[0]); // auto-fill if only one
   }
 
   const buyBox: BuyBoxConfig = {
@@ -254,35 +269,61 @@ export default function GeneratePage() {
             </legend>
 
             {storeDomain && (
-              <div>
-                <label className={LABEL}>Select a product</label>
-                <select
-                  className={FIELD}
-                  defaultValue=""
-                  onChange={(e) => selectProduct(e.target.value)}
-                >
-                  <option value="" disabled>
-                    {productsLoading
-                      ? "Loading products…"
-                      : products.length
-                      ? "Choose a product…"
-                      : "No products found"}
-                  </option>
-                  {products.map((p) => (
-                    <option key={p.handle} value={p.handle}>
-                      {p.title}
-                      {p.price ? ` — ${formatPrice(p.price)}` : ""}
+              <div className="space-y-3">
+                <div>
+                  <label className={LABEL}>Select a product</label>
+                  <select
+                    className={FIELD}
+                    value={selectedHandle}
+                    onChange={(e) => onSelectProduct(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      {productsLoading
+                        ? "Loading products…"
+                        : products.length
+                        ? "Choose a product…"
+                        : "No products found"}
                     </option>
-                  ))}
-                </select>
+                    {products.map((p) => (
+                      <option key={p.handle} value={p.handle}>
+                        {p.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {selectedProduct && selectedProduct.options.length > 1 && (
+                  <div>
+                    <label className={LABEL}>Buy option</label>
+                    <select
+                      className={FIELD}
+                      defaultValue=""
+                      onChange={(e) => {
+                        const opt = selectedProduct.options[Number(e.target.value)];
+                        if (opt) applyOption(selectedProduct, opt);
+                      }}
+                    >
+                      <option value="" disabled>
+                        Choose an option…
+                      </option>
+                      {selectedProduct.options.map((opt, i) => (
+                        <option key={i} value={i}>
+                          {opt.label}
+                          {opt.price ? ` — ${formatPrice(opt.price)}` : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 {productsError && (
-                  <p className="mt-1 text-xs text-red-600">
+                  <p className="text-xs text-red-600">
                     Couldn't load products: {productsError}
                   </p>
                 )}
-                <p className="mt-1 text-xs text-neutral-400">
-                  Live from {storeDomain} — auto-fills the fields below (and the
-                  product page URL for scraping). You can still edit them.
+                <p className="text-xs text-neutral-400">
+                  Live from {storeDomain} — fills the fields below (and the product
+                  page URL for scraping). You can still edit them.
                 </p>
               </div>
             )}
