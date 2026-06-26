@@ -1,42 +1,57 @@
-// Supabase Edge Function: generate-page
+// Supabase Edge Function: generate-page  (Stage 3 — structural mirror)
 // ---------------------------------------------------------------------------
-// The core engine. Given a competitor URL + a brand kit, it:
-//   1. Fetches the competitor page and reduces it to readable text.
-//   2. Claude PASS 1 — comprehensive strategic teardown (structure/persuasion
-//      only, NOT the competitor's words).
-//   3. Claude PASS 2 — rebuilds that playbook into OUR section JSON with
-//      original, on-brand copy (respecting allowed claims / banned words).
-// Returns { analysis, sections } for the admin console to preview + save.
+// Pass 1 (Haiku): read the competitor advertorial and extract its STRUCTURE
+//   only — an ordered block plan (section type + persuasive purpose + content
+//   hint in its own words + what image belongs there). Never its wording.
+// Pass 2 (Opus): WITHOUT seeing the competitor text, write the page from the
+//   brand's Context Hub docs, voice, allowed claims, product, image library and
+//   reviews — following the plan's order. Places real images/reviews by match;
+//   leaves labelled placeholders otherwise.
 //
-// Secrets (set in Supabase dashboard → Edge Functions → Secrets):
-//   ANTHROPIC_API_KEY   (required)
-//
-// Deploy (dashboard, no CLI): Edge Functions → Deploy a new function →
-// name it "generate-page" → paste this file → Deploy.
+// This split is the anti-plagiarism design: pass 2 can't copy what it never sees.
+// Secret: ANTHROPIC_API_KEY.
 // ---------------------------------------------------------------------------
 
 const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-
-// Latest models: Opus for generation quality, Haiku for cheap extraction.
-const MODEL_GENERATE = "claude-opus-4-8";
-const MODEL_ANALYZE = "claude-haiku-4-5";
+const MODEL_PLAN = "claude-haiku-4-5";
+const MODEL_WRITE = "claude-opus-4-8";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
-
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
+function stripToText(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&[a-z]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function safeJson(text: string): any {
+  try {
+    let c = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const a = c.search(/[[{]/);
+    const b = Math.max(c.lastIndexOf("]"), c.lastIndexOf("}"));
+    if (a !== -1 && b !== -1) c = c.slice(a, b + 1);
+    return JSON.parse(c);
+  } catch {
+    return null;
+  }
+}
 
-// --- Anthropic call with simple 429/5xx backoff (inline ai-proxy for v1). ----
 async function callClaude(opts: {
   model: string;
   system: string;
@@ -45,9 +60,8 @@ async function callClaude(opts: {
   tool_choice?: unknown;
   max_tokens?: number;
 }): Promise<any> {
-  const maxAttempts = 4;
   let lastErr = "";
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+  for (let attempt = 0; attempt < 4; attempt++) {
     const res = await fetch(ANTHROPIC_URL, {
       method: "POST",
       headers: {
@@ -64,144 +78,66 @@ async function callClaude(opts: {
         ...(opts.tool_choice ? { tool_choice: opts.tool_choice } : {}),
       }),
     });
-
     if (res.ok) return await res.json();
-
     lastErr = `${res.status} ${await res.text()}`;
-    // Retry on rate limit / transient server errors with exponential backoff.
     if (res.status === 429 || res.status >= 500) {
-      const waitMs = 1000 * Math.pow(2, attempt);
-      await new Promise((r) => setTimeout(r, waitMs));
+      await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
       continue;
     }
-    break; // non-retryable
+    break;
   }
   throw new Error(`Anthropic request failed: ${lastErr}`);
 }
 
-// --- HTML → readable text. --------------------------------------------------
-function stripToText(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<!--[\s\S]*?-->/g, " ")
-    .replace(/<[^>]+>/g, " ") // strip tags
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&[a-z]+;/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+const BLOCK_TYPES = [
+  "hero",
+  "richText",
+  "problemAgitate",
+  "mechanism",
+  "imageText",
+  "comparison",
+  "beforeAfter",
+  "quote",
+  "proof",
+  "offer",
+  "faq",
+  "finalCta",
+  "image",
+];
 
-async function fetchHtml(url: string, label: string): Promise<string> {
-  const res = await fetch(url, {
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" },
-    redirect: "follow",
-  });
-  if (!res.ok) throw new Error(`Could not fetch ${label} (HTTP ${res.status})`);
-  return await res.text();
-}
-
-// Competitor page: text only (we want its structure, not its images).
-async function fetchReadable(url: string): Promise<string> {
-  const html = await fetchHtml(url, "competitor URL");
-  return stripToText(html).slice(0, 18000); // advertorials front-load structure
-}
-
-// --- Product page: text + candidate product images. -------------------------
-function absolutize(src: string, base: string): string | null {
-  try {
-    return new URL(src, base).href;
-  } catch {
-    return null;
-  }
-}
-
-/** Pull real, plausibly-product image URLs from product-page HTML. */
-function extractImages(html: string, baseUrl: string): { url: string; alt: string }[] {
-  const out: { url: string; alt: string }[] = [];
-  const seen = new Set<string>();
-  const push = (rawSrc: string | undefined, alt = "") => {
-    if (!rawSrc) return;
-    const abs = absolutize(rawSrc.trim(), baseUrl);
-    if (!abs || !/^https?:/i.test(abs)) return;
-    if (/\.svg(\?|$)/i.test(abs)) return;
-    if (/(sprite|favicon|icon|logo|pixel|tracking|loader|spinner|1x1|placeholder)/i.test(abs))
-      return;
-    if (seen.has(abs)) return;
-    seen.add(abs);
-    out.push({ url: abs, alt: alt.slice(0, 120) });
-  };
-  // og:image first (usually the canonical product shot).
-  const og =
-    html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
-    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-  if (og) push(og[1]);
-  // Then <img> tags (src / data-src), capturing alt for relevance hints.
-  const imgRe = /<img\b[^>]*>/gi;
-  let m: RegExpExecArray | null;
-  while ((m = imgRe.exec(html)) && out.length < 20) {
-    const tag = m[0];
-    const src =
-      tag.match(/\bsrc=["']([^"']+)["']/i)?.[1] ??
-      tag.match(/\bdata-src=["']([^"']+)["']/i)?.[1];
-    const alt = tag.match(/\balt=["']([^"']*)["']/i)?.[1] ?? "";
-    push(src, alt);
-  }
-  return out.slice(0, 12);
-}
-
-async function fetchProductPage(
-  url: string
-): Promise<{ text: string; images: { url: string; alt: string }[] }> {
-  const html = await fetchHtml(url, "product URL");
-  return { text: stripToText(html).slice(0, 14000), images: extractImages(html, url) };
-}
-
-// Lenient JSON parse for model output (handles ```json fences / stray prose).
-function safeJsonParse(text: string): any {
-  try {
-    let c = text.replace(/```json/gi, "").replace(/```/g, "").trim();
-    const a = c.indexOf("{");
-    const b = c.lastIndexOf("}");
-    if (a !== -1 && b !== -1) c = c.slice(a, b + 1);
-    return JSON.parse(c);
-  } catch {
-    return { raw: text };
-  }
-}
-
-// --- The section JSON schema we force Claude to emit (PASS 2). ---------------
-// Mirrors src/types/page.ts. Kept permissive on per-section data so the model
-// has room, but the section `type`s are locked to our components.
-const sectionsTool = {
+// emit_page tool: the flexible block schema (mirrors src/types/page.ts). Image
+// slots are { url?, role? } — url copied verbatim from availableImages/reviews,
+// else role = a short description of what to upload there.
+const emitTool = {
   name: "emit_page",
-  description: "Return the finished advertorial as structured section JSON.",
+  description: "Return the finished advertorial as an ordered array of section blocks.",
   input_schema: {
     type: "object",
     properties: {
       sections: {
         type: "array",
-        description: "Ordered sections. Use each type at most once; reorder freely.",
         items: {
           type: "object",
           properties: {
-            type: {
-              type: "string",
-              enum: [
-                "hero",
-                "problemAgitate",
-                "mechanism",
-                "proof",
-                "offer",
-                "faq",
-                "finalCta",
-              ],
-            },
+            type: { type: "string", enum: BLOCK_TYPES },
             data: {
               type: "object",
               description:
-                "Slots for this section type. hero{eyebrow?,headline,subheadline,ctaLabel,trustLine?,image?}; problemAgitate{headline,intro?,painPoints:[{title,body}]}; mechanism{eyebrow?,headline,subheadline?,steps:[{title,body}]}; proof{headline,stats?:[{value,label}],reviews:[{quote,author,rating}]}; offer{headline,subheadline?,bullets:[string],guarantee?,image?}; faq{headline,items:[{q,a}]}; finalCta{headline,subheadline?,ctaLabel,trustLine?}. image fields are product photo URLs and MUST be copied verbatim from the provided allowedImages list — never invent an image URL, and omit the field if no suitable image was provided.",
+                "Slots for this block type. " +
+                "hero{eyebrow?,headline,subheadline,ctaLabel,trustLine?,image?(url string)}; " +
+                "richText{eyebrow?,heading?,paragraphs[string]}; " +
+                "problemAgitate{headline,intro?,painPoints[{title,body}]}; " +
+                "mechanism{eyebrow?,headline,subheadline?,steps[{title,body}]}; " +
+                "imageText{heading?,body,image{url?,role?},imagePosition?(left|right)}; " +
+                "comparison{heading?,usLabel,themLabel,rows[{feature,us,them}]}; " +
+                "beforeAfter{heading?,caption?,before{url?,role?},after{url?,role?}}; " +
+                "quote{quote,attribution?,image{url?,role?}}; " +
+                "proof{headline,stats?[{value,label}],reviews[{quote,author,rating}]}; " +
+                "offer{headline,subheadline?,bullets[string],guarantee?,image?(url string)}; " +
+                "faq{headline,items[{q,a}]}; " +
+                "finalCta{headline,subheadline?,ctaLabel,trustLine?}; " +
+                "image{image{url?,role?},caption?}. " +
+                "Image url values MUST be copied verbatim from availableImages or a review's image; never invent a URL. If nothing fits, omit url and set role to a short description (e.g. 'Vet holding the product').",
             },
           },
           required: ["type", "data"],
@@ -215,9 +151,7 @@ const sectionsTool = {
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
-  if (!ANTHROPIC_API_KEY) {
-    return json({ error: "ANTHROPIC_API_KEY secret is not set on this function." }, 500);
-  }
+  if (!ANTHROPIC_API_KEY) return json({ error: "ANTHROPIC_API_KEY not set." }, 500);
 
   let payload: any;
   try {
@@ -226,91 +160,82 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Body must be JSON." }, 400);
   }
 
-  const { competitorUrl, productUrl, brandKit, buyBox } = payload ?? {};
-  if (!competitorUrl || typeof competitorUrl !== "string") {
-    return json({ error: "competitorUrl is required." }, 400);
-  }
-  if (!brandKit) return json({ error: "brandKit is required." }, 400);
+  const {
+    competitorUrl,
+    brand = {},
+    buyBox = {},
+    docs = [],
+    images = [],
+    reviews = [],
+  } = payload ?? {};
+  if (!competitorUrl) return json({ error: "competitorUrl is required." }, 400);
 
   try {
-    // 1) Fetch competitor page + (optionally) the owner's product page in parallel.
-    const [pageText, product] = await Promise.all([
-      fetchReadable(competitorUrl),
-      productUrl && typeof productUrl === "string"
-        ? fetchProductPage(productUrl)
-        : Promise.resolve(null),
-    ]);
+    // Fetch competitor page → text (structure source for pass 1 only).
+    const res = await fetch(competitorUrl, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" },
+      redirect: "follow",
+    });
+    if (!res.ok) throw new Error(`Could not fetch competitor URL (HTTP ${res.status}).`);
+    const pageText = stripToText(await res.text()).slice(0, 20000);
 
-    // 2) PASS 1 — comprehensive strategic teardown (structure, not copy).
-    const analysisResp = await callClaude({
-      model: MODEL_ANALYZE,
-      max_tokens: 2000,
+    // PASS 1 — structure plan (no copy).
+    const planResp = await callClaude({
+      model: MODEL_PLAN,
+      max_tokens: 2500,
       system:
-        "You are a direct-response strategist. Analyze a competitor advertorial/landing page and extract its PERSUASION STRUCTURE only — never copy its wording. Output a tight JSON object with keys: angle, hook, targetAudience, tone, persuasionSequence (array of stage names in order), offerStructure (pricing/bundle/guarantee/urgency cues), objections (array), proofTypes (array), keySectionsSkeleton (array of {section, purpose, keyPoints[]}). Respond with ONLY the JSON object, no prose.",
+        "You reverse-engineer the STRUCTURE of a competitor advertorial. Output ONLY a JSON object " +
+        `{"blocks":[...]}. Each block: {type, purpose, contentHint, imageNeed}. ` +
+        "type = the best match from " + JSON.stringify(BLOCK_TYPES) + ". " +
+        "purpose = the persuasive job of this section. " +
+        "contentHint = what argument/topic it covers, IN YOUR OWN WORDS — never copy their sentences. " +
+        "imageNeed = one of [vet, dog, product, before-after, ugc, ingredient, none]. " +
+        "Preserve the exact order and the full flow from top to bottom. Be thorough — capture every section.",
       messages: [
-        { role: "user", content: `Competitor page text:\n"""\n${pageText}\n"""` },
+        { role: "user", content: `Competitor advertorial text:\n"""\n${pageText}\n"""` },
       ],
     });
-    const analysis = safeJsonParse(
-      analysisResp.content?.find((b: any) => b.type === "text")?.text ?? "{}"
-    );
+    const plan = safeJson(planResp.content?.find((b: any) => b.type === "text")?.text ?? "") ?? {
+      blocks: [],
+    };
 
-    // 2b) PRODUCT PASS — extract real product facts + pick real product images
-    //     (chosen only from the candidate URLs we scraped).
-    let productFacts: any = null;
-    if (product) {
-      const prodResp = await callClaude({
-        model: MODEL_ANALYZE,
-        max_tokens: 1500,
-        system:
-          "Extract structured product facts from this product page to ground an advertorial. Return ONLY JSON: { name, tagline, summary, keyFeatures:[], ingredients:[], claims:[], price, heroImage, gallery:[] }. heroImage and gallery MUST be chosen ONLY from the provided candidate image URLs (copy exact URL strings) — pick the single best main product shot as heroImage and up to 3 other genuine product images for gallery; skip logos/banners/lifestyle/unrelated images. If none are clearly product images, leave heroImage empty and gallery [].",
-        messages: [
-          {
-            role: "user",
-            content: JSON.stringify({
-              productPageText: product.text,
-              candidateImages: product.images,
-            }),
-          },
-        ],
-      });
-      productFacts = safeJsonParse(
-        prodResp.content?.find((b: any) => b.type === "text")?.text ?? "{}"
-      );
-    }
+    // PASS 2 — write the page from BRAND material only, following the plan.
+    const docsText = (docs as any[])
+      .map((d) => `### ${d.title} [${d.tag}]\n${d.content}`)
+      .join("\n\n")
+      .slice(0, 90000);
+    const availableImages = (images as any[]).map((i) => ({
+      url: i.url,
+      tag: i.tag,
+      caption: i.caption,
+    }));
+    const availableReviews = (reviews as any[]).map((r) => ({
+      author: r.author,
+      rating: r.rating,
+      body: r.body,
+      image: (r.images || [])[0] ?? null,
+    }));
 
-    // Whitelist of image URLs the generator is allowed to use (verbatim only).
-    const allowedImages: string[] = [];
-    if (productFacts?.heroImage) allowedImages.push(productFacts.heroImage);
-    if (Array.isArray(productFacts?.gallery)) allowedImages.push(...productFacts.gallery);
-
-    // 3) PASS 2 — rebuild on-brand with original copy, forced into our schema.
-    const bk = brandKit;
-    const genResp = await callClaude({
-      model: MODEL_GENERATE,
-      max_tokens: 4096,
-      tools: [sectionsTool],
+    const writeResp = await callClaude({
+      model: MODEL_WRITE,
+      max_tokens: 8000,
+      tools: [emitTool],
       tool_choice: { type: "tool", name: "emit_page" },
       system: [
-        "You are an expert direct-response copywriter for a DTC e-commerce brand.",
-        "Write a complete advertorial landing page by calling emit_page.",
-        "Rules:",
-        "- Use the competitor TEARDOWN only as a strategic blueprint (sequence, angles, proof types). NEVER reuse the competitor's literal wording. All copy must be original.",
-        product
-          ? "- Ground ALL product specifics (name, benefits, features, ingredients) in the provided productFacts — this is the REAL product. Do not invent product attributes that contradict it; use the real product name."
+        "You are an elite direct-response copywriter for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
+        "FOLLOW THE STRUCTURE PLAN: emit one block per plan item, in the same order, mapping to the planned type. This mirrors a proven competitor layout.",
+        "WRITE 100% ORIGINAL COPY in the brand voice. You are NOT given the competitor's words and must not reproduce any competitor phrasing.",
+        "GROUND EVERYTHING in the brand knowledge docs: use only the approved claims, obey the NEVER-SAY rules, and write in the customer's real voice/objection→proof patterns from the docs.",
+        "CRITICAL — NUMBERS: never state any statistic, count, percentage, price, multiple or timeframe unless it appears verbatim in the brand knowledge. Do NOT invent or inflate figures (e.g. no made-up '43,000 owners'). The ONLY approved volume figures are '20,000+ dogs helped in the last 12 months' and '4,537+ verified reviews'; use the exact comparative phrasing from the docs ('up to 20x', the cheaper-per-serving line) and never round up or embellish.",
+        "Never invent specifics about named people — e.g. do not claim the vet gives it to his own dogs unless the docs say so. Do not invent product details, ingredients or [CONFIRM] items.",
+        "Voice: " + (brand.voice || "warm, honest, plain-spoken, founder-to-owner") + ".",
+        brand.allowedClaims?.length
+          ? "ONLY make product claims found in the docs / this allowed list: " + JSON.stringify(brand.allowedClaims) + "."
           : "",
-        allowedImages.length
-          ? "- You may set hero.data.image and offer.data.image, but ONLY to a URL copied verbatim from allowedImages. Never invent an image URL. Prefer productFacts.heroImage for the hero."
-          : "- No product images are available; omit all image fields.",
-        "- Stay strictly on-brand. Voice/tone: " + (bk.voice || "clear, trustworthy, benefit-led") + ".",
-        bk.allowedClaims?.length
-          ? "- You may ONLY make product claims from this allowed list: " + JSON.stringify(bk.allowedClaims) + ". Do not invent health/performance claims beyond it."
-          : "- Avoid unverifiable health/performance claims.",
-        bk.bannedWords?.length
-          ? "- NEVER use these banned words: " + JSON.stringify(bk.bannedWords) + "."
-          : "",
-        "- Reviews must be plausible but clearly generic placeholders the owner can replace; do not fabricate specific named studies.",
-        "- Order sections for maximum persuasion. Include a hero, the problem, the mechanism, proof, the offer, an faq, and a final CTA.",
+        brand.bannedWords?.length ? "NEVER use these words: " + JSON.stringify(brand.bannedWords) + "." : "",
+        "IMAGES: for any image slot, pick a url verbatim from availableImages whose tag/caption fits the block (e.g. a 'vet' image for an authority quote, 'before-after' for a transformation). If none fits, omit url and set role to a short description of what to upload.",
+        "REVIEWS: for testimonial/quote/proof blocks use availableReviews verbatim (real author + body + rating). When a review has an image, prefer a `quote` block and set its image.url to that review's image so the right dog pairs with the right words. Never put a review photo with a different review.",
+        "Product/offer: use the buyBox for product name, price and CTA. Put the guarantee near CTAs.",
       ]
         .filter(Boolean)
         .join("\n"),
@@ -318,25 +243,22 @@ Deno.serve(async (req: Request) => {
         {
           role: "user",
           content: JSON.stringify({
-            brand: { name: bk.name, voice: bk.voice },
-            product: buyBox ?? null,
-            productFacts,
-            allowedImages,
-            competitorTeardown: analysis,
+            brand: { name: brand.name },
+            buyBox,
+            structurePlan: plan.blocks ?? plan,
+            availableImages,
+            availableReviews,
+            brandKnowledge: docsText,
           }),
         },
       ],
     });
 
-    const toolUse = genResp.content?.find((b: any) => b.type === "tool_use");
+    const toolUse = writeResp.content?.find((b: any) => b.type === "tool_use");
     if (!toolUse?.input?.sections) {
-      return json(
-        { error: "Generation did not return sections.", raw: genResp },
-        502
-      );
+      return json({ error: "Generation did not return sections.", plan, raw: writeResp }, 502);
     }
-
-    return json({ analysis, productFacts, sections: toolUse.input.sections });
+    return json({ plan, sections: toolUse.input.sections });
   } catch (err) {
     return json({ error: String(err instanceof Error ? err.message : err) }, 500);
   }

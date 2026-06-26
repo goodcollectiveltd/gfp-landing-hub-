@@ -1,36 +1,34 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, Section } from "@/types/page";
 
-// Calls the generate-page edge function: competitor URL + brand kit -> sections.
+// Calls the generate-page edge function (structural mirror): competitor URL +
+// brand knowledge (docs, images, reviews) -> on-brand section blocks.
 
 export interface GenerateInput {
   competitorUrl: string;
-  /** The owner's own product page — scraped for real facts + images. Optional. */
-  productUrl?: string;
-  brandKit: {
+  brand: {
     name: string;
     voice: string;
     allowedClaims: string[];
     bannedWords: string[];
   };
   buyBox: BuyBoxConfig;
+  docs: { title: string; tag: string; content: string }[];
+  images: { url: string; tag: string; caption: string }[];
+  reviews: { author: string; rating: number; body: string; images: string[] }[];
 }
 
 export interface GenerateResult {
-  analysis: unknown;
-  productFacts: unknown;
+  plan: unknown;
   sections: Section[];
 }
 
-export async function generatePage(
-  input: GenerateInput
-): Promise<GenerateResult> {
+export async function generatePage(input: GenerateInput): Promise<GenerateResult> {
   const { data, error } = await supabase.functions.invoke("generate-page", {
     body: input,
   });
 
   if (error) {
-    // Supabase wraps non-2xx responses; surface the function's message if present.
     let detail = error.message;
     try {
       const ctx = (error as { context?: Response }).context;

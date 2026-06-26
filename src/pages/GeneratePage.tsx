@@ -15,6 +15,8 @@ import {
   type StoreProduct,
   type ProductOption,
 } from "@/lib/products";
+import { listDocs } from "@/lib/knowledge";
+import { listReviews } from "@/lib/reviews";
 import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
@@ -113,23 +115,35 @@ export default function GeneratePage() {
   async function handleGenerate() {
     setError(null);
     setSections(null);
-    if (!brand) return;
+    if (!brand?.id) return;
     if (!competitorUrl.trim()) {
       setError("Please paste a competitor landing-page URL first.");
       return;
     }
     setLoading(true);
     try {
+      // Pull the brand's knowledge to ground the copy + place real assets.
+      const [docs, reviews] = await Promise.all([
+        listDocs(brand.id),
+        listReviews(brand.id),
+      ]);
       const result = await generatePage({
         competitorUrl: competitorUrl.trim(),
-        productUrl: productPageUrl.trim() || undefined,
-        brandKit: {
+        brand: {
           name: brand.name,
           voice: brandVoiceBrief(brand),
           allowedClaims: brand.allowedClaims,
           bannedWords: brand.bannedWords,
         },
         buyBox,
+        docs: docs.map((d) => ({ title: d.title, tag: d.tag, content: d.content })),
+        images: brand.images.map((i) => ({ url: i.url, tag: i.tag, caption: i.caption })),
+        reviews: reviews.map((r) => ({
+          author: r.author,
+          rating: r.rating,
+          body: r.body,
+          images: r.images,
+        })),
       });
       setSections(result.sections);
       setSaveMsg(null);
