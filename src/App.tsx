@@ -3,6 +3,7 @@ import AdminConsole from "@/pages/AdminConsole";
 import GeneratePage from "@/pages/GeneratePage";
 import HubPage from "@/pages/HubPage";
 import PublicPage from "@/pages/PublicPage";
+import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -41,6 +42,7 @@ export default function App() {
         }
       />
       <Route path="/p/:slug" element={<PublicPage />} />
+      <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
