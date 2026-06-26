@@ -173,8 +173,8 @@ const COMPONENT_BLOCK_TYPES = [
   "customVisual",
 ];
 
-// Full set Pass 2 may emit.
-const BLOCK_TYPES = [...LEGACY_BLOCK_TYPES, ...COMPONENT_BLOCK_TYPES];
+// Full set Pass 2 may emit ("video" is a media block for variety).
+const BLOCK_TYPES = [...LEGACY_BLOCK_TYPES, ...COMPONENT_BLOCK_TYPES, "video"];
 
 // emit_page tool: the flexible block schema (mirrors src/types/page.ts). Image
 // slots are { url?, role? } — url copied verbatim from availableImages/reviews,
@@ -223,7 +223,8 @@ const emitTool = {
                 "trustBadgeRow{badges?[{label,icon?(flag|shield|leaf|heart)}]}; " +
                 "guaranteeBlock{days?(number),text?}; " +
                 "vetPanel{name,credential,quote,image?{url?,role?}}; " +
-                "customVisual{markup(string: self-contained, sanitised SVG/HTML, brand CSS vars only, NO <script>/on*/external src/href),designBrief(string),heading?}. " +
+                "customVisual{markup(string: self-contained, sanitised SVG/HTML, brand CSS vars only, NO <script>/on*/external src/href),designBrief(string),heading?}; " +
+                "video{src?(url),poster?(url),caption?,role?} — for media variety; unless you are given a real video URL, omit src and set role to what the video should show (a poster placeholder + brief is added automatically). " +
                 "Image url values MUST be copied verbatim from availableImages or a review's image; never invent a URL. If nothing fits, omit url and set role to a short description (e.g. 'Vet holding the product') — a generation brief is added automatically.",
             },
           },
@@ -305,6 +306,12 @@ function postProcessSections(sections: any[]): any[] {
       case "imageText":
         fillSlotBrief(d.image, sec.type, d.imagePosition ?? "full");
         break;
+      case "video":
+        // A video with no asset is a poster placeholder — give it a brief too.
+        if (!d.src && d.role && !d.brief) {
+          d.brief = makeBrief("video", String(d.role), "full", false);
+        }
+        break;
       case "beforeAfter":
         fillSlotBrief(d.before, sec.type, "left");
         fillSlotBrief(d.after, sec.type, "right");
@@ -318,6 +325,60 @@ function postProcessSections(sections: any[]): any[] {
     }
   }
   return sections;
+}
+
+// --- Quality gate (brief §4) — server port of src/lib/qualityGate.ts ---------
+
+const GATE_COMPONENTS = new Set([
+  "mechanismDiagram", "gutRebalance", "strainBreakdown", "symptomToGut",
+  "expectationTimeline", "chewsComparison", "statPanel", "socialProofBar",
+  "numberedReason", "reviewCard", "trustBadgeRow", "guaranteeBlock", "vetPanel",
+  "customVisual", "comparison", "proof",
+]);
+const GATE_PHOTO = new Set(["image", "imageText", "beforeAfter"]);
+
+function mediaClass(s: any): string {
+  if (s.type === "finalCta") return "feature";
+  if (s.type === "video") return "video";
+  if (GATE_PHOTO.has(s.type)) return "photo";
+  if (s.type === "quote") return s.data?.image?.url ? "photo" : "copy";
+  if (GATE_COMPONENTS.has(s.type)) return "component";
+  return "copy";
+}
+function paragraphCount(s: any): number {
+  const d = s.data ?? {};
+  if (s.type === "richText") return (d.paragraphs ?? []).length;
+  if (s.type === "imageText") {
+    const body = d.body ?? "";
+    return body.split(/\n\s*\n/).filter((p: string) => p.trim()).length || (body ? 1 : 0);
+  }
+  return 0;
+}
+function checkPage(sections: any[]): { pass: boolean; failures: string[]; warnings: string[] } {
+  const failures: string[] = [];
+  const warnings: string[] = [];
+  if (!sections?.length) return { pass: false, failures: ["Page has no sections."], warnings: [] };
+
+  sections.forEach((s, i) => {
+    const n = paragraphCount(s);
+    if (n > 2)
+      failures.push(`Block ${i + 1} (${s.type}) has ${n} paragraphs — convert the substance into a component, don't write a wall of text.`);
+  });
+
+  const media = sections.map(mediaClass);
+  for (let i = 1; i < media.length; i++) {
+    if (media[i] === media[i - 1]) {
+      const msg = `Blocks ${i} and ${i + 1} are both "${media[i]}" — adjacent blocks must differ in media/layout.`;
+      if (media[i] === "copy") failures.push(msg);
+      else warnings.push(msg);
+    }
+  }
+  if (!media.some((m) => m === "component" || m === "video"))
+    failures.push("No built component or video present — the page reads as flat image+text. Convert idea blocks into components and add a video.");
+  if (!sections.some((s) => s.type === "finalCta"))
+    warnings.push("No finalCta feature block — add a closing vermilion CTA.");
+
+  return { pass: failures.length === 0, failures, warnings };
 }
 
 Deno.serve(async (req: Request) => {
@@ -406,6 +467,10 @@ Deno.serve(async (req: Request) => {
         "CONVERSION FURNITURE: you MAY add a small, sensible set of furniture blocks even if the plan lacks them — at most ONE socialProofBar (just under the hero), and near the offer/finalCta at most ONE trustBadgeRow, ONE guaranteeBlock and ONE statPanel. Do not scatter furniture elsewhere or exceed these counts.",
         "customVisual is the escape hatch — use it ONLY for a genuinely bespoke diagram no component covers. data.markup must be self-contained, sanitised SVG/HTML (NO <script>, NO on* handlers, NO external src/href — internal #refs only), themed ONLY via the brand CSS variables (var(--brand-primary), var(--brand-on-primary), var(--brand-text), var(--font-heading), …), large and legible. Set data.designBrief to a one-line description so it can be regenerated. NEVER output a raw freeform HTML page — one self-contained block only.",
         "COMPONENT DATA obeys every rule below: only approved claims; numbers ONLY verbatim from the docs (strainBreakdown strains/CFU, statPanel figures, etc.); expectationTimeline/gutRebalance/symptomToGut stay associative with supports/helps language — never a cure/treat/prevent claim. Fill component data from the brand docs; when unsure of an optional heading, omit it and let the component use its on-brand default.",
+        "QUALITY GATE — every page MUST pass these or it is rejected:",
+        "(a) TEXT DENSITY: no block may be a heading plus three or more paragraphs. Keep every block to a heading + AT MOST two short paragraphs. If a plan block has more substance (its `paragraphs` array is long), do NOT write long copy — pull the substance into a component instead (numberedReason list, statPanel, strainBreakdown, chewsComparison, expectationTimeline, mechanismDiagram). Body copy is support, not the main event.",
+        "(b) MEDIA VARIETY: no two ADJACENT blocks may share the same media/layout. Never place two copy blocks, two photo blocks, or two of the same component back to back. Alternate treatments — e.g. component, then photo/video, then copy. Include at least ONE video block for variety (poster placeholder unless given a real video URL).",
+        "(c) NO INVENTED FILLER: if the brand docs do not contain the substance a block needs (a real number, a per-strain benefit, a testimonial with a photo), do NOT fabricate it and do NOT pad with generic filler. Emit the block but prefix the relevant copy with '[NEEDS CONTENT: what's missing]' so the owner can supply it. A flagged gap is acceptable; invented filler is not.",
         "MATCH LENGTH & IMAGES per block: for copy blocks, write the SAME NUMBER of paragraphs as the block's `paragraphs` array, each roughly that word count (within ~25%). Honour `image`: 'beside'/'after' → a component or imageText/image block carrying an image slot; 'top' → a hero/offer image; 'none' → no image. Keep the brand's section to the same visual weight as the original.",
         "The HERO block's headline IS the page's main headline — build it from titlePattern in the SAME shape, in your own wording. For a numbered-listicle page the hero headline must take the '[N] Reasons …' form (e.g. '5 Reasons Dog Owners Are Switching to Good For Pets'), then the numbered reason sections follow. Mirror the FAQ questions with on-brand answers.",
         "WRITE 100% ORIGINAL COPY in the brand voice. You do NOT have the competitor's words — never reproduce competitor phrasing; only their structure and the abstracted themes guide you. Every sentence is yours, grounded in the brand docs.",
@@ -446,8 +511,51 @@ Deno.serve(async (req: Request) => {
     if (!toolUse?.input?.sections) {
       return json({ error: "Generation did not return sections.", plan, raw: writeResp }, 502);
     }
-    const sections = postProcessSections(toolUse.input.sections);
-    return json({ plan, sections });
+    let sections = postProcessSections(toolUse.input.sections);
+    let gate = checkPage(sections);
+
+    // Quality gate: if the page fails, run ONE corrective pass to fix the
+    // specific failures before returning. Remaining issues are reported, not
+    // hidden — and never block the response (the owner reviews before publish).
+    if (gate.failures.length) {
+      try {
+        const fixResp = await callClaude({
+          model: MODEL_WRITE,
+          max_tokens: 14000,
+          tools: [emitTool],
+          tool_choice: { type: "tool", name: "emit_page" },
+          system: [
+            "You are revising an advertorial landing page to pass a strict quality gate. Return the FULL corrected page by calling emit_page.",
+            "Keep the brand voice and obey every compliance rule: approved claims only, numbers ONLY verbatim from the existing copy (invent nothing), supports/helps language (never cure/treat/prevent), product name exactly \"5 Strain Probiotic+\".",
+            "Fix EVERY listed failure. Rules to satisfy: no block is a heading + 3 or more paragraphs (pull the substance into a component — numberedReason/statPanel/strainBreakdown/chewsComparison/expectationTimeline/mechanismDiagram); no two ADJACENT blocks share the same media/layout; include at least one built component AND one video (poster placeholder, omit src + set role); keep a closing finalCta.",
+            "Do NOT invent numbers or filler. If substance is missing, prefix the copy with '[NEEDS CONTENT: …]'. Preserve real reviews/images already placed.",
+          ].join("\n"),
+          messages: [
+            {
+              role: "user",
+              content: JSON.stringify({
+                failures: gate.failures,
+                warnings: gate.warnings,
+                currentSections: sections,
+              }),
+            },
+          ],
+        });
+        const fixUse = fixResp.content?.find((b: any) => b.type === "tool_use");
+        if (fixUse?.input?.sections) {
+          const fixed = postProcessSections(fixUse.input.sections);
+          const gate2 = checkPage(fixed);
+          if (gate2.failures.length <= gate.failures.length) {
+            sections = fixed;
+            gate = gate2;
+          }
+        }
+      } catch (_e) {
+        // Keep the first draft + its gate result if the corrective pass fails.
+      }
+    }
+
+    return json({ plan, sections, gate });
   } catch (err) {
     return json({ error: String(err instanceof Error ? err.message : err) }, 500);
   }

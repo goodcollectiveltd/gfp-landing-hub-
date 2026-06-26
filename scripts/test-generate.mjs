@@ -61,6 +61,13 @@ if (out.error) {
   console.log("plan blocks:", pb.length);
   if (out.raw) console.log("stop_reason:", out.raw.stop_reason, "| content:", (out.raw.content || []).map((c) => c.type).join(","));
 } else {
+  if (out.gate) {
+    console.log("=== QUALITY GATE ===");
+    console.log("  pass:", out.gate.pass);
+    (out.gate.failures || []).forEach((f) => console.log("  FAIL:", f));
+    (out.gate.warnings || []).forEach((w) => console.log("  warn:", w));
+    console.log("");
+  }
   const plan = out.plan?.blocks || out.plan || [];
   console.log("=== STRUCTURE PLAN (from competitor) ===");
   plan.forEach((b, i) => console.log(`  ${i + 1}. ${b.type}  img:${b.image || "-"}  paras:${JSON.stringify(b.paragraphs || [])}  ${(b.theme || "").slice(0, 48)}`));
