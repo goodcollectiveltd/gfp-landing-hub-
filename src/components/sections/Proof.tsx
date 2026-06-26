@@ -31,7 +31,7 @@ export default function Proof({ data }: { data: ProofSection["data"] }) {
         )}
 
         <div className="mt-12 grid gap-5 sm:grid-cols-3">
-          {data.reviews.map((review, i) => (
+          {(data.reviews ?? []).map((review, i) => (
             <figure
               key={i}
               className="flex flex-col rounded-xl border border-black/5 bg-white p-6 shadow-sm"

@@ -22,7 +22,7 @@ export default function Comparison({ data }: { data: ComparisonSection["data"] }
               </tr>
             </thead>
             <tbody>
-              {data.rows.map((row, i) => (
+              {(data.rows ?? []).map((row, i) => (
                 <tr key={i} className="border-t border-black/5">
                   <td className="p-3 font-medium">{row.feature}</td>
                   <td className="lp-accent-text p-3 text-center font-semibold">

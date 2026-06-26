@@ -32,6 +32,7 @@ import TrustBadgeRow from "@/components/visuals/TrustBadgeRow";
 import GuaranteeBlock from "@/components/visuals/GuaranteeBlock";
 import VetPanel from "@/components/visuals/VetPanel";
 import CustomVisual from "@/components/sections/CustomVisual";
+import SectionBoundary from "@/components/SectionBoundary";
 
 /**
  * Renders a full landing page from its JSON. Brand kit → CSS variables, then the
@@ -123,7 +124,7 @@ export default function PageRenderer({
       <main className="pb-24">
         {sections.map((section, i) => (
           <div key={i} className="lp-band" data-tone={toneFor(section.type)}>
-            {renderSection(section, buyBox)}
+            <SectionBoundary>{renderSection(section, buyBox)}</SectionBoundary>
           </div>
         ))}
       </main>

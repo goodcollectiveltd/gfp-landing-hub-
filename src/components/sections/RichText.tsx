@@ -14,7 +14,7 @@ export default function RichText({ data }: { data: RichTextSection["data"] }) {
           </h2>
         )}
         <div className="mt-3 space-y-3">
-          {data.paragraphs.map((p, i) => (
+          {(data.paragraphs ?? []).map((p, i) => (
             <p key={i} className="text-[15px] leading-relaxed sm:text-base">
               {p}
             </p>

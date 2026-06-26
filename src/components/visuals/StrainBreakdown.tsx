@@ -30,7 +30,7 @@ function Capsule({ name, cfu }: { name: string; cfu?: string }) {
 
 export default function StrainBreakdown({
   heading = "What's actually in every capsule",
-  strains,
+  strains = [],
   total = "5 billion live cultures",
   addOns = [],
 }: StrainBreakdownProps) {

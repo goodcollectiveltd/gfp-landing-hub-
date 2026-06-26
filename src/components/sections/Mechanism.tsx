@@ -22,7 +22,7 @@ export default function Mechanism({
       </div>
 
       <div className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
-        {data.steps.map((step, i) => (
+        {(data.steps ?? []).map((step, i) => (
           <div key={i} className="text-center">
             <div
               className="lp-accent-bg mx-auto flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold"

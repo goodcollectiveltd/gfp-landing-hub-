@@ -8,7 +8,7 @@ export interface ExpectationTimelineProps {
 
 export default function ExpectationTimeline({
   heading = "What to expect",
-  steps,
+  steps = [],
 }: ExpectationTimelineProps) {
   return (
     <section className="px-6 py-10">

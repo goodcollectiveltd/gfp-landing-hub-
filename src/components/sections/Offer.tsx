@@ -27,7 +27,7 @@ export default function Offer({
           )}
 
           <ul className="mt-8 space-y-3">
-            {data.bullets.map((bullet, i) => (
+            {(data.bullets ?? []).map((bullet, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span
                   className="lp-accent-text mt-0.5 text-lg font-bold leading-none"

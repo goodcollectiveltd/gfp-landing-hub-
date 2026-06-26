@@ -17,7 +17,7 @@ export default function ProblemAgitate({
           </p>
         )}
         <div className="mt-10 grid gap-5 sm:grid-cols-3">
-          {data.painPoints.map((point, i) => (
+          {(data.painPoints ?? []).map((point, i) => (
             <div
               key={i}
               className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"

@@ -37,17 +37,19 @@ function mediaClass(s: Section): Media {
   return "copy"; // hero, richText, problemAgitate, mechanism, faq, offer
 }
 
-/** Count body paragraphs for the text-density rule. */
-function paragraphCount(s: Section): number {
+/** Body paragraphs of a section, for the text-density rule. */
+function bodyParas(s: Section): string[] {
   const d = s.data as Record<string, unknown>;
-  if (s.type === "richText") return (d.paragraphs as string[] | undefined)?.length ?? 0;
+  if (s.type === "richText") return (d.paragraphs as string[] | undefined) ?? [];
   if (s.type === "imageText") {
-    // A single long body counts as one paragraph unless it has hard breaks.
     const body = (d.body as string) ?? "";
-    return body.split(/\n\s*\n/).filter((p) => p.trim()).length || (body ? 1 : 0);
+    const parts = body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    return parts.length ? parts : body ? [body] : [];
   }
-  return 0;
+  return [];
 }
+const wordCount = (p: string) => (p || "").trim().split(/\s+/).filter(Boolean).length;
+const MAX_PARA_WORDS = 60;
 
 export function checkPage(sections: Section[]): GateResult {
   const failures: string[] = [];
@@ -57,12 +59,19 @@ export function checkPage(sections: Section[]): GateResult {
     return { pass: false, failures: ["Page has no sections."], warnings: [] };
   }
 
-  // 1. Text density — no section beyond a heading + ~2 short paragraphs.
+  // 1. Text density — no section beyond a heading + ~2 short paragraphs, and no
+  //    single over-long paragraph (a wall of text in one block).
   sections.forEach((s, i) => {
-    const n = paragraphCount(s);
-    if (n > 2) {
+    const paras = bodyParas(s);
+    if (paras.length > 2) {
       failures.push(
-        `Section ${i + 1} (${s.type}) has ${n} paragraphs — convert the substance into a component (list, stat, diagram, comparison).`
+        `Section ${i + 1} (${s.type}) has ${paras.length} paragraphs — convert the substance into a component (list, stat, diagram, comparison).`
+      );
+    }
+    const longest = Math.max(0, ...paras.map(wordCount));
+    if (longest > MAX_PARA_WORDS) {
+      failures.push(
+        `Section ${i + 1} (${s.type}) has a ${longest}-word paragraph — too long; tighten to ~2 short sentences or move it into a component.`
       );
     }
   });

@@ -29,7 +29,7 @@ export default function ChewsComparison({
   heading = "Why owners switch from chews",
   usLabel = "5 Strain Probiotic+",
   themLabel = "Typical chews",
-  rows,
+  rows = [],
 }: ChewsComparisonProps) {
   return (
     <section className="px-6 py-10">

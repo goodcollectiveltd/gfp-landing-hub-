@@ -8,7 +8,7 @@ export default function FAQ({ data }: { data: FaqSection["data"] }) {
           {data.headline}
         </h2>
         <div className="mt-8 divide-y divide-black/10 rounded-xl border border-black/5 bg-white">
-          {data.items.map((item, i) => (
+          {(data.items ?? []).map((item, i) => (
             <details key={i} className="group p-5 [&_summary::-webkit-details-marker]:hidden">
               <summary className="lp-heading flex cursor-pointer items-center justify-between gap-4 text-base font-semibold">
                 {item.q}

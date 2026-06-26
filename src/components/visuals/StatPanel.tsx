@@ -6,7 +6,7 @@ export interface StatPanelProps {
   stats: { value: string; label: string }[];
 }
 
-export default function StatPanel({ heading, stats }: StatPanelProps) {
+export default function StatPanel({ heading, stats = [] }: StatPanelProps) {
   return (
     <section className="px-6 py-10">
       <div className="mx-auto max-w-3xl">
