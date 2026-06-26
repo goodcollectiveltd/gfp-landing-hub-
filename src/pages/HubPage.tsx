@@ -15,6 +15,7 @@ import {
   uploadBrandImage,
 } from "@/lib/brand";
 import { analyzeImage } from "@/lib/imageAnalysis";
+import KnowledgeDocs from "@/components/KnowledgeDocs";
 
 const FIELD =
   "mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-900 focus:outline-none";
@@ -692,13 +693,7 @@ export default function HubPage() {
               </div>
             </section>
 
-            <section className="rounded-2xl border border-dashed border-neutral-300 bg-white p-6">
-              <h2 className="text-base font-semibold text-neutral-700">Knowledge documents</h2>
-              <p className="mt-1 text-sm text-neutral-500">
-                Coming next — upload brand-guideline docs, best-practice guides, video
-                transcripts and core angles. The generator will read these when it writes.
-              </p>
-            </section>
+            <KnowledgeDocs brandId={selectedId === "new" ? null : selectedId} />
           </>
         )}
       </main>
