@@ -7,6 +7,11 @@ import ExpectationTimeline from "@/components/visuals/ExpectationTimeline";
 import VetPanel from "@/components/visuals/VetPanel";
 import GuaranteeBlock from "@/components/visuals/GuaranteeBlock";
 import NumberedReasonCard from "@/components/visuals/NumberedReasonCard";
+import MechanismDiagram from "@/components/visuals/MechanismDiagram";
+import GutRebalanceVisual from "@/components/visuals/GutRebalanceVisual";
+import SymptomToGut from "@/components/visuals/SymptomToGut";
+import ReviewCard from "@/components/visuals/ReviewCard";
+import TrustBadgeRow from "@/components/visuals/TrustBadgeRow";
 
 // Public gallery of the new visual component library (Good For Pets sample data),
 // for visual review at /showcase. Compliance-safe copy (supports/helps language).
@@ -111,6 +116,25 @@ export default function Showcase() {
 
       <Label>GuaranteeBlock</Label>
       <GuaranteeBlock />
+
+      <Label>MechanismDiagram</Label>
+      <MechanismDiagram />
+
+      <Label>GutRebalanceVisual</Label>
+      <GutRebalanceVisual />
+
+      <Label>SymptomToGut</Label>
+      <SymptomToGut />
+
+      <Label>ReviewCard</Label>
+      <ReviewCard
+        name="Sherry B."
+        rating={5}
+        quote="I'd tried many others but nothing helped until I tried Good For Pets. He now has his full coat back. It's been a year — wouldn't give them anything else."
+      />
+
+      <Label>TrustBadgeRow</Label>
+      <TrustBadgeRow />
 
       <div className="h-16" />
     </div>
