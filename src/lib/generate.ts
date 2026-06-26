@@ -6,6 +6,9 @@ import type { BuyBoxConfig, Section } from "@/types/page";
 
 export interface GenerateInput {
   competitorUrl: string;
+  /** Public URL of an uploaded screenshot of the original advertorial. When set,
+   *  the engine reads its visual design (vision) and replicates those features. */
+  screenshotUrl?: string;
   brand: {
     name: string;
     voice: string;

@@ -7,6 +7,7 @@ import {
   listBrands,
   brandKitFromBrand,
   brandVoiceBrief,
+  uploadScreenshot,
   type Brand,
 } from "@/lib/brand";
 import {
@@ -34,6 +35,24 @@ export default function GeneratePage() {
 
   const [competitorUrl, setCompetitorUrl] = useState("");
   const [productPageUrl, setProductPageUrl] = useState("");
+
+  // Screenshot of the original advertorial → drives visual-feature replication.
+  const [screenshotUrl, setScreenshotUrl] = useState("");
+  const [shotUploading, setShotUploading] = useState(false);
+
+  async function onPickScreenshot(file: File | undefined) {
+    if (!file) return;
+    setShotUploading(true);
+    setError(null);
+    try {
+      const url = await uploadScreenshot(file);
+      setScreenshotUrl(url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setShotUploading(false);
+    }
+  }
 
   // Live products from the selected brand's store.
   const [products, setProducts] = useState<StoreProduct[]>([]);
@@ -116,8 +135,8 @@ export default function GeneratePage() {
     setError(null);
     setSections(null);
     if (!brand?.id) return;
-    if (!competitorUrl.trim()) {
-      setError("Please paste a competitor landing-page URL first.");
+    if (!competitorUrl.trim() && !screenshotUrl) {
+      setError("Add a competitor URL or upload a screenshot of the original first.");
       return;
     }
     setLoading(true);
@@ -129,6 +148,7 @@ export default function GeneratePage() {
       ]);
       const result = await generatePage({
         competitorUrl: competitorUrl.trim(),
+        screenshotUrl: screenshotUrl || undefined,
         brand: {
           name: brand.name,
           voice: brandVoiceBrief(brand),
@@ -261,6 +281,43 @@ export default function GeneratePage() {
             />
             <p className="mt-1 text-xs text-neutral-400">
               We analyze its structure & persuasion flow — never copy its words.
+            </p>
+          </div>
+
+          <div>
+            <label className={LABEL}>Screenshot of the original (recommended)</label>
+            {screenshotUrl ? (
+              <div className="mt-1 flex items-start gap-3 rounded-lg border border-neutral-200 bg-white p-2">
+                <img
+                  src={screenshotUrl}
+                  alt="Original advertorial screenshot"
+                  className="h-24 w-20 rounded object-cover object-top"
+                />
+                <div className="flex-1 text-xs text-neutral-500">
+                  <p className="font-medium text-neutral-700">Screenshot added</p>
+                  <p className="mt-0.5">We'll replicate its visual features in your brand style.</p>
+                  <button
+                    type="button"
+                    onClick={() => setScreenshotUrl("")}
+                    className="mt-2 text-neutral-500 underline hover:text-neutral-800"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <input
+                type="file"
+                accept="image/*"
+                disabled={shotUploading}
+                onChange={(e) => onPickScreenshot(e.target.files?.[0])}
+                className="mt-1 block w-full text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-neutral-700"
+              />
+            )}
+            <p className="mt-1 text-xs text-neutral-400">
+              {shotUploading
+                ? "Uploading…"
+                : "Upload a full-page screenshot of the original advertorial — the engine reads its design and rebuilds those features in your brand look."}
             </p>
           </div>
 

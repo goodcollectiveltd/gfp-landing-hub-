@@ -313,3 +313,5 @@ async function uploadBrandAsset(file: File, folder: string): Promise<string> {
 
 export const uploadBrandLogo = (file: File) => uploadBrandAsset(file, "logos");
 export const uploadBrandImage = (file: File) => uploadBrandAsset(file, "images");
+/** Upload a competitor-advertorial screenshot used to drive visual replication. */
+export const uploadScreenshot = (file: File) => uploadBrandAsset(file, "screenshots");
