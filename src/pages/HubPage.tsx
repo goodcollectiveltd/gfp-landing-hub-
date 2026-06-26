@@ -16,6 +16,7 @@ import {
 } from "@/lib/brand";
 import { analyzeImage } from "@/lib/imageAnalysis";
 import KnowledgeDocs from "@/components/KnowledgeDocs";
+import ReviewsLibrary from "@/components/ReviewsLibrary";
 
 const FIELD =
   "mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-900 focus:outline-none";
@@ -694,6 +695,8 @@ export default function HubPage() {
             </section>
 
             <KnowledgeDocs brandId={selectedId === "new" ? null : selectedId} />
+
+            <ReviewsLibrary brandId={selectedId === "new" ? null : selectedId} />
           </>
         )}
       </main>
