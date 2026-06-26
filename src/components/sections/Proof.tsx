@@ -11,9 +11,9 @@ function Stars({ rating }: { rating: number }) {
 
 export default function Proof({ data }: { data: ProofSection["data"] }) {
   return (
-    <section className="px-6 py-16" style={{ background: "rgba(0,0,0,0.02)" }}>
+    <section className="px-6 py-10" style={{ background: "rgba(0,0,0,0.02)" }}>
       <div className="mx-auto max-w-4xl">
-        <h2 className="lp-heading text-center text-2xl font-bold sm:text-3xl">
+        <h2 className="lp-heading text-center text-xl font-extrabold tracking-tight sm:text-2xl">
           {data.headline}
         </h2>
 

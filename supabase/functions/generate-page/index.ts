@@ -71,6 +71,9 @@ function structuralSkeleton(html: string): string {
     }
     lastImg = false;
     if (l.startsWith("[H")) {
+      const ht = l.replace(/^\[H[1-3]\]\s*/, "");
+      if (/^(your cart|cart|all products|menu|search|policies|helpful links|monthly giveaway|footer|newsletter|log ?in|sign ?up)/i.test(ht))
+        continue;
       out.push(l);
       continue;
     }
@@ -79,8 +82,9 @@ function structuralSkeleton(html: string): string {
     const w = l.split(" ").filter(Boolean).length;
     if (w >= 3) out.push(`p(${w})`);
   }
-  // Start at the first real headline so we drop nav/cart chrome.
-  const firstH = out.findIndex((x) => x.startsWith("[H1]") || x.startsWith("[H2]"));
+  // Start at the real headline (prefer the H1) so we drop nav/cart chrome.
+  let firstH = out.findIndex((x) => x.startsWith("[H1]"));
+  if (firstH < 0) firstH = out.findIndex((x) => x.startsWith("[H2]"));
   return (firstH > 0 ? out.slice(firstH) : out).slice(0, 130).join("\n");
 }
 
@@ -277,6 +281,8 @@ Deno.serve(async (req: Request) => {
         "MATCH LENGTH & IMAGES per block: write the SAME NUMBER of paragraphs as the block's `paragraphs` array, each roughly that word count (within ~25%). Honour `image`: 'beside' or 'after' → an imageText (or image) block with an image slot; 'top' → a hero/offer image; 'none' → no image. Keep the brand's section to the same visual weight as the original.",
         "The HERO block's headline IS the page's main headline — build it from titlePattern in the SAME shape, in your own wording. For a numbered-listicle page the hero headline must take the '[N] Reasons …' form (e.g. '5 Reasons Dog Owners Are Switching to Good For Pets'), then the numbered reason sections follow. Mirror the FAQ questions with on-brand answers.",
         "WRITE 100% ORIGINAL COPY in the brand voice. You do NOT have the competitor's words — never reproduce competitor phrasing; only their structure and the abstracted themes guide you. Every sentence is yours, grounded in the brand docs.",
+        "PUNCHY & SCANNABLE: this is a high-converting landing page, not an essay. Short, sharp sentences. Short paragraphs (mostly 1 sentence, occasionally 2). Lead with the hook/benefit. Match the paragraph LENGTHS in each block's `paragraphs` array — if it's ~15-25 words, write ~15-25 words. NEVER write long expository paragraphs.",
+        "Use the brand docs as KNOWLEDGE ONLY — never paste, quote, or lightly reword doc passages; they read like reference material, which is the wrong register for a landing page. Transform the facts into tight, original, benefit-led lines.",
         "GROUND EVERYTHING in the brand knowledge docs: use only the approved claims, obey the NEVER-SAY rules, and write in the customer's real voice/objection→proof patterns from the docs.",
         "CRITICAL — NUMBERS: never state any statistic, count, percentage, price, multiple or timeframe unless it appears verbatim in the brand knowledge. Do NOT invent or inflate figures (e.g. no made-up '43,000 owners'). The ONLY approved volume figures are '20,000+ dogs helped in the last 12 months' and '4,537+ verified reviews'; use the exact comparative phrasing from the docs ('up to 20x', the cheaper-per-serving line) and never round up or embellish.",
         "Do NOT state or imply the vet uses the product on his own dogs, or any personal anecdote about him — only that he co-developed the formula, plus his on-record quote from the docs. Do not invent product details, ingredients, or [CONFIRM] items.",

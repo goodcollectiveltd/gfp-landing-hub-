@@ -2,9 +2,9 @@ import type { FaqSection } from "@/types/page";
 
 export default function FAQ({ data }: { data: FaqSection["data"] }) {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-2xl">
-        <h2 className="lp-heading text-center text-2xl font-bold sm:text-3xl">
+        <h2 className="lp-heading text-center text-xl font-extrabold tracking-tight sm:text-2xl">
           {data.headline}
         </h2>
         <div className="mt-8 divide-y divide-black/10 rounded-xl border border-black/5 bg-white">

@@ -9,9 +9,9 @@ export default function FinalCTA({
   productUrl: string;
 }) {
   return (
-    <section className="lp-accent-bg px-6 py-20">
+    <section className="lp-accent-bg px-6 py-12">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="lp-heading text-3xl font-bold sm:text-4xl">
+        <h2 className="lp-heading text-2xl font-extrabold tracking-tight sm:text-3xl">
           {data.headline}
         </h2>
         {data.subheadline && (

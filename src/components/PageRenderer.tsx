@@ -66,11 +66,11 @@ export default function PageRenderer({
   return (
     <div className="lp-root min-h-screen" style={brandVars}>
       {/* Minimal brand header: logo image if available, else the wordmark text. */}
-      <header className="flex items-center justify-center border-b border-black/5 px-6 py-4">
+      <header className="flex items-center justify-center border-b border-black/5 px-6 py-3">
         {brandKit.logoUrl ? (
-          <img src={brandKit.logoUrl} alt={brandKit.name} className="h-9 w-auto" />
+          <img src={brandKit.logoUrl} alt={brandKit.name} className="h-11 w-auto sm:h-12" />
         ) : (
-          <span className="lp-heading lp-accent-text text-xl font-bold">
+          <span className="lp-heading lp-accent-text text-2xl font-extrabold">
             {brandKit.wordmark}
           </span>
         )}

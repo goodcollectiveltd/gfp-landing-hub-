@@ -4,7 +4,7 @@ import SlotImage from "@/components/ui/SlotImage";
 // Authority / testimonial quote with an optional portrait (e.g. the vet).
 export default function Quote({ data }: { data: QuoteSection["data"] }) {
   return (
-    <section className="px-6 py-12">
+    <section className="px-6 py-8">
       <div className="mx-auto flex max-w-3xl items-center gap-6 rounded-2xl border border-black/5 bg-white p-6 shadow-sm sm:p-8">
         {data.image && (
           <SlotImage

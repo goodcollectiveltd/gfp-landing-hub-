@@ -11,7 +11,7 @@ export default function SlotImage({
 }) {
   if (slot?.url) {
     return (
-      <img src={slot.url} alt={slot.role ?? ""} className={`object-contain ${className}`} />
+      <img src={slot.url} alt={slot.role ?? ""} className={`object-cover ${className}`} />
     );
   }
   return (

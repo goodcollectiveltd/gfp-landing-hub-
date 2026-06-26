@@ -9,9 +9,9 @@ export default function Offer({
   buyBox: BuyBoxConfig;
 }) {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-2xl">
-        <div className="rounded-2xl border border-black/5 bg-white p-8 shadow-md sm:p-10">
+        <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-md sm:p-8">
           {data.image && (
             <img
               src={data.image}

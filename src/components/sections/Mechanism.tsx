@@ -6,12 +6,12 @@ export default function Mechanism({
   data: MechanismSection["data"];
 }) {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-3xl text-center">
         {data.eyebrow && (
-          <p className="lp-eyebrow mb-3 text-sm font-semibold">{data.eyebrow}</p>
+          <p className="lp-eyebrow mb-2 text-xs font-semibold">{data.eyebrow}</p>
         )}
-        <h2 className="lp-heading text-2xl font-bold sm:text-3xl">
+        <h2 className="lp-heading text-xl font-extrabold tracking-tight sm:text-2xl">
           {data.headline}
         </h2>
         {data.subheadline && (

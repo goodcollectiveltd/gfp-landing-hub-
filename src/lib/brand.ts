@@ -67,13 +67,29 @@ const SYSTEM_FONTS = new Set([
   "Arial",
   "Helvetica",
 ]);
-const HEADING_FALLBACK = "Georgia, 'Times New Roman', serif";
+const HEADING_FALLBACK = "system-ui, -apple-system, 'Segoe UI', sans-serif";
 const BODY_FALLBACK = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+
+// Strip trailing weight/style words so "Poppins Bold" resolves to the real
+// Google family "Poppins" (the weight is applied via CSS, not the family name).
+const WEIGHT_RE =
+  /\s+(thin|extra ?light|light|regular|book|medium|semi ?bold|demi ?bold|bold|extra ?bold|black|heavy|italic|oblique)$/i;
+export function cleanFamily(f: string): string {
+  let s = (f || "").trim();
+  let prev = "";
+  while (s !== prev) {
+    prev = s;
+    s = s.replace(WEIGHT_RE, "").trim();
+  }
+  return s;
+}
 
 /** Build the CSS font stacks for the renderer from the brand's font names. */
 export function makeFonts(headingFont: string, bodyFont: string) {
-  const stack = (family: string, fallback: string) =>
-    family && !SYSTEM_FONTS.has(family) ? `'${family}', ${fallback}` : family ? `'${family}', ${fallback}` : fallback;
+  const stack = (family: string, fallback: string) => {
+    const f = cleanFamily(family);
+    return f && !SYSTEM_FONTS.has(f) ? `'${f}', ${fallback}` : f ? `'${f}', ${fallback}` : fallback;
+  };
   return {
     heading: stack(headingFont, HEADING_FALLBACK),
     body: stack(bodyFont, BODY_FALLBACK),
@@ -83,7 +99,10 @@ export function makeFonts(headingFont: string, bodyFont: string) {
 /** Which font families must be loaded from Google Fonts (non-system ones). */
 export function googleFontFamilies(headingFont: string, bodyFont: string): string[] {
   const out: string[] = [];
-  for (const f of [headingFont, bodyFont]) if (f && !SYSTEM_FONTS.has(f)) out.push(f);
+  for (const f of [headingFont, bodyFont]) {
+    const c = cleanFamily(f);
+    if (c && !SYSTEM_FONTS.has(c)) out.push(c);
+  }
   return [...new Set(out)];
 }
 
