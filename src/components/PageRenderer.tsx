@@ -30,6 +30,7 @@ import ReviewCard from "@/components/visuals/ReviewCard";
 import TrustBadgeRow from "@/components/visuals/TrustBadgeRow";
 import GuaranteeBlock from "@/components/visuals/GuaranteeBlock";
 import VetPanel from "@/components/visuals/VetPanel";
+import CustomVisual from "@/components/sections/CustomVisual";
 
 /**
  * Renders a full landing page from its JSON. Brand kit → CSS variables, then the
@@ -158,6 +159,10 @@ export default function PageRenderer({
               return <GuaranteeBlock key={i} {...section.data} />;
             case "vetPanel":
               return <VetPanel key={i} {...section.data} />;
+
+            // Bespoke escape hatch (markup sanitised at render time).
+            case "customVisual":
+              return <CustomVisual key={i} data={section.data} />;
 
             default:
               // Exhaustiveness guard: a new section type without a renderer

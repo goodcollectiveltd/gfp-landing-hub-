@@ -140,13 +140,43 @@ export interface FinalCtaSection {
 }
 
 /**
+ * A generation brief for a photographic slot that had no confident match in the
+ * image library. The owner can drop this straight into an AI image pipeline.
+ * Mirrors the build brief's image-brief schema (§5). Stored on the page record.
+ */
+export interface ImageBrief {
+  /** Stable id for this slot within the page. */
+  slotId: string;
+  /** The section type the image lives in (e.g. "image", "beforeAfter"). */
+  sectionType: string;
+  placement: "left" | "right" | "full";
+  aspectRatio: "1:1" | "4:5" | "16:9";
+  /** Specific subject, e.g. "5 Strain Probiotic+ tub beside a bowl of food". */
+  subject: string;
+  /** Style reference, e.g. "clean studio, seamless brand-red #EF3824 background". */
+  styleRef: string;
+  /** Mood / cast, e.g. "real-looking older dog, owner 55-65, warm and calm". */
+  mood: string;
+  /** Composition safe-zone rule (Meta UI buffer). */
+  safeZone: string;
+  /** On-image text policy — none by default; text lives in the component. */
+  textOverlay: string;
+  /** What must not appear (claims, fake stats, competitor branding). */
+  negativePrompt: string;
+  /** Compliance note — product name always exactly "5 Strain Probiotic+". */
+  compliance: string;
+}
+
+/**
  * An image slot. When `url` is set it renders the image; otherwise it renders a
  * labelled placeholder ("upload a vet photo here") the owner fills from their
- * image library. `role` describes what belongs there.
+ * image library. `role` describes what belongs there. When the slot was emitted
+ * by the generator with no library match, `brief` carries a generation brief.
  */
 export interface ImageSlot {
   url?: string;
   role?: string;
+  brief?: ImageBrief;
 }
 
 // --- Flexible blocks (let a page mirror an arbitrary competitor structure) ---
@@ -299,6 +329,25 @@ export interface VetPanelSection {
   data: { name: string; credential: string; quote: string; image?: ImageSlot };
 }
 
+/**
+ * The escape hatch: a bespoke diagram the generator authors directly as
+ * sanitised SVG/HTML markup (brand CSS variables only, no scripts/handlers) when
+ * no library component fits. `markup` is sanitised again at render time as a
+ * safety net. `designBrief` is stored so the block can be regenerated or swapped.
+ * NOT raw freeform HTML pages — a single themeable, editable block.
+ */
+export interface CustomVisualSection {
+  type: "customVisual";
+  data: {
+    /** Sanitised SVG/HTML markup, themed via brand CSS variables. */
+    markup: string;
+    /** The design brief that produced it (for regenerate / swap / edit). */
+    designBrief: string;
+    /** Optional heading shown above the visual. */
+    heading?: string;
+  };
+}
+
 /** Any section. Discriminate on `.type`. */
 export type Section =
   | HeroSection
@@ -327,7 +376,9 @@ export type Section =
   | ReviewCardSection
   | TrustBadgeRowSection
   | GuaranteeBlockSection
-  | VetPanelSection;
+  | VetPanelSection
+  // Bespoke escape hatch
+  | CustomVisualSection;
 
 export type SectionType = Section["type"];
 
