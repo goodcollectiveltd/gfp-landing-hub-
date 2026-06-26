@@ -238,6 +238,26 @@ export interface ImageSection {
   data: { image: ImageSlot; caption?: string };
 }
 
+/**
+ * A video block — autoplay, muted, looped (the format Meta advertorials lean on).
+ * When `src` is set it plays; otherwise it renders a clean poster placeholder
+ * with the generation brief, exactly like an image slot.
+ */
+export interface VideoSection {
+  type: "video";
+  data: {
+    /** Video file URL (mp4/webm). Absent → poster placeholder. */
+    src?: string;
+    /** Poster / first-frame image shown before play or as the placeholder. */
+    poster?: string;
+    caption?: string;
+    /** What this video should show (placeholder label + matching hint). */
+    role?: string;
+    /** Generation brief when there's no asset yet. */
+    brief?: ImageBrief;
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Visual component library — bespoke, themed, prop-driven blocks. These are the
 // "default" for any idea section (a mechanism, comparison, process, stat, proof
@@ -374,6 +394,7 @@ export type Section =
   | BeforeAfterSection
   | QuoteSection
   | ImageSection
+  | VideoSection
   // Visual component library
   | MechanismDiagramSection
   | GutRebalanceSection

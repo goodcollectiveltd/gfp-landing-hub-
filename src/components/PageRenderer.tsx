@@ -15,6 +15,7 @@ import Comparison from "@/components/sections/Comparison";
 import BeforeAfter from "@/components/sections/BeforeAfter";
 import Quote from "@/components/sections/Quote";
 import ImageBlock from "@/components/sections/ImageBlock";
+import VideoBlock from "@/components/sections/VideoBlock";
 
 // Visual component library — bespoke themed blocks the generator can emit.
 import MechanismDiagram from "@/components/visuals/MechanismDiagram";
@@ -161,6 +162,8 @@ function renderSection(section: Section, buyBox: BuyBoxConfig): ReactNode {
       return <Quote data={section.data} />;
     case "image":
       return <ImageBlock data={section.data} />;
+    case "video":
+      return <VideoBlock data={section.data} />;
 
     // Visual component library — props are passed directly (not wrapped in
     // `data`), so we spread the section's data into the component.
