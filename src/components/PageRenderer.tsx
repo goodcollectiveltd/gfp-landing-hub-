@@ -16,6 +16,21 @@ import BeforeAfter from "@/components/sections/BeforeAfter";
 import Quote from "@/components/sections/Quote";
 import ImageBlock from "@/components/sections/ImageBlock";
 
+// Visual component library — bespoke themed blocks the generator can emit.
+import MechanismDiagram from "@/components/visuals/MechanismDiagram";
+import GutRebalanceVisual from "@/components/visuals/GutRebalanceVisual";
+import StrainBreakdown from "@/components/visuals/StrainBreakdown";
+import SymptomToGut from "@/components/visuals/SymptomToGut";
+import ExpectationTimeline from "@/components/visuals/ExpectationTimeline";
+import ChewsComparison from "@/components/visuals/ChewsComparison";
+import StatPanel from "@/components/visuals/StatPanel";
+import SocialProofBar from "@/components/visuals/SocialProofBar";
+import NumberedReasonCard from "@/components/visuals/NumberedReasonCard";
+import ReviewCard from "@/components/visuals/ReviewCard";
+import TrustBadgeRow from "@/components/visuals/TrustBadgeRow";
+import GuaranteeBlock from "@/components/visuals/GuaranteeBlock";
+import VetPanel from "@/components/visuals/VetPanel";
+
 /**
  * Renders a full landing page from its JSON. Brand kit → CSS variables, then the
  * ordered `sections` array → the matching fixed components. This is the heart of
@@ -114,6 +129,36 @@ export default function PageRenderer({
               return <Quote key={i} data={section.data} />;
             case "image":
               return <ImageBlock key={i} data={section.data} />;
+
+            // Visual component library — props are passed directly (not wrapped
+            // in `data`), so we spread the section's data into the component.
+            case "mechanismDiagram":
+              return <MechanismDiagram key={i} {...section.data} />;
+            case "gutRebalance":
+              return <GutRebalanceVisual key={i} {...section.data} />;
+            case "strainBreakdown":
+              return <StrainBreakdown key={i} {...section.data} />;
+            case "symptomToGut":
+              return <SymptomToGut key={i} {...section.data} />;
+            case "expectationTimeline":
+              return <ExpectationTimeline key={i} {...section.data} />;
+            case "chewsComparison":
+              return <ChewsComparison key={i} {...section.data} />;
+            case "statPanel":
+              return <StatPanel key={i} {...section.data} />;
+            case "socialProofBar":
+              return <SocialProofBar key={i} {...section.data} />;
+            case "numberedReason":
+              return <NumberedReasonCard key={i} {...section.data} />;
+            case "reviewCard":
+              return <ReviewCard key={i} {...section.data} />;
+            case "trustBadgeRow":
+              return <TrustBadgeRow key={i} {...section.data} />;
+            case "guaranteeBlock":
+              return <GuaranteeBlock key={i} {...section.data} />;
+            case "vetPanel":
+              return <VetPanel key={i} {...section.data} />;
+
             default:
               // Exhaustiveness guard: a new section type without a renderer
               // becomes a compile error here.

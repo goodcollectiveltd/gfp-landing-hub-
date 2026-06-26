@@ -197,6 +197,108 @@ export interface ImageSection {
   data: { image: ImageSlot; caption?: string };
 }
 
+// ---------------------------------------------------------------------------
+// Visual component library — bespoke, themed, prop-driven blocks. These are the
+// "default" for any idea section (a mechanism, comparison, process, stat, proof
+// point): the generator emits a designed component, not a flat image+text block.
+// Each `data` shape mirrors the matching component's props in
+// `src/components/visuals/`. See the visual-fidelity build brief.
+// ---------------------------------------------------------------------------
+
+/** The "potency paradox": baked chews kill live bacteria; cold-fill keeps them alive. */
+export interface MechanismDiagramSection {
+  type: "mechanismDiagram";
+  data: { heading?: string; subhead?: string };
+}
+
+/** Good bacteria crowding out the bad — two balance rings. supports/helps framing only. */
+export interface GutRebalanceSection {
+  type: "gutRebalance";
+  data: { heading?: string; caption?: string };
+}
+
+/** The five named strains + prebiotic/enzyme add-ons, as designed capsule chips. */
+export interface StrainBreakdownSection {
+  type: "strainBreakdown";
+  data: {
+    heading?: string;
+    strains: { name: string; cfu?: string }[];
+    total?: string;
+    addOns?: { label: string; detail?: string }[];
+  };
+}
+
+/** Top symptoms shown as "often starts in the gut, not the skin" (associative only). */
+export interface SymptomToGutSection {
+  type: "symptomToGut";
+  data: { heading?: string; symptoms?: string[]; caption?: string };
+}
+
+/** "What to expect" timeline — week 1, 2-3, 4+. */
+export interface ExpectationTimelineSection {
+  type: "expectationTimeline";
+  data: { heading?: string; steps: { when: string; title: string; body: string }[] };
+}
+
+/** Designed "us vs typical chews" comparison (tick/cross, brand column highlighted). */
+export interface ChewsComparisonSection {
+  type: "chewsComparison";
+  data: {
+    heading?: string;
+    usLabel?: string;
+    themLabel?: string;
+    rows: { feature: string; us: string; them: string; usWins?: boolean }[];
+  };
+}
+
+/** A row of large, legible stat figures (big number + label). */
+export interface StatPanelSection {
+  type: "statPanel";
+  data: { heading?: string; stats: { value: string; label: string }[] };
+}
+
+/** Compact trust strip — stars, rating, review count, optional second proof number. */
+export interface SocialProofBarSection {
+  type: "socialProofBar";
+  data: { rating?: number; reviewCount?: string; extraValue?: string; extraLabel?: string };
+}
+
+/** A numbered reason (for "N reasons" listicles) with an optional real image. */
+export interface NumberedReasonSection {
+  type: "numberedReason";
+  data: {
+    number: number;
+    title: string;
+    body: string;
+    image?: ImageSlot;
+    imagePosition?: "left" | "right";
+  };
+}
+
+/** Polished testimonial card — stars, quote, name, "Verified Customer", optional photo. */
+export interface ReviewCardSection {
+  type: "reviewCard";
+  data: { quote: string; name: string; rating?: number; image?: ImageSlot; verified?: boolean };
+}
+
+/** A row of trust badges (UK-made, GMP, vegan, charity). */
+export interface TrustBadgeRowSection {
+  type: "trustBadgeRow";
+  data: { badges?: { label: string; icon?: "flag" | "shield" | "leaf" | "heart" }[] };
+}
+
+/** The money-back guarantee, as a designed seal + line. */
+export interface GuaranteeBlockSection {
+  type: "guaranteeBlock";
+  data: { days?: number; text?: string };
+}
+
+/** Vet credibility panel — portrait, name, credential, on-record quote. */
+export interface VetPanelSection {
+  type: "vetPanel";
+  data: { name: string; credential: string; quote: string; image?: ImageSlot };
+}
+
 /** Any section. Discriminate on `.type`. */
 export type Section =
   | HeroSection
@@ -211,7 +313,21 @@ export type Section =
   | ComparisonSection
   | BeforeAfterSection
   | QuoteSection
-  | ImageSection;
+  | ImageSection
+  // Visual component library
+  | MechanismDiagramSection
+  | GutRebalanceSection
+  | StrainBreakdownSection
+  | SymptomToGutSection
+  | ExpectationTimelineSection
+  | ChewsComparisonSection
+  | StatPanelSection
+  | SocialProofBarSection
+  | NumberedReasonSection
+  | ReviewCardSection
+  | TrustBadgeRowSection
+  | GuaranteeBlockSection
+  | VetPanelSection;
 
 export type SectionType = Section["type"];
 
