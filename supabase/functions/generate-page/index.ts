@@ -177,22 +177,42 @@ Deno.serve(async (req: Request) => {
       redirect: "follow",
     });
     if (!res.ok) throw new Error(`Could not fetch competitor URL (HTTP ${res.status}).`);
-    const pageText = stripToText(await res.text()).slice(0, 20000);
+    const html = await res.text();
+    // The heading outline is the structural backbone — anchors Pass 1 to the
+    // real section-by-section structure (and count) instead of interpreting it.
+    const headings = [...html.matchAll(/<(h[1-3])[^>]*>([\s\S]*?)<\/\1>/gi)]
+      .map((m) => stripToText(m[2]))
+      .filter(
+        (t) =>
+          t.length > 4 &&
+          !/^(your cart|all products|cart|policies|helpful links|monthly giveaway|menu|footer|newsletter|follow us)/i.test(t)
+      )
+      .slice(0, 50);
+    const pageText = stripToText(html).slice(0, 20000);
 
     // PASS 1 — structure plan (no copy).
     const planResp = await callClaude({
       model: MODEL_PLAN,
       max_tokens: 2500,
       system:
-        "You reverse-engineer the STRUCTURE of a competitor advertorial. Output ONLY a JSON object " +
-        `{"blocks":[...]}. Each block: {type, purpose, contentHint, imageNeed}. ` +
-        "type = the best match from " + JSON.stringify(BLOCK_TYPES) + ". " +
-        "purpose = the persuasive job of this section. " +
-        "contentHint = what argument/topic it covers, IN YOUR OWN WORDS — never copy their sentences. " +
+        "You reverse-engineer the EXACT STRUCTURE of a competitor advertorial so it can be rebuilt for a different brand, section for section. Output ONLY JSON: " +
+        `{"format": string, "titlePattern": string, "blocks": [{"type","role","theme","imageNeed"}]}. ` +
+        "format = the page's overall template/concept in a few words (e.g. 'Listicle: 5 numbered reasons, then an FAQ'). " +
+        "titlePattern = the main headline's pattern and sentiment IN YOUR OWN WORDS (e.g. '5 reasons dogs with [problem] are switching to [product]'). " +
+        "For blocks: produce ONE block per actual content section, in exact top-to-bottom order, and PRESERVE COUNTS — if there are 5 numbered reasons, output 5 blocks in order; if the FAQ has 7 questions, use one faq block but list all 7 question themes in its theme. " +
+        "type = best match from " + JSON.stringify(BLOCK_TYPES) + ". " +
+        "role = this section's persuasive job. " +
+        "theme = the specific point/argument/sentiment this section makes, IN YOUR OWN WORDS — never copy their sentences. " +
         "imageNeed = one of [vet, dog, product, before-after, ugc, ingredient, none]. " +
-        "Preserve the exact order and the full flow from top to bottom. Be thorough — capture every section.",
+        "Ignore site chrome (cart, nav, header menu, footer, policies, giveaway). Be faithful and granular so the page can be rebuilt block-for-block.",
       messages: [
-        { role: "user", content: `Competitor advertorial text:\n"""\n${pageText}\n"""` },
+        {
+          role: "user",
+          content:
+            `Section heading outline (the structural backbone — one block per real content section, same order and count):\n` +
+            headings.map((h, i) => `${i + 1}. ${h}`).join("\n") +
+            `\n\nFull page text (for context only):\n"""\n${pageText}\n"""`,
+        },
       ],
     });
     const plan = safeJson(planResp.content?.find((b: any) => b.type === "text")?.text ?? "") ?? {
@@ -223,11 +243,12 @@ Deno.serve(async (req: Request) => {
       tool_choice: { type: "tool", name: "emit_page" },
       system: [
         "You are an elite direct-response copywriter for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
-        "FOLLOW THE STRUCTURE PLAN: emit one block per plan item, in the same order, mapping to the planned type. This mirrors a proven competitor layout.",
-        "WRITE 100% ORIGINAL COPY in the brand voice. You are NOT given the competitor's words and must not reproduce any competitor phrasing.",
+        "MIRROR THE STRUCTURE FAITHFULLY, section for section: emit exactly one block per plan block, in the same order, the same TYPE, and the same COUNT. If the format is a numbered listicle (e.g. '5 reasons'), produce the same number of reason sections in the same order, each covering the SAME theme/sentiment as the plan block — rewritten for this brand. Number reason headings (1., 2., 3.…) when the source is numbered.",
+        "The HERO block's headline IS the page's main headline — build it from titlePattern in the SAME shape, in your own wording. For a numbered-listicle page the hero headline must take the '[N] Reasons …' form (e.g. '5 Reasons Dog Owners Are Switching to Good For Pets'), then the numbered reason sections follow. Mirror the FAQ questions with on-brand answers.",
+        "WRITE 100% ORIGINAL COPY in the brand voice. You do NOT have the competitor's words — never reproduce competitor phrasing; only their structure and the abstracted themes guide you. Every sentence is yours, grounded in the brand docs.",
         "GROUND EVERYTHING in the brand knowledge docs: use only the approved claims, obey the NEVER-SAY rules, and write in the customer's real voice/objection→proof patterns from the docs.",
         "CRITICAL — NUMBERS: never state any statistic, count, percentage, price, multiple or timeframe unless it appears verbatim in the brand knowledge. Do NOT invent or inflate figures (e.g. no made-up '43,000 owners'). The ONLY approved volume figures are '20,000+ dogs helped in the last 12 months' and '4,537+ verified reviews'; use the exact comparative phrasing from the docs ('up to 20x', the cheaper-per-serving line) and never round up or embellish.",
-        "Never invent specifics about named people — e.g. do not claim the vet gives it to his own dogs unless the docs say so. Do not invent product details, ingredients or [CONFIRM] items.",
+        "Do NOT state or imply the vet uses the product on his own dogs, or any personal anecdote about him — only that he co-developed the formula, plus his on-record quote from the docs. Do not invent product details, ingredients, or [CONFIRM] items.",
         "Voice: " + (brand.voice || "warm, honest, plain-spoken, founder-to-owner") + ".",
         brand.allowedClaims?.length
           ? "ONLY make product claims found in the docs / this allowed list: " + JSON.stringify(brand.allowedClaims) + "."
@@ -245,6 +266,8 @@ Deno.serve(async (req: Request) => {
           content: JSON.stringify({
             brand: { name: brand.name },
             buyBox,
+            format: plan.format ?? "",
+            titlePattern: plan.titlePattern ?? "",
             structurePlan: plan.blocks ?? plan,
             availableImages,
             availableReviews,
