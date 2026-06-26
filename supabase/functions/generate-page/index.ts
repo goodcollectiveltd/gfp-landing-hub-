@@ -137,7 +137,8 @@ async function callClaude(opts: {
   throw new Error(`Anthropic request failed: ${lastErr}`);
 }
 
-const BLOCK_TYPES = [
+// Legacy structural archetypes — used by Pass 1 to classify competitor sections.
+const LEGACY_BLOCK_TYPES = [
   "hero",
   "richText",
   "problemAgitate",
@@ -152,6 +153,28 @@ const BLOCK_TYPES = [
   "finalCta",
   "image",
 ];
+
+// Bespoke visual-library components + furniture + the customVisual escape hatch.
+// Pass 2 UPGRADES idea sections into these instead of flat image+text blocks.
+const COMPONENT_BLOCK_TYPES = [
+  "mechanismDiagram",
+  "gutRebalance",
+  "strainBreakdown",
+  "symptomToGut",
+  "expectationTimeline",
+  "chewsComparison",
+  "statPanel",
+  "socialProofBar",
+  "numberedReason",
+  "reviewCard",
+  "trustBadgeRow",
+  "guaranteeBlock",
+  "vetPanel",
+  "customVisual",
+];
+
+// Full set Pass 2 may emit.
+const BLOCK_TYPES = [...LEGACY_BLOCK_TYPES, ...COMPONENT_BLOCK_TYPES];
 
 // emit_page tool: the flexible block schema (mirrors src/types/page.ts). Image
 // slots are { url?, role? } — url copied verbatim from availableImages/reviews,
@@ -172,6 +195,7 @@ const emitTool = {
               type: "object",
               description:
                 "Slots for this block type. " +
+                "— Copy/structure blocks — " +
                 "hero{eyebrow?,headline,subheadline,ctaLabel,trustLine?,image?(url string)}; " +
                 "richText{eyebrow?,heading?,paragraphs[string]}; " +
                 "problemAgitate{headline,intro?,painPoints[{title,body}]}; " +
@@ -185,7 +209,22 @@ const emitTool = {
                 "faq{headline,items[{q,a}]}; " +
                 "finalCta{headline,subheadline?,ctaLabel,trustLine?}; " +
                 "image{image{url?,role?},caption?}. " +
-                "Image url values MUST be copied verbatim from availableImages or a review's image; never invent a URL. If nothing fits, omit url and set role to a short description (e.g. 'Vet holding the product').",
+                "— Bespoke visual components (PREFER these for idea sections) — " +
+                "mechanismDiagram{heading?,subhead?} (the potency paradox: baked chews kill live bacteria vs cold-fill; internal art is fixed, you only set headings); " +
+                "gutRebalance{heading?,caption?} (good bacteria crowding out bad — associative, supports/helps only); " +
+                "strainBreakdown{heading?,strains[{name,cfu?}],total?,addOns?[{label,detail?}]}; " +
+                "symptomToGut{heading?,symptoms?[string],caption?}; " +
+                "expectationTimeline{heading?,steps[{when,title,body}]}; " +
+                "chewsComparison{heading?,usLabel?,themLabel?,rows[{feature,us,them}]}; " +
+                "statPanel{heading?,stats[{value,label}]}; " +
+                "socialProofBar{rating?(number),reviewCount?(string),extraValue?,extraLabel?}; " +
+                "numberedReason{number,title,body,image?{url?,role?},imagePosition?(left|right)}; " +
+                "reviewCard{quote,name,rating?(number),image?{url?,role?},verified?(bool)}; " +
+                "trustBadgeRow{badges?[{label,icon?(flag|shield|leaf|heart)}]}; " +
+                "guaranteeBlock{days?(number),text?}; " +
+                "vetPanel{name,credential,quote,image?{url?,role?}}; " +
+                "customVisual{markup(string: self-contained, sanitised SVG/HTML, brand CSS vars only, NO <script>/on*/external src/href),designBrief(string),heading?}. " +
+                "Image url values MUST be copied verbatim from availableImages or a review's image; never invent a URL. If nothing fits, omit url and set role to a short description (e.g. 'Vet holding the product') — a generation brief is added automatically.",
             },
           },
           required: ["type", "data"],
@@ -195,6 +234,91 @@ const emitTool = {
     required: ["sections"],
   },
 };
+
+// --- Post-processing: deterministic slot routing on the emitted sections -----
+// (Server port of src/lib/visualRouting.ts + sanitizeCustomVisual.ts.)
+
+const DANGEROUS_TAGS =
+  "script|iframe|object|embed|link|meta|base|foreignObject|style|form|input|button|textarea|select|audio|video|source|a|animate|animateTransform|animateMotion|set|handler";
+
+/** Coarse server-side sanitiser for storage. The render-time DOM sanitiser
+ *  (sanitizeCustomVisual.ts) is the strong net; this strips the obvious vectors
+ *  before the markup is ever persisted. */
+function sanitizeMarkupServer(markup: unknown): string {
+  if (!markup || typeof markup !== "string") return "";
+  let s = markup;
+  // Paired dangerous tags + their contents.
+  s = s.replace(new RegExp(`<\\s*(${DANGEROUS_TAGS})\\b[\\s\\S]*?<\\/\\s*\\1\\s*>`, "gi"), " ");
+  // Self-closing / unclosed dangerous tags.
+  s = s.replace(new RegExp(`<\\s*\\/?\\s*(${DANGEROUS_TAGS})\\b[^>]*>`, "gi"), " ");
+  // Inline event handlers.
+  s = s
+    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, " ")
+    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, " ")
+    .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, " ");
+  // URL attributes that aren't same-document refs.
+  s = s
+    .replace(/\b(href|xlink:href|src)\s*=\s*"(?!#)[^"]*"/gi, " ")
+    .replace(/\b(href|xlink:href|src)\s*=\s*'(?!#)[^']*'/gi, " ");
+  return s.trim();
+}
+
+function makeBrief(sectionType: string, role: string, placement: string, productPhoto: boolean) {
+  return {
+    slotId: `${sectionType}-${role}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 60),
+    sectionType,
+    placement,
+    aspectRatio: sectionType === "beforeAfter" ? "1:1" : "4:5",
+    subject: role,
+    styleRef: productPhoto
+      ? "clean studio, seamless brand-red #EF3824 background, soft shadow"
+      : "natural home lifestyle, soft daylight",
+    mood: "real-looking older dog, owner 55-65, warm and calm",
+    safeZone:
+      "Keep key elements within the central 60% of the frame; top 20% and bottom 20% clear (Meta UI buffer).",
+    textOverlay: "None — text lives in the component, not the image.",
+    negativePrompt: "no on-image health claims, no fake stats, no competitor branding",
+    compliance: 'Product name always exactly "5 Strain Probiotic+".',
+  };
+}
+
+/** An image slot is { url?, role?, brief? }. Attach a brief when it's a bare
+ *  placeholder (role, no url) so the owner gets a ready-to-use generation brief. */
+function fillSlotBrief(slot: any, sectionType: string, placement: string) {
+  if (slot && typeof slot === "object" && !slot.url && slot.role && !slot.brief) {
+    const productish = /product|tub|pack|bottle|capsule|label/i.test(String(slot.role));
+    slot.brief = makeBrief(sectionType, String(slot.role), placement, productish);
+  }
+}
+
+/** Walk the emitted sections: sanitise customVisual markup, attach image briefs. */
+function postProcessSections(sections: any[]): any[] {
+  if (!Array.isArray(sections)) return sections;
+  for (const sec of sections) {
+    const d = sec?.data;
+    if (!d) continue;
+    switch (sec.type) {
+      case "customVisual":
+        d.markup = sanitizeMarkupServer(d.markup);
+        break;
+      case "image":
+      case "imageText":
+        fillSlotBrief(d.image, sec.type, d.imagePosition ?? "full");
+        break;
+      case "beforeAfter":
+        fillSlotBrief(d.before, sec.type, "left");
+        fillSlotBrief(d.after, sec.type, "right");
+        break;
+      case "quote":
+      case "vetPanel":
+      case "reviewCard":
+      case "numberedReason":
+        fillSlotBrief(d.image, sec.type, d.imagePosition ?? "full");
+        break;
+    }
+  }
+  return sections;
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -242,7 +366,7 @@ Deno.serve(async (req: Request) => {
         "(3) A run of short question-style headings/paragraphs (an FAQ accordion, often after a 'Got questions/FAQ' heading) = ONE faq block; list the questions as its theme. NEVER make each FAQ question its own block. " +
         "(4) A trailing call to action = finalCta. " +
         "Do NOT add sections that aren't there (no extra problem/mechanism/proof/comparison) and do NOT split a section into several blocks. A typical result is hero + the listicle items + offer + faq + finalCta (~8-12 blocks), NOT dozens. " +
-        "For each block: type = best fit from " + JSON.stringify(BLOCK_TYPES) + " (heading+paragraphs, no image = richText; section with an [IMG] = imageText; standalone [IMG] = image; questions = faq; closing CTA = finalCta). " +
+        "For each block: type = best fit from " + JSON.stringify(LEGACY_BLOCK_TYPES) + " (heading+paragraphs, no image = richText; section with an [IMG] = imageText; standalone [IMG] = image; questions = faq; closing CTA = finalCta). " +
         "theme = the section's point IN YOUR OWN WORDS from its heading (never copy wording). " +
         "image = one of [none, top, beside, after] (none if no [IMG] in that block). " +
         "paragraphs = array of approx word counts for that block's body paragraphs, in order (e.g. [20,25]). " +
@@ -276,9 +400,13 @@ Deno.serve(async (req: Request) => {
       tools: [emitTool],
       tool_choice: { type: "tool", name: "emit_page" },
       system: [
-        "You are an elite direct-response copywriter for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
-        "MIRROR THE STRUCTURE EXACTLY, block for block: emit EXACTLY one block per plan block, in the same order and the same TYPE. Emit the same TOTAL number of blocks as the plan — never add a section (no extra problem/mechanism/proof/comparison) the plan does not contain, and never drop or merge one. If it's a numbered listicle, number the reason headings (1., 2., 3.…).",
-        "MATCH LENGTH & IMAGES per block: write the SAME NUMBER of paragraphs as the block's `paragraphs` array, each roughly that word count (within ~25%). Honour `image`: 'beside' or 'after' → an imageText (or image) block with an image slot; 'top' → a hero/offer image; 'none' → no image. Keep the brand's section to the same visual weight as the original.",
+        "You are an elite direct-response copywriter AND visual designer for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
+        "MIRROR THE STRUCTURE, block for block: cover one content block per plan block, in the same order, conveying the same point. Keep the same total count of CONTENT sections — never invent a content section (no extra problem/mechanism/proof/comparison) the plan does not contain, and never drop or merge one. If it's a numbered listicle, number the reason headings (1., 2., 3.…). (You MAY additionally insert a few conversion-furniture blocks per the rule below — those don't count as content sections.)",
+        "DEFAULT TO A DESIGNED VISUAL COMPONENT, NOT FLAT IMAGE+TEXT. For any block that carries an IDEA — a mechanism/how-it-works, a comparison, a process, a set of stats, a proof point, an authority quote, a numbered reason — emit the matching bespoke component instead of a plain image/imageText/richText block. Mapping: how/why-it-works or mechanism → mechanismDiagram (or gutRebalance for the good-vs-bad-bacteria balance idea); strains/ingredients → strainBreakdown; symptoms-trace-to-root → symptomToGut; what-to-expect / results-over-time → expectationTimeline; us-vs-them / chews comparison → chewsComparison; a big number / stat callout → statPanel; a numbered reason in a listicle → numberedReason; a testimonial (especially one with a photo) → reviewCard; the vet / authority figure → vetPanel. richText, imageText, image and plain comparison/quote are the FALLBACK — use them only for genuine photographs or pure editorial copy that no component fits.",
+        "CONVERSION FURNITURE: you MAY add a small, sensible set of furniture blocks even if the plan lacks them — at most ONE socialProofBar (just under the hero), and near the offer/finalCta at most ONE trustBadgeRow, ONE guaranteeBlock and ONE statPanel. Do not scatter furniture elsewhere or exceed these counts.",
+        "customVisual is the escape hatch — use it ONLY for a genuinely bespoke diagram no component covers. data.markup must be self-contained, sanitised SVG/HTML (NO <script>, NO on* handlers, NO external src/href — internal #refs only), themed ONLY via the brand CSS variables (var(--brand-primary), var(--brand-on-primary), var(--brand-text), var(--font-heading), …), large and legible. Set data.designBrief to a one-line description so it can be regenerated. NEVER output a raw freeform HTML page — one self-contained block only.",
+        "COMPONENT DATA obeys every rule below: only approved claims; numbers ONLY verbatim from the docs (strainBreakdown strains/CFU, statPanel figures, etc.); expectationTimeline/gutRebalance/symptomToGut stay associative with supports/helps language — never a cure/treat/prevent claim. Fill component data from the brand docs; when unsure of an optional heading, omit it and let the component use its on-brand default.",
+        "MATCH LENGTH & IMAGES per block: for copy blocks, write the SAME NUMBER of paragraphs as the block's `paragraphs` array, each roughly that word count (within ~25%). Honour `image`: 'beside'/'after' → a component or imageText/image block carrying an image slot; 'top' → a hero/offer image; 'none' → no image. Keep the brand's section to the same visual weight as the original.",
         "The HERO block's headline IS the page's main headline — build it from titlePattern in the SAME shape, in your own wording. For a numbered-listicle page the hero headline must take the '[N] Reasons …' form (e.g. '5 Reasons Dog Owners Are Switching to Good For Pets'), then the numbered reason sections follow. Mirror the FAQ questions with on-brand answers.",
         "WRITE 100% ORIGINAL COPY in the brand voice. You do NOT have the competitor's words — never reproduce competitor phrasing; only their structure and the abstracted themes guide you. Every sentence is yours, grounded in the brand docs.",
         "PUNCHY & SCANNABLE: this is a high-converting landing page, not an essay. Short, sharp sentences. Short paragraphs (mostly 1 sentence, occasionally 2). Lead with the hook/benefit. Match the paragraph LENGTHS in each block's `paragraphs` array — if it's ~15-25 words, write ~15-25 words. NEVER write long expository paragraphs.",
@@ -318,7 +446,8 @@ Deno.serve(async (req: Request) => {
     if (!toolUse?.input?.sections) {
       return json({ error: "Generation did not return sections.", plan, raw: writeResp }, 502);
     }
-    return json({ plan, sections: toolUse.input.sections });
+    const sections = postProcessSections(toolUse.input.sections);
+    return json({ plan, sections });
   } catch (err) {
     return json({ error: String(err instanceof Error ? err.message : err) }, 500);
   }
