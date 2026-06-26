@@ -176,6 +176,57 @@ const COMPONENT_BLOCK_TYPES = [
 // Full set Pass 2 may emit ("video" is a media block for variety).
 const BLOCK_TYPES = [...LEGACY_BLOCK_TYPES, ...COMPONENT_BLOCK_TYPES, "video"];
 
+// The visualType vocabulary the vision pass uses to tag each block's design
+// treatment (maps onto our components / customVisual / photo / video).
+const VISUAL_TYPES = [
+  "mechanism", "gutRebalance", "strainBreakdown", "symptomToGut", "timeline",
+  "comparison", "statPanel", "trustBadgeRow", "reviewCard", "vetPanel",
+  "socialProofBar", "numberedReason", "guaranteeBlock", "productPhoto",
+  "lifestylePhoto", "video", "customVisual", "copy",
+];
+
+/**
+ * PASS 1 (vision): read the uploaded SCREENSHOT of the original advertorial and
+ * produce a block plan that captures its VISUAL DESIGN features — so the page
+ * can be rebuilt with the same KINDS of features in the brand's own style.
+ * Captures design + structure only; never the competitor's wording.
+ */
+async function visionPlan(screenshotUrl: string, skeleton: string): Promise<any> {
+  const resp = await callClaude({
+    model: MODEL_WRITE, // Opus vision — design reading needs the strong model.
+    max_tokens: 4000,
+    system:
+      "You are a senior direct-response landing-page designer. You are shown a SCREENSHOT of a competitor advertorial. Read its VISUAL DESIGN and output a block plan so the page can be REBUILT for another brand with the SAME KINDS of visual features, rendered in that brand's own style. " +
+      "Look at the actual visual treatments, in order down the page: hero layout, comparison tables/sliders, before/after visuals, numbered lists with icons, stat callouts, process/timeline diagrams, mechanism diagrams, testimonial cards, authority/vet panels, trust-badge rows, guarantee seals, sticky offer cards, charts. " +
+      'Output ONLY JSON: {"format":string,"titlePattern":string,"blocks":[{"type","theme","visualFeature","visualType","image","paragraphs"}]}. ' +
+      "One entry per LOGICAL section, in order (the masthead/first screen is ONE hero; group an FAQ list into ONE faq block; a closing CTA is finalCta). ~8-14 blocks, never dozens. " +
+      "For each block: " +
+      "type = closest archetype from " + JSON.stringify(LEGACY_BLOCK_TYPES) + ". " +
+      "theme = the section's point IN YOUR OWN WORDS (never transcribe the original's copy). " +
+      "visualFeature = a precise description of the DESIGN treatment you actually see (e.g. 'two-column comparison, brand column highlighted, green check vs grey cross'; 'three circular percentage rings'; 'numbered cards 1-5, each an icon + small photo'; 'sticky price card with strikethrough + guarantee seal'). Describe DESIGN only — no copied sentences. " +
+      "visualType = best match from " + JSON.stringify(VISUAL_TYPES) + ". Use 'customVisual' when the feature is a bespoke diagram none of the named components covers. Prefer a designed component over a plain photo whenever the section conveys an idea. " +
+      "image = one of [none, top, beside, after] based on where a photo sits. " +
+      "paragraphs = approx word counts of that section's body paragraphs, in order. " +
+      "format = the page concept in a few words. titlePattern = the headline's shape/sentiment in your own words. " +
+      "NEVER transcribe the competitor's wording, claims or numbers — capture DESIGN and STRUCTURE only.",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "url", url: screenshotUrl } },
+          {
+            type: "text",
+            text:
+              "Analyse this advertorial's visual design and return the block plan." +
+              (skeleton ? `\n\nText skeleton (structure reference only, do not copy wording):\n${skeleton}` : ""),
+          },
+        ],
+      },
+    ],
+  });
+  return safeJson(resp.content?.find((b: any) => b.type === "text")?.text ?? "");
+}
+
 // emit_page tool: the flexible block schema (mirrors src/types/page.ts). Image
 // slots are { url?, role? } — url copied verbatim from availableImages/reviews,
 // else role = a short description of what to upload there.
@@ -345,24 +396,31 @@ function mediaClass(s: any): string {
   if (GATE_COMPONENTS.has(s.type)) return "component";
   return "copy";
 }
-function paragraphCount(s: any): number {
+function bodyParas(s: any): string[] {
   const d = s.data ?? {};
-  if (s.type === "richText") return (d.paragraphs ?? []).length;
+  if (s.type === "richText") return (d.paragraphs ?? []) as string[];
   if (s.type === "imageText") {
-    const body = d.body ?? "";
-    return body.split(/\n\s*\n/).filter((p: string) => p.trim()).length || (body ? 1 : 0);
+    const body = (d.body as string) ?? "";
+    const parts = body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    return parts.length ? parts : body ? [body] : [];
   }
-  return 0;
+  return [];
 }
+const wordCount = (p: string) => (p || "").trim().split(/\s+/).filter(Boolean).length;
+const MAX_PARA_WORDS = 60;
 function checkPage(sections: any[]): { pass: boolean; failures: string[]; warnings: string[] } {
   const failures: string[] = [];
   const warnings: string[] = [];
-  if (!sections?.length) return { pass: false, failures: ["Page has no sections."], warnings: [] };
+  if (!Array.isArray(sections) || !sections.length)
+    return { pass: false, failures: ["Page has no sections."], warnings: [] };
 
   sections.forEach((s, i) => {
-    const n = paragraphCount(s);
-    if (n > 2)
-      failures.push(`Block ${i + 1} (${s.type}) has ${n} paragraphs — convert the substance into a component, don't write a wall of text.`);
+    const paras = bodyParas(s);
+    if (paras.length > 2)
+      failures.push(`Block ${i + 1} (${s.type}) has ${paras.length} paragraphs — convert the substance into a component, don't write a wall of text.`);
+    const longest = Math.max(0, ...paras.map(wordCount));
+    if (longest > MAX_PARA_WORDS)
+      failures.push(`Block ${i + 1} (${s.type}) has a ${longest}-word paragraph — too long; tighten to ~2 short sentences or move the substance into a component.`);
   });
 
   const media = sections.map(mediaClass);
@@ -395,48 +453,62 @@ Deno.serve(async (req: Request) => {
 
   const {
     competitorUrl,
+    screenshotUrl,
     brand = {},
     buyBox = {},
     docs = [],
     images = [],
     reviews = [],
   } = payload ?? {};
-  if (!competitorUrl) return json({ error: "competitorUrl is required." }, 400);
+  if (!competitorUrl && !screenshotUrl)
+    return json({ error: "Provide a competitor URL or a screenshot." }, 400);
 
   try {
-    // Fetch competitor page → text (structure source for pass 1 only).
-    const res = await fetch(competitorUrl, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" },
-      redirect: "follow",
-    });
-    if (!res.ok) throw new Error(`Could not fetch competitor URL (HTTP ${res.status}).`);
-    const html = await res.text();
-    const skeleton = structuralSkeleton(html);
+    // Fetch competitor page → text skeleton (structure reference). Optional when
+    // a screenshot is supplied; the vision pass reads structure from the image.
+    let skeleton = "";
+    if (competitorUrl) {
+      try {
+        const res = await fetch(competitorUrl, {
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; GFP-LandingHub/1.0)" },
+          redirect: "follow",
+        });
+        if (res.ok) skeleton = structuralSkeleton(await res.text());
+        else if (!screenshotUrl) throw new Error(`Could not fetch competitor URL (HTTP ${res.status}).`);
+      } catch (e) {
+        if (!screenshotUrl) throw e; // with a screenshot we can proceed without the URL
+      }
+    }
 
-    // PASS 1 — turn the deterministic skeleton into a strict block plan.
-    const planResp = await callClaude({
-      model: MODEL_PLAN,
-      max_tokens: 3000,
-      system:
-        "You convert a competitor advertorial's STRUCTURAL SKELETON into a block plan so the page can be rebuilt for another brand, block-for-block. " +
-        "The skeleton is an ordered token stream: [H1]/[H2]/[H3] are headings (with their text), [IMG] marks an image, and p(N) marks a paragraph of about N words. " +
-        "Output ONLY JSON: {\"format\":string, \"titlePattern\":string, \"blocks\":[{\"type\",\"theme\",\"image\",\"paragraphs\"}]}. " +
-        "Group the skeleton into the page's LOGICAL blocks, in order, preserving image placement and paragraph lengths — but do NOT fragment: " +
-        "(1) The content before the first heading is ONE hero block. Output exactly ONE hero. " +
-        "(2) Each main content heading (e.g. each numbered reason) = one block, containing its following paragraphs and image. " +
-        "(3) A run of short question-style headings/paragraphs (an FAQ accordion, often after a 'Got questions/FAQ' heading) = ONE faq block; list the questions as its theme. NEVER make each FAQ question its own block. " +
-        "(4) A trailing call to action = finalCta. " +
-        "Do NOT add sections that aren't there (no extra problem/mechanism/proof/comparison) and do NOT split a section into several blocks. A typical result is hero + the listicle items + offer + faq + finalCta (~8-12 blocks), NOT dozens. " +
-        "For each block: type = best fit from " + JSON.stringify(LEGACY_BLOCK_TYPES) + " (heading+paragraphs, no image = richText; section with an [IMG] = imageText; standalone [IMG] = image; questions = faq; closing CTA = finalCta). " +
-        "theme = the section's point IN YOUR OWN WORDS from its heading (never copy wording). " +
-        "image = one of [none, top, beside, after] (none if no [IMG] in that block). " +
-        "paragraphs = array of approx word counts for that block's body paragraphs, in order (e.g. [20,25]). " +
-        "format = the page concept in a few words. titlePattern = the headline's shape/sentiment in your own words.",
-      messages: [{ role: "user", content: `Structural skeleton:\n${skeleton}` }],
-    });
-    const plan = safeJson(planResp.content?.find((b: any) => b.type === "text")?.text ?? "") ?? {
-      blocks: [],
-    };
+    // PASS 1 — build the block plan. With a screenshot, READ ITS VISUAL DESIGN
+    // (vision) so we can replicate the original's features. Otherwise fall back
+    // to the deterministic text skeleton.
+    let plan: any;
+    if (screenshotUrl) {
+      plan = (await visionPlan(screenshotUrl, skeleton)) ?? { blocks: [] };
+    } else {
+      const planResp = await callClaude({
+        model: MODEL_PLAN,
+        max_tokens: 3000,
+        system:
+          "You convert a competitor advertorial's STRUCTURAL SKELETON into a block plan so the page can be rebuilt for another brand, block-for-block. " +
+          "The skeleton is an ordered token stream: [H1]/[H2]/[H3] are headings (with their text), [IMG] marks an image, and p(N) marks a paragraph of about N words. " +
+          "Output ONLY JSON: {\"format\":string, \"titlePattern\":string, \"blocks\":[{\"type\",\"theme\",\"image\",\"paragraphs\"}]}. " +
+          "Group the skeleton into the page's LOGICAL blocks, in order, preserving image placement and paragraph lengths — but do NOT fragment: " +
+          "(1) The content before the first heading is ONE hero block. Output exactly ONE hero. " +
+          "(2) Each main content heading (e.g. each numbered reason) = one block, containing its following paragraphs and image. " +
+          "(3) A run of short question-style headings/paragraphs (an FAQ accordion, often after a 'Got questions/FAQ' heading) = ONE faq block; list the questions as its theme. NEVER make each FAQ question its own block. " +
+          "(4) A trailing call to action = finalCta. " +
+          "Do NOT add sections that aren't there (no extra problem/mechanism/proof/comparison) and do NOT split a section into several blocks. A typical result is hero + the listicle items + offer + faq + finalCta (~8-12 blocks), NOT dozens. " +
+          "For each block: type = best fit from " + JSON.stringify(LEGACY_BLOCK_TYPES) + " (heading+paragraphs, no image = richText; section with an [IMG] = imageText; standalone [IMG] = image; questions = faq; closing CTA = finalCta). " +
+          "theme = the section's point IN YOUR OWN WORDS from its heading (never copy wording). " +
+          "image = one of [none, top, beside, after] (none if no [IMG] in that block). " +
+          "paragraphs = array of approx word counts for that block's body paragraphs, in order (e.g. [20,25]). " +
+          "format = the page concept in a few words. titlePattern = the headline's shape/sentiment in your own words.",
+        messages: [{ role: "user", content: `Structural skeleton:\n${skeleton}` }],
+      });
+      plan = safeJson(planResp.content?.find((b: any) => b.type === "text")?.text ?? "") ?? { blocks: [] };
+    }
 
     // PASS 2 — write the page from BRAND material only, following the plan.
     const docsText = (docs as any[])
@@ -463,6 +535,7 @@ Deno.serve(async (req: Request) => {
       system: [
         "You are an elite direct-response copywriter AND visual designer for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
         "MIRROR THE STRUCTURE, block for block: cover one content block per plan block, in the same order, conveying the same point. Keep the same total count of CONTENT sections — never invent a content section (no extra problem/mechanism/proof/comparison) the plan does not contain, and never drop or merge one. If it's a numbered listicle, number the reason headings (1., 2., 3.…). (You MAY additionally insert a few conversion-furniture blocks per the rule below — those don't count as content sections.)",
+        "REPLICATE THE ORIGINAL'S VISUAL FEATURES: when a plan block has a `visualFeature` (the design treatment seen in the uploaded original) and a suggested `visualType`, recreate that SAME feature in the BRAND'S style. Use the suggested library component when one fits; when `visualType` is 'customVisual', author a customVisual that recreates the feature (brand CSS variables, sanitised SVG/HTML, large & legible). Take design cues from the original's features — but render everything in the brand palette/voice and NEVER copy its wording, images, or exact colours. The goal: each page visually echoes the specific original it came from, not a generic kit.",
         "DEFAULT TO A DESIGNED VISUAL COMPONENT, NOT FLAT IMAGE+TEXT. For any block that carries an IDEA — a mechanism/how-it-works, a comparison, a process, a set of stats, a proof point, an authority quote, a numbered reason — emit the matching bespoke component instead of a plain image/imageText/richText block. Mapping: how/why-it-works or mechanism → mechanismDiagram (or gutRebalance for the good-vs-bad-bacteria balance idea); strains/ingredients → strainBreakdown; symptoms-trace-to-root → symptomToGut; what-to-expect / results-over-time → expectationTimeline; us-vs-them / chews comparison → chewsComparison; a big number / stat callout → statPanel; a numbered reason in a listicle → numberedReason; a testimonial (especially one with a photo) → reviewCard; the vet / authority figure → vetPanel. richText, imageText, image and plain comparison/quote are the FALLBACK — use them only for genuine photographs or pure editorial copy that no component fits.",
         "CONVERSION FURNITURE: you MAY add a small, sensible set of furniture blocks even if the plan lacks them — at most ONE socialProofBar (just under the hero), and near the offer/finalCta at most ONE trustBadgeRow, ONE guaranteeBlock and ONE statPanel. Do not scatter furniture elsewhere or exceed these counts.",
         "customVisual is the escape hatch — use it ONLY for a genuinely bespoke diagram no component covers. data.markup must be self-contained, sanitised SVG/HTML (NO <script>, NO on* handlers, NO external src/href — internal #refs only), themed ONLY via the brand CSS variables (var(--brand-primary), var(--brand-on-primary), var(--brand-text), var(--font-heading), …), large and legible. Set data.designBrief to a one-line description so it can be regenerated. NEVER output a raw freeform HTML page — one self-contained block only.",
@@ -508,10 +581,13 @@ Deno.serve(async (req: Request) => {
     });
 
     const toolUse = writeResp.content?.find((b: any) => b.type === "tool_use");
-    if (!toolUse?.input?.sections) {
+    let rawSections = toolUse?.input?.sections;
+    // The model occasionally returns `sections` as a JSON string — coerce it.
+    if (typeof rawSections === "string") rawSections = safeJson(rawSections);
+    if (!Array.isArray(rawSections)) {
       return json({ error: "Generation did not return sections.", plan, raw: writeResp }, 502);
     }
-    let sections = postProcessSections(toolUse.input.sections);
+    let sections = postProcessSections(rawSections);
     let gate = checkPage(sections);
 
     // Quality gate: if the page fails, run ONE corrective pass to fix the
@@ -542,8 +618,10 @@ Deno.serve(async (req: Request) => {
           ],
         });
         const fixUse = fixResp.content?.find((b: any) => b.type === "tool_use");
-        if (fixUse?.input?.sections) {
-          const fixed = postProcessSections(fixUse.input.sections);
+        let rawFixed = fixUse?.input?.sections;
+        if (typeof rawFixed === "string") rawFixed = safeJson(rawFixed);
+        if (Array.isArray(rawFixed)) {
+          const fixed = postProcessSections(rawFixed);
           const gate2 = checkPage(fixed);
           if (gate2.failures.length <= gate.failures.length) {
             sections = fixed;

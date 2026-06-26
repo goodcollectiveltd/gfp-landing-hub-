@@ -26,8 +26,12 @@ console.log(
   `Loaded: ${docs.length} docs, ${(brand.images || []).length} images, ${reviews.length} reviews`
 );
 
+const SCREENSHOT = process.env.SCREENSHOT_URL || undefined;
+if (SCREENSHOT) console.log("Using screenshot:", SCREENSHOT);
+
 const payload = {
   competitorUrl: COMPETITOR,
+  screenshotUrl: SCREENSHOT,
   brand: {
     name: brand.name,
     voice: brand.voice || "warm, honest, plain-spoken, founder-to-owner UK voice",
