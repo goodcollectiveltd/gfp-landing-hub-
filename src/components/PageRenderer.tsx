@@ -53,9 +53,13 @@ export default function PageRenderer({
   useEffect(() => {
     const families = brandKit.fontFamilies ?? [];
     if (!families.length) return;
+    // Request the full weight range so headings render in TRUE bold (e.g.
+    // Poppins 700/800), not a browser-synthesised faux-bold of the 400 file.
     const href =
       "https://fonts.googleapis.com/css2?" +
-      families.map((f) => `family=${encodeURIComponent(f).replace(/%20/g, "+")}`).join("&") +
+      families
+        .map((f) => `family=${encodeURIComponent(f).replace(/%20/g, "+")}:wght@400;500;600;700;800`)
+        .join("&") +
       "&display=swap";
     const link = document.createElement("link");
     link.rel = "stylesheet";

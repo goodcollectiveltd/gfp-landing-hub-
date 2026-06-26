@@ -24,6 +24,15 @@
   .lp-band[data-tone="feature"] {
     background: transparent;
   }
+  /* Even vertical rhythm: normalise each section's own padding so spacing
+     between bands is consistent regardless of the component. Higher specificity
+     than Tailwind's py-* utilities, so it wins. Horizontal padding is left to
+     the component. Feature bands keep their own padding (wave edge clearance). */
+  .lp-band:not([data-tone="feature"]) > section,
+  .lp-band:not([data-tone="feature"]) > div {
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+  }
   .lp-heading {
     font-family: var(--font-heading);
     color: var(--brand-ink, var(--brand-text));
