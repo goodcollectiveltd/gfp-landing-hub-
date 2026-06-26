@@ -7,6 +7,47 @@ and the **visual build brief** (see §4). The owner (`will@stefanthomas.co`) is
 
 ---
 
+## UPDATE — 2026-06-26 session (read this first; supersedes §2/§5 below)
+
+Big progress. All pushed to `origin/main`. Done this session:
+
+- **Visual component library wired into the generator** (was the §5 task): all 13
+  components are typed `Section`s rendered by `PageRenderer`; `generate-page` Pass 2
+  now emits them ("default to a designed component, not flat image+text").
+- **`customVisual` escape hatch** + sanitiser (`src/lib/sanitizeCustomVisual.ts`,
+  render-time) + server-side sanitiser; **slot routing** (`src/lib/visualRouting.ts`).
+- **Image briefs**: photo slots with no library match get an `ImageBrief` attached
+  (schema in `page.ts`); shown in `SlotImage` placeholders. (Copyable-list UI = TODO.)
+- **Visual fidelity (wake-up-call brief, `~/Downloads/gfp-wake-up-call-brief.md`):**
+  v2 palette (white base #FFF, tint #FCEAE6, accent #EF3824, accentDeep #C02A18,
+  ink #161616, body #4B4B4B — in `makeColors` + PageRenderer role vars); section
+  rhythm bands (alternating white/tint, vermilion `finalCta` feature w/ wave edge);
+  **fixed Poppins Bold** (renderer now requests font weights); even section padding.
+- **Quality gate** (`src/lib/qualityGate.ts` + server port in `generate-page`):
+  flags text density (>2 paras OR >60-word para), media-variety adjacency, missing
+  component/video; **one corrective Opus pass** runs on failure before returning.
+  `video` block type added (autoplay/muted/poster-placeholder).
+- **VISUAL REPLICATION (the headline feature):** owner now **uploads a screenshot**
+  of the original advertorial on `/new`; `generate-page` runs an **Opus vision pass**
+  that reads the screenshot's *design features* and rebuilds those same feature types
+  **in the brand's style** (component or `customVisual`). Fidelity decision = "replicate
+  feature types in brand style", NOT pixel-clone. `competitorUrl` is now optional.
+- **Critical resilience fix:** added a per-section error boundary
+  (`SectionBoundary`) + defensive array defaults across components — a malformed
+  generated section no longer blanks the whole page.
+
+**Immediate next tasks (remaining roadmap):** (1) image-brief copyable list UI +
+storage (brief §5); (2) stock-photo toggle, default off (brief §6); (3) **light
+visual editor** — reorder/delete/swap/edit/regenerate a single block (the last 10%);
+(4) Meta Pixel + fbclid/UTM passthrough; (5) subdomain deploy.
+
+**Ops notes:** deploys still need a fresh Supabase access token each session (owner
+creates + deletes; reuse within a session is fine). Test a generation with
+`SB_TOKEN=… PROJECT_REF=uzpqgeodcbfgymipefwb [SCREENSHOT_URL=…] node scripts/test-generate.mjs`.
+Preview `screenshot` tool times out in this env — verify via `preview_eval` DOM checks.
+
+---
+
 ## 1. What this is (one line)
 
 An AI advertorial generator for **Good For Pets** (UK dog supplements, hero product
