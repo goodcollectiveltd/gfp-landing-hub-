@@ -40,6 +40,50 @@ function stripToText(html: string): string {
     .replace(/\s+/g, " ")
     .trim();
 }
+// Deterministic structural skeleton: an ordered token stream of the page's real
+// blocks — [H1]/[H2] headings (text), [IMG] image markers, and p(N) paragraph
+// LENGTH markers (word counts only, never the competitor's body copy). This is
+// what lets the rebuild match section count, image placement and paragraph
+// lengths exactly.
+function structuralSkeleton(html: string): string {
+  let h = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<svg[\s\S]*?<\/svg>/gi, " ")
+    .replace(/<img\b[^>]*>/gi, "\n[IMG]\n")
+    .replace(/background-image\s*:\s*url/gi, "\n[IMG]\n")
+    .replace(
+      /<(h[1-3])\b[^>]*>([\s\S]*?)<\/\1>/gi,
+      (_m, t, x) => `\n[${String(t).toUpperCase()}] ${stripToText(x).slice(0, 80)}\n`
+    )
+    .replace(/<\/(p|div|li|section|h[1-6]|button|a)>/gi, "\n")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&[a-z]+;/gi, " ");
+  const lines = h.split("\n").map((x) => x.replace(/\s+/g, " ").trim());
+  const out: string[] = [];
+  let lastImg = false;
+  for (const l of lines) {
+    if (!l) continue;
+    if (l === "[IMG]") {
+      if (!lastImg) out.push("[IMG]");
+      lastImg = true;
+      continue;
+    }
+    lastImg = false;
+    if (l.startsWith("[H")) {
+      out.push(l);
+      continue;
+    }
+    if (/^(your cart|all products|cart|menu|policies|helpful links|monthly giveaway|©|powered by|skip to|search|log in|sign up|follow)/i.test(l))
+      continue;
+    const w = l.split(" ").filter(Boolean).length;
+    if (w >= 3) out.push(`p(${w})`);
+  }
+  // Start at the first real headline so we drop nav/cart chrome.
+  const firstH = out.findIndex((x) => x.startsWith("[H1]") || x.startsWith("[H2]"));
+  return (firstH > 0 ? out.slice(firstH) : out).slice(0, 130).join("\n");
+}
+
 function safeJson(text: string): any {
   try {
     let c = text.replace(/```json/gi, "").replace(/```/g, "").trim();
@@ -178,42 +222,28 @@ Deno.serve(async (req: Request) => {
     });
     if (!res.ok) throw new Error(`Could not fetch competitor URL (HTTP ${res.status}).`);
     const html = await res.text();
-    // The heading outline is the structural backbone — anchors Pass 1 to the
-    // real section-by-section structure (and count) instead of interpreting it.
-    const headings = [...html.matchAll(/<(h[1-3])[^>]*>([\s\S]*?)<\/\1>/gi)]
-      .map((m) => stripToText(m[2]))
-      .filter(
-        (t) =>
-          t.length > 4 &&
-          !/^(your cart|all products|cart|policies|helpful links|monthly giveaway|menu|footer|newsletter|follow us)/i.test(t)
-      )
-      .slice(0, 50);
-    const pageText = stripToText(html).slice(0, 20000);
+    const skeleton = structuralSkeleton(html);
 
-    // PASS 1 — structure plan (no copy).
+    // PASS 1 — turn the deterministic skeleton into a strict block plan.
     const planResp = await callClaude({
       model: MODEL_PLAN,
-      max_tokens: 2500,
+      max_tokens: 3000,
       system:
-        "You reverse-engineer the EXACT STRUCTURE of a competitor advertorial so it can be rebuilt for a different brand, section for section. Output ONLY JSON: " +
-        `{"format": string, "titlePattern": string, "blocks": [{"type","role","theme","imageNeed"}]}. ` +
-        "format = the page's overall template/concept in a few words (e.g. 'Listicle: 5 numbered reasons, then an FAQ'). " +
-        "titlePattern = the main headline's pattern and sentiment IN YOUR OWN WORDS (e.g. '5 reasons dogs with [problem] are switching to [product]'). " +
-        "For blocks: produce ONE block per actual content section, in exact top-to-bottom order, and PRESERVE COUNTS — if there are 5 numbered reasons, output 5 blocks in order; if the FAQ has 7 questions, use one faq block but list all 7 question themes in its theme. " +
-        "type = best match from " + JSON.stringify(BLOCK_TYPES) + ". " +
-        "role = this section's persuasive job. " +
-        "theme = the specific point/argument/sentiment this section makes, IN YOUR OWN WORDS — never copy their sentences. " +
-        "imageNeed = one of [vet, dog, product, before-after, ugc, ingredient, none]. " +
-        "Ignore site chrome (cart, nav, header menu, footer, policies, giveaway). Be faithful and granular so the page can be rebuilt block-for-block.",
-      messages: [
-        {
-          role: "user",
-          content:
-            `Section heading outline (the structural backbone — one block per real content section, same order and count):\n` +
-            headings.map((h, i) => `${i + 1}. ${h}`).join("\n") +
-            `\n\nFull page text (for context only):\n"""\n${pageText}\n"""`,
-        },
-      ],
+        "You convert a competitor advertorial's STRUCTURAL SKELETON into a block plan so the page can be rebuilt for another brand, block-for-block. " +
+        "The skeleton is an ordered token stream: [H1]/[H2]/[H3] are headings (with their text), [IMG] marks an image, and p(N) marks a paragraph of about N words. " +
+        "Output ONLY JSON: {\"format\":string, \"titlePattern\":string, \"blocks\":[{\"type\",\"theme\",\"image\",\"paragraphs\"}]}. " +
+        "Group the skeleton into the page's LOGICAL blocks, in order, preserving image placement and paragraph lengths — but do NOT fragment: " +
+        "(1) The content before the first heading is ONE hero block. Output exactly ONE hero. " +
+        "(2) Each main content heading (e.g. each numbered reason) = one block, containing its following paragraphs and image. " +
+        "(3) A run of short question-style headings/paragraphs (an FAQ accordion, often after a 'Got questions/FAQ' heading) = ONE faq block; list the questions as its theme. NEVER make each FAQ question its own block. " +
+        "(4) A trailing call to action = finalCta. " +
+        "Do NOT add sections that aren't there (no extra problem/mechanism/proof/comparison) and do NOT split a section into several blocks. A typical result is hero + the listicle items + offer + faq + finalCta (~8-12 blocks), NOT dozens. " +
+        "For each block: type = best fit from " + JSON.stringify(BLOCK_TYPES) + " (heading+paragraphs, no image = richText; section with an [IMG] = imageText; standalone [IMG] = image; questions = faq; closing CTA = finalCta). " +
+        "theme = the section's point IN YOUR OWN WORDS from its heading (never copy wording). " +
+        "image = one of [none, top, beside, after] (none if no [IMG] in that block). " +
+        "paragraphs = array of approx word counts for that block's body paragraphs, in order (e.g. [20,25]). " +
+        "format = the page concept in a few words. titlePattern = the headline's shape/sentiment in your own words.",
+      messages: [{ role: "user", content: `Structural skeleton:\n${skeleton}` }],
     });
     const plan = safeJson(planResp.content?.find((b: any) => b.type === "text")?.text ?? "") ?? {
       blocks: [],
@@ -223,12 +253,12 @@ Deno.serve(async (req: Request) => {
     const docsText = (docs as any[])
       .map((d) => `### ${d.title} [${d.tag}]\n${d.content}`)
       .join("\n\n")
-      .slice(0, 90000);
-    const availableImages = (images as any[]).map((i) => ({
-      url: i.url,
-      tag: i.tag,
-      caption: i.caption,
-    }));
+      .slice(0, 48000);
+    // Only images useful for matching (captioned or specifically tagged), capped.
+    const availableImages = (images as any[])
+      .filter((i) => (i.caption && i.caption.length) || (i.tag && i.tag !== "other"))
+      .slice(0, 50)
+      .map((i) => ({ url: i.url, tag: i.tag, caption: i.caption }));
     const availableReviews = (reviews as any[]).map((r) => ({
       author: r.author,
       rating: r.rating,
@@ -238,12 +268,13 @@ Deno.serve(async (req: Request) => {
 
     const writeResp = await callClaude({
       model: MODEL_WRITE,
-      max_tokens: 8000,
+      max_tokens: 14000,
       tools: [emitTool],
       tool_choice: { type: "tool", name: "emit_page" },
       system: [
         "You are an elite direct-response copywriter for the DTC brand below. Build a complete advertorial landing page by calling emit_page.",
-        "MIRROR THE STRUCTURE FAITHFULLY, section for section: emit exactly one block per plan block, in the same order, the same TYPE, and the same COUNT. If the format is a numbered listicle (e.g. '5 reasons'), produce the same number of reason sections in the same order, each covering the SAME theme/sentiment as the plan block — rewritten for this brand. Number reason headings (1., 2., 3.…) when the source is numbered.",
+        "MIRROR THE STRUCTURE EXACTLY, block for block: emit EXACTLY one block per plan block, in the same order and the same TYPE. Emit the same TOTAL number of blocks as the plan — never add a section (no extra problem/mechanism/proof/comparison) the plan does not contain, and never drop or merge one. If it's a numbered listicle, number the reason headings (1., 2., 3.…).",
+        "MATCH LENGTH & IMAGES per block: write the SAME NUMBER of paragraphs as the block's `paragraphs` array, each roughly that word count (within ~25%). Honour `image`: 'beside' or 'after' → an imageText (or image) block with an image slot; 'top' → a hero/offer image; 'none' → no image. Keep the brand's section to the same visual weight as the original.",
         "The HERO block's headline IS the page's main headline — build it from titlePattern in the SAME shape, in your own wording. For a numbered-listicle page the hero headline must take the '[N] Reasons …' form (e.g. '5 Reasons Dog Owners Are Switching to Good For Pets'), then the numbered reason sections follow. Mirror the FAQ questions with on-brand answers.",
         "WRITE 100% ORIGINAL COPY in the brand voice. You do NOT have the competitor's words — never reproduce competitor phrasing; only their structure and the abstracted themes guide you. Every sentence is yours, grounded in the brand docs.",
         "GROUND EVERYTHING in the brand knowledge docs: use only the approved claims, obey the NEVER-SAY rules, and write in the customer's real voice/objection→proof patterns from the docs.",

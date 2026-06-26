@@ -57,10 +57,13 @@ const out = await res.json();
 console.log("HTTP", res.status, `· ${((Date.now() - t0) / 1000).toFixed(0)}s\n`);
 if (out.error) {
   console.log("ERROR:", out.error);
+  const pb = out.plan?.blocks || out.plan || [];
+  console.log("plan blocks:", pb.length);
+  if (out.raw) console.log("stop_reason:", out.raw.stop_reason, "| content:", (out.raw.content || []).map((c) => c.type).join(","));
 } else {
   const plan = out.plan?.blocks || out.plan || [];
   console.log("=== STRUCTURE PLAN (from competitor) ===");
-  plan.forEach((b, i) => console.log(`  ${i + 1}. ${b.type}  [img:${b.imageNeed || "-"}]  ${b.purpose || ""}`));
+  plan.forEach((b, i) => console.log(`  ${i + 1}. ${b.type}  img:${b.image || "-"}  paras:${JSON.stringify(b.paragraphs || [])}  ${(b.theme || "").slice(0, 48)}`));
   console.log("\n=== GENERATED PAGE (your brand) ===");
   (out.sections || []).forEach((s, i) => {
     const d = s.data || {};
