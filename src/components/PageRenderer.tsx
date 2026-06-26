@@ -1,5 +1,5 @@
-import { useEffect, type CSSProperties } from "react";
-import type { LandingPage } from "@/types/page";
+import { useEffect, type CSSProperties, type ReactNode } from "react";
+import type { BuyBoxConfig, LandingPage, Section } from "@/types/page";
 
 import Hero from "@/components/sections/Hero";
 import ProblemAgitate from "@/components/sections/ProblemAgitate";
@@ -68,16 +68,37 @@ export default function PageRenderer({
   }, [familyKey]);
 
   // Brand kit drives every color/font via CSS variables (see index.css helpers).
+  // The v2 role palette is authoritative: white base, vermilion accent, ink
+  // headings, grey body. We prefer the brand's role fields and fall back to the
+  // v2 defaults — deliberately NOT using the legacy cream `background` / dark
+  // `text` values, so older brand rows still render on-spec.
+  const c = brandKit.colors;
+  const accent = c.accent || c.primary;
   const brandVars = {
-    "--brand-primary": brandKit.colors.primary,
-    "--brand-on-primary": brandKit.colors.onPrimary,
-    "--brand-accent": brandKit.colors.accent,
-    "--brand-bg": brandKit.colors.background,
-    "--brand-text": brandKit.colors.text,
-    "--brand-muted": brandKit.colors.muted,
+    "--brand-primary": c.primary,
+    "--brand-on-primary": c.onPrimary,
+    "--brand-accent": accent,
+    "--brand-accent-deep": c.accentDeep ?? "#C02A18",
+    "--brand-base": c.base ?? "#FFFFFF",
+    "--brand-surface-tint": c.surfaceTint ?? "#FCEAE6",
+    "--brand-ink": c.ink ?? "#161616",
+    "--brand-text": c.body ?? "#4B4B4B",
+    "--brand-muted": c.muted && c.body ? c.muted : "#6B6B6B",
+    // Back-compat: .lp-root reads --brand-bg.
+    "--brand-bg": c.base ?? "#FFFFFF",
     "--font-heading": brandKit.fonts.heading,
     "--font-body": brandKit.fonts.body,
   } as CSSProperties;
+
+  // Section rhythm: alternate white / pale-tint bands so no two adjacent
+  // sections share a background. Full-vermilion "feature" sections (the closing
+  // CTA) paint their own background, so the band stays transparent for them.
+  const FEATURE_TYPES = new Set(["finalCta"]);
+  let nf = 0; // counts non-feature sections to drive the alternation
+  const toneFor = (type: string): "white" | "tint" | "feature" => {
+    if (FEATURE_TYPES.has(type)) return "feature";
+    return nf++ % 2 === 0 ? "white" : "tint";
+  };
 
   return (
     <div className="lp-root min-h-screen" style={brandVars}>
@@ -92,89 +113,89 @@ export default function PageRenderer({
         )}
       </header>
 
-      {/* Ordered sections. pb-24 leaves room for the sticky buy bar. */}
+      {/* Ordered sections, each in a rhythm band. pb-24 leaves room for the
+          sticky buy bar. */}
       <main className="pb-24">
-        {sections.map((section, i) => {
-          switch (section.type) {
-            case "hero":
-              return (
-                <Hero key={i} data={section.data} productUrl={buyBox.productUrl} />
-              );
-            case "problemAgitate":
-              return <ProblemAgitate key={i} data={section.data} />;
-            case "mechanism":
-              return <Mechanism key={i} data={section.data} />;
-            case "proof":
-              return <Proof key={i} data={section.data} />;
-            case "offer":
-              return <Offer key={i} data={section.data} buyBox={buyBox} />;
-            case "faq":
-              return <FAQ key={i} data={section.data} />;
-            case "finalCta":
-              return (
-                <FinalCTA
-                  key={i}
-                  data={section.data}
-                  productUrl={buyBox.productUrl}
-                />
-              );
-            case "richText":
-              return <RichText key={i} data={section.data} />;
-            case "imageText":
-              return <ImageText key={i} data={section.data} />;
-            case "comparison":
-              return <Comparison key={i} data={section.data} />;
-            case "beforeAfter":
-              return <BeforeAfter key={i} data={section.data} />;
-            case "quote":
-              return <Quote key={i} data={section.data} />;
-            case "image":
-              return <ImageBlock key={i} data={section.data} />;
-
-            // Visual component library — props are passed directly (not wrapped
-            // in `data`), so we spread the section's data into the component.
-            case "mechanismDiagram":
-              return <MechanismDiagram key={i} {...section.data} />;
-            case "gutRebalance":
-              return <GutRebalanceVisual key={i} {...section.data} />;
-            case "strainBreakdown":
-              return <StrainBreakdown key={i} {...section.data} />;
-            case "symptomToGut":
-              return <SymptomToGut key={i} {...section.data} />;
-            case "expectationTimeline":
-              return <ExpectationTimeline key={i} {...section.data} />;
-            case "chewsComparison":
-              return <ChewsComparison key={i} {...section.data} />;
-            case "statPanel":
-              return <StatPanel key={i} {...section.data} />;
-            case "socialProofBar":
-              return <SocialProofBar key={i} {...section.data} />;
-            case "numberedReason":
-              return <NumberedReasonCard key={i} {...section.data} />;
-            case "reviewCard":
-              return <ReviewCard key={i} {...section.data} />;
-            case "trustBadgeRow":
-              return <TrustBadgeRow key={i} {...section.data} />;
-            case "guaranteeBlock":
-              return <GuaranteeBlock key={i} {...section.data} />;
-            case "vetPanel":
-              return <VetPanel key={i} {...section.data} />;
-
-            // Bespoke escape hatch (markup sanitised at render time).
-            case "customVisual":
-              return <CustomVisual key={i} data={section.data} />;
-
-            default:
-              // Exhaustiveness guard: a new section type without a renderer
-              // becomes a compile error here.
-              return assertNever(section);
-          }
-        })}
+        {sections.map((section, i) => (
+          <div key={i} className="lp-band" data-tone={toneFor(section.type)}>
+            {renderSection(section, buyBox)}
+          </div>
+        ))}
       </main>
 
       <BuyBox buyBox={buyBox} embedded={embedded} />
     </div>
   );
+}
+
+/** Map one section to its component. The band wrapper supplies the key. */
+function renderSection(section: Section, buyBox: BuyBoxConfig): ReactNode {
+  switch (section.type) {
+    case "hero":
+      return <Hero data={section.data} productUrl={buyBox.productUrl} />;
+    case "problemAgitate":
+      return <ProblemAgitate data={section.data} />;
+    case "mechanism":
+      return <Mechanism data={section.data} />;
+    case "proof":
+      return <Proof data={section.data} />;
+    case "offer":
+      return <Offer data={section.data} buyBox={buyBox} />;
+    case "faq":
+      return <FAQ data={section.data} />;
+    case "finalCta":
+      return <FinalCTA data={section.data} productUrl={buyBox.productUrl} />;
+    case "richText":
+      return <RichText data={section.data} />;
+    case "imageText":
+      return <ImageText data={section.data} />;
+    case "comparison":
+      return <Comparison data={section.data} />;
+    case "beforeAfter":
+      return <BeforeAfter data={section.data} />;
+    case "quote":
+      return <Quote data={section.data} />;
+    case "image":
+      return <ImageBlock data={section.data} />;
+
+    // Visual component library — props are passed directly (not wrapped in
+    // `data`), so we spread the section's data into the component.
+    case "mechanismDiagram":
+      return <MechanismDiagram {...section.data} />;
+    case "gutRebalance":
+      return <GutRebalanceVisual {...section.data} />;
+    case "strainBreakdown":
+      return <StrainBreakdown {...section.data} />;
+    case "symptomToGut":
+      return <SymptomToGut {...section.data} />;
+    case "expectationTimeline":
+      return <ExpectationTimeline {...section.data} />;
+    case "chewsComparison":
+      return <ChewsComparison {...section.data} />;
+    case "statPanel":
+      return <StatPanel {...section.data} />;
+    case "socialProofBar":
+      return <SocialProofBar {...section.data} />;
+    case "numberedReason":
+      return <NumberedReasonCard {...section.data} />;
+    case "reviewCard":
+      return <ReviewCard {...section.data} />;
+    case "trustBadgeRow":
+      return <TrustBadgeRow {...section.data} />;
+    case "guaranteeBlock":
+      return <GuaranteeBlock {...section.data} />;
+    case "vetPanel":
+      return <VetPanel {...section.data} />;
+
+    // Bespoke escape hatch (markup sanitised at render time).
+    case "customVisual":
+      return <CustomVisual data={section.data} />;
+
+    default:
+      // Exhaustiveness guard: a new section type without a renderer becomes a
+      // compile error here.
+      return assertNever(section);
+  }
 }
 
 function assertNever(x: never): never {

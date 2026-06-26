@@ -21,8 +21,9 @@ export default function Hero({
           {data.subheadline}
         </p>
 
-        {/* Hero visual: real scraped product image if we have one, else a
-            branded gradient placeholder. */}
+        {/* Hero visual: real scraped product image if we have one, else a clean
+            labelled placeholder (a frame the owner fills — never a saturated
+            box that reads like a rendering error). */}
         {data.image ? (
           <img
             src={data.image}
@@ -31,15 +32,17 @@ export default function Hero({
           />
         ) : (
           <div
-            className="mx-auto mt-7 flex h-48 max-w-sm items-center justify-center rounded-2xl sm:h-56"
+            className="mx-auto mt-7 flex h-48 max-w-sm flex-col items-center justify-center rounded-2xl border-2 border-dashed sm:h-56"
             style={{
-              background:
-                "linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%)",
+              borderColor: "rgba(0,0,0,0.12)",
+              background: "var(--brand-surface-tint, #FCEAE6)",
             }}
           >
-            <span className="text-sm font-medium uppercase tracking-wide text-white/80">
-              Product image
+            <span className="text-2xl opacity-30" aria-hidden>
+              🖼
             </span>
+            <span className="lp-muted mt-1 text-xs font-medium">Product image</span>
+            <span className="lp-muted text-[10px] opacity-70">add a hero image</span>
           </div>
         )}
 

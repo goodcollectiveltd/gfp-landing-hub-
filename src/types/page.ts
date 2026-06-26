@@ -27,6 +27,17 @@ export interface BrandKit {
     text: string;
     /** Muted text color for secondary copy. */
     muted: string;
+    // --- v2 role palette (optional; renderer fills sensible defaults) ---
+    /** Page base — the dominant background. White, never cream. */
+    base?: string;
+    /** Pale tint band used to alternate section backgrounds. */
+    surfaceTint?: string;
+    /** Darker shade of the accent for headings / depth. */
+    accentDeep?: string;
+    /** Heading colour — near-black ink. */
+    ink?: string;
+    /** Body copy colour — soft grey. */
+    body?: string;
   };
   fonts: {
     /** CSS font-family stack for headings. */

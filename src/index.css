@@ -9,12 +9,24 @@
 */
 @layer components {
   .lp-root {
-    background: var(--brand-bg);
+    background: var(--brand-base, var(--brand-bg));
     color: var(--brand-text);
     font-family: var(--font-body);
   }
+  /* Section rhythm: alternate white / pale-tint bands. Feature bands stay
+     transparent so a full-vermilion section paints its own background. */
+  .lp-band[data-tone="white"] {
+    background: var(--brand-base, #ffffff);
+  }
+  .lp-band[data-tone="tint"] {
+    background: var(--brand-surface-tint, #fceae6);
+  }
+  .lp-band[data-tone="feature"] {
+    background: transparent;
+  }
   .lp-heading {
     font-family: var(--font-heading);
+    color: var(--brand-ink, var(--brand-text));
   }
   .lp-eyebrow {
     color: var(--brand-accent);
@@ -23,6 +35,12 @@
   }
   .lp-muted {
     color: var(--brand-muted);
+  }
+  .lp-ink {
+    color: var(--brand-ink, var(--brand-text));
+  }
+  .lp-accent-deep {
+    color: var(--brand-accent-deep, var(--brand-primary));
   }
   .lp-btn {
     background: var(--brand-primary);

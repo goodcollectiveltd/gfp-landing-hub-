@@ -35,7 +35,7 @@ export default function StrainBreakdown({
   addOns = [],
 }: StrainBreakdownProps) {
   return (
-    <section className="px-6 py-10" style={{ background: "rgba(0,0,0,0.02)" }}>
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-3xl">
         <h2 className="lp-heading mb-6 text-center text-xl font-extrabold tracking-tight sm:text-2xl">
           {heading}
@@ -52,7 +52,7 @@ export default function StrainBreakdown({
           className="mt-5 rounded-2xl px-5 py-4 text-center"
           style={{ background: "var(--brand-primary)", color: "var(--brand-on-primary)" }}
         >
-          <span className="lp-heading text-lg font-extrabold sm:text-xl">{total}</span>
+          <span className="lp-heading text-lg font-extrabold sm:text-xl" style={{ color: "var(--brand-on-primary)" }}>{total}</span>
           <span className="block text-sm opacity-90">across five research-backed strains</span>
         </div>
 

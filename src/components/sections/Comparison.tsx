@@ -3,7 +3,7 @@ import type { ComparisonSection } from "@/types/page";
 // "Us vs them" comparison table.
 export default function Comparison({ data }: { data: ComparisonSection["data"] }) {
   return (
-    <section className="px-6 py-10" style={{ background: "rgba(0,0,0,0.02)" }}>
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-2xl">
         {data.heading && (
           <h2 className="lp-heading mb-5 text-center text-xl font-extrabold tracking-tight sm:text-2xl">

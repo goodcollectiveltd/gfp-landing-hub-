@@ -11,7 +11,7 @@ export default function ExpectationTimeline({
   steps,
 }: ExpectationTimelineProps) {
   return (
-    <section className="px-6 py-10" style={{ background: "rgba(0,0,0,0.02)" }}>
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-3xl">
         <h2 className="lp-heading mb-8 text-center text-xl font-extrabold tracking-tight sm:text-2xl">
           {heading}

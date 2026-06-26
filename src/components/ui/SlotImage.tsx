@@ -14,17 +14,23 @@ export default function SlotImage({
       <img src={slot.url} alt={slot.role ?? ""} className={`object-cover ${className}`} />
     );
   }
+  // Clean, intentional placeholder — a subtly tinted frame with a label and, when
+  // present, the generation brief (so the empty slot doubles as a worklist).
+  const brief = slot?.brief;
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-black/15 bg-black/[0.02] p-4 text-center ${className}`}
+      className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-4 text-center ${className}`}
+      style={{ borderColor: "rgba(0,0,0,0.12)", background: "var(--brand-surface-tint, #FCEAE6)" }}
     >
-      <span className="text-2xl opacity-40" aria-hidden>
+      <span className="text-2xl opacity-30" aria-hidden>
         🖼
       </span>
-      <span className="lp-muted mt-1 text-xs font-medium">
-        {slot?.role || "Image"}
+      <span className="lp-muted mt-1 text-xs font-semibold">
+        {brief?.subject || slot?.role || "Image"}
       </span>
-      <span className="lp-muted text-[10px] opacity-70">upload here</span>
+      <span className="lp-muted text-[10px] opacity-70">
+        {brief ? `${brief.aspectRatio} · add image` : "add image"}
+      </span>
     </div>
   );
 }

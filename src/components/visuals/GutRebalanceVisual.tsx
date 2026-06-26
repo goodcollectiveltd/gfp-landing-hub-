@@ -47,7 +47,7 @@ export default function GutRebalanceVisual({
   caption = "Five strains of good bacteria, fed by a prebiotic, help crowd out the unfriendly ones and support a healthier gut balance over time.",
 }: GutRebalanceVisualProps) {
   return (
-    <section className="px-6 py-10" style={{ background: "rgba(0,0,0,0.02)" }}>
+    <section className="px-6 py-10">
       <div className="mx-auto max-w-3xl">
         <h2 className="lp-heading text-center text-xl font-extrabold tracking-tight sm:text-2xl">
           {heading}

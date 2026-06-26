@@ -136,9 +136,16 @@ export function makeColors(primary: string, accent: string): BrandKit["colors"] 
     primary,
     onPrimary: "#ffffff",
     accent,
-    background: "#fbfaf7",
-    text: "#1c2b27",
-    muted: "#5d6b66",
+    // v2 role palette — white base, never cream. The legacy fields below mirror
+    // the role values so older readers stay consistent.
+    base: "#FFFFFF",
+    surfaceTint: "#FCEAE6",
+    accentDeep: "#C02A18",
+    ink: "#161616",
+    body: "#4B4B4B",
+    background: "#FFFFFF",
+    text: "#161616",
+    muted: "#6B6B6B",
   };
 }
 
