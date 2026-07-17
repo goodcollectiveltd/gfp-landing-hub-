@@ -1,6 +1,6 @@
 # Netlify build + hosting config for the GFP Landing Hub.
 #
-# Vite builds a single-page app: React Router handles routes like /p/10-reasons
+# Vite builds a single-page app: React Router handles routes like /p/8-reasons
 # in the browser, but the server must serve index.html for those paths (a direct
 # hit or refresh would otherwise 404). The SPA fallback below does that.
 
@@ -16,6 +16,14 @@
   from = "/"
   to = "https://goodforpets.co"
   status = 302
+  force = true
+
+# Old route → new route. The page was renamed 10 → 8 reasons; keep the old path
+# alive (it was publicly reachable) so any stray link lands on the new URL.
+[[redirects]]
+  from = "/p/10-reasons"
+  to = "/p/8-reasons"
+  status = 301
   force = true
 
 # Serve index.html for any path the CDN can't match to a real file, so deep links

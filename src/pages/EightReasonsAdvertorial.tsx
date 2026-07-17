@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
 
-// "10 REASONS" LISTICLE ADVERTORIAL, 5 Strain Probiotic+ sprinkle capsules.
+// "8 REASONS" LISTICLE ADVERTORIAL, 5 Strain Probiotic+ sprinkle capsules.
 // Structure mirrors the winning Hollow Socks /10r page (hero lands on the
 // comparison table; each reason = heading → full-width image → body). Copy is
 // GFP's own, grounded in company-context/ (listicles.md, nick-theriot.md,
@@ -123,7 +123,7 @@ function BeforeAfter({ before, after, beforeAlt, afterAlt, afterLabel = "AFTER",
   );
 }
 
-/* ---------- the 10 reasons ---------- */
+/* ---------- the 8 reasons ---------- */
 
 type Reason = {
   n: number; title: string; body: string;
@@ -231,13 +231,13 @@ function Accordion({ q, a }: { q: string; a: string }) {
 
 /* ---------- page ---------- */
 
-export default function TenReasonsAdvertorial() {
+export default function EightReasonsAdvertorial() {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap";
     document.head.appendChild(link);
-    document.title = "10 Reasons UK Dog Owners Are Switching, Good For Pets";
+    document.title = "8 Reasons UK Dog Parents Are Switching, Good For Pets";
     initTracking();
     track("ViewContent", { content_name: "8 Reasons Advertorial", content_ids: ["5-strain-probiotic"], content_type: "product" });
     return () => { document.head.removeChild(link); };
@@ -339,7 +339,7 @@ export default function TenReasonsAdvertorial() {
         </div>
       </section>
 
-      {/* THE 10 REASONS, heading → full-width image → body */}
+      {/* THE 8 REASONS, heading → full-width image → body */}
       <section className="mx-auto mt-12 max-w-2xl space-y-10 px-6">
         {REASONS.map((r) => (
           <Fragment key={r.n}>

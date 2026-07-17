@@ -5,6 +5,30 @@ file locations, gotchas, and what's still open. Written 16 Jul 2026.
 
 ---
 
+## ⏫ Update — 17 Jul 2026 (Session 2: shipped it live)
+The page is **deployed and live**. Key changes since the original bridge below:
+- **Renamed 10 → 8 everywhere:** route is now **`/p/8-reasons`**, component/file **`EightReasonsAdvertorial.tsx`**,
+  `document.title` fixed to "8 Reasons…". Old `/p/10-reasons` → `/p/8-reasons` via a 301 in `netlify.toml`.
+- **Live on Netlify:** project **`gfp-landing-hub`** → `https://gfp-landing-hub.netlify.app`. Auto-builds from
+  `origin/main`. Branded subdomain **`hello.goodforpets.co`** added (Shopify-managed DNS: CNAME `hello` →
+  `gfp-landing-hub.netlify.app`). Final ad URL: **`https://hello.goodforpets.co/p/8-reasons`**.
+- **Meta pixel + attribution DONE** (was open item #2): new `src/lib/tracking.ts` (pixel `3813384208943708`,
+  same as store/quiz; ported from the quiz funnel). Fires `PageView` + `ViewContent` on load and a `CTAClick`
+  custom event per placement; `withAttribution()` appends `fbclid`/`_fbp`/`_fbc`/UTMs to the Shopify CTA URL.
+  Pixel only fires in the **PROD build** (never local). Verified live end-to-end via Playwright.
+- **Subdomain root** `/` now **302 → goodforpets.co** (edge redirect in `netlify.toml` + `StoreRedirect`
+  fallback). To avoid locking the owner out, the **admin console moved `/` → `/admin`** (login + "back to
+  console" links updated).
+- **`netlify.toml`** added: build (`npm run build` → `dist`), root redirect, 10→8 redirect, SPA fallback.
+- **Supabase client** hardened: `??` → `||` so an empty Netlify env var can't white-screen the app.
+- **Committed + pushed** to `origin/main` (was open item #3 — done). Repo is fully deployable from a clean clone.
+- **Still open:** compress `charity-rescue.png` (3.0MB, on-page) + `tub-cutout.png` (3.9MB, golden page);
+  confirm `hello.goodforpets.co` once DNS/SSL propagate; Meta Pixel Helper spot-check in a real browser.
+
+*(The rest of this doc is the original 16 Jul bridge — still accurate except the 10→8 rename and the items above.)*
+
+---
+
 ## TL;DR
 Built a bespoke **listicle advertorial** for 5 Strain Probiotic+ (a rebuild of the live Replo page
 `goodforpets.co/pages/10reasons`), plus an earlier PDP-style "golden page." Both live in the Landing Hub
