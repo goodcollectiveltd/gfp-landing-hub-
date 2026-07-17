@@ -429,30 +429,18 @@ export default function EightReasonsAdvertorial() {
       {/* mid CTA */}
       <div className="mx-auto mt-12 max-w-2xl px-6"><Cta label="GIVE IT A RISK-FREE TRY →" where="mid-cta" /></div>
 
-      {/* OFFER block — HONEST urgency only: real price-lock + cost of waiting + real volume savings */}
+      {/* OFFER block — tight: "up to 45% off" is the real max (30% first-sub + 15% for 3 tubs off RRP) */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
         <div className="overflow-hidden rounded-3xl border border-black/5 bg-white text-center shadow-xl">
           <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the capsule over food" className="h-48 w-full object-cover" />
           <div className="p-7">
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
-            <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Start today and lock your first tub at £31.49</h2>
-            <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed" style={{ color: BODY }}>
-              That's <b style={{ color: INK }}>30% off</b> the usual <span className="line-through" style={{ color: MUTE }}>£44.99</span> on your first subscription order, then £35.99 after, <b style={{ color: INK }}>54% cheaper per day</b> than the UK's top-10 competitor chews. Ships free, pause or cancel anytime.
-            </p>
-            {/* honest urgency = cost of waiting (no fake timers, no invented scarcity) */}
-            <div className="mx-auto mt-4 flex max-w-md items-start gap-3 rounded-2xl p-4 text-left" style={{ background: "rgba(22,34,60,0.05)" }}>
-              <svg className="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={NAVY} /><path d="M9 4.5v5l3 2" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              <span className="text-[14px] leading-snug" style={{ color: INK }}>The gut takes 3 to 6 weeks to settle, so every week you put it off is another week they're licking and scratching. The sooner they start, the sooner they're comfortable.</span>
-            </div>
+            <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
+            <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping.</p>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
               Start My Dog's Relief →
             </a>
-            <div className="mt-3 grid grid-cols-3 gap-2 text-xs font-semibold" style={{ color: BODY }}>
-              <span className="rounded-lg bg-black/[0.04] px-2 py-2">Free 48h shipping</span>
-              <span className="rounded-lg bg-black/[0.04] px-2 py-2">Pause anytime</span>
-              <span className="rounded-lg bg-black/[0.04] px-2 py-2">90-day guarantee</span>
-            </div>
-            <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Stocking up saves more: 2 tubs save an extra 10%, 3 tubs an extra 15%.</p>
+            <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
           </div>
         </div>
       </section>
