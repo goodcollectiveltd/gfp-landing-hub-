@@ -18,10 +18,16 @@
   status = 302
   force = true
 
-# Old route → new route. The page was renamed 10 → 8 reasons; keep the old path
-# alive (it was publicly reachable) so any stray link lands on the new URL.
+# Old routes → the live page. 10→8 was the rename; 8-reasons-v2 was the review
+# draft that's now been promoted to /p/8-reasons. Keep both alive so stray links land.
 [[redirects]]
   from = "/p/10-reasons"
+  to = "/p/8-reasons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/p/8-reasons-v2"
   to = "/p/8-reasons"
   status = 301
   force = true

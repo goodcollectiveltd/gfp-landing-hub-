@@ -1,17 +1,23 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
 
-// "8 REASONS" LISTICLE ADVERTORIAL, 5 Strain Probiotic+ sprinkle capsules.
-// Structure mirrors the winning Hollow Socks /10r page (hero lands on the
-// comparison table; each reason = heading → full-width image → body). Copy is
-// GFP's own, grounded in company-context/ (listicles.md, nick-theriot.md,
-// brand-voice.md, personas.md, testimonials.md, label-specs.md).
+// "8 REASONS" LISTICLE ADVERTORIAL, 5 Strain Probiotic+ sprinkle capsules. Route /p/8-reasons.
 //
-// Colour system: ONE accent, ORANGE is reserved for CTAs only, so they pull the
-// click. Every other coloured block/accent is NAVY (secondary). Cream page bg.
+// Structure (mentor restructure, promoted live 17 Jul 2026):
+//  - Agitating opening that names the failed-med carousel and lifts the guilt.
+//  - The 8 reasons are DISTINCT persuasive moves, not eight benefits in a row:
+//    agitate the current solution → new mechanism → proof (3 sliders) → authority →
+//    ease/objection → risk reversal. (listicles.md: back half = the conversion stack.)
+//  - Mechanism leads on MOISTURE (self-verifying: an owner can feel a chew is moist,
+//    whereas "baked" is an unverifiable claim); heat is the backup point.
+//  - Charity is a late "bonus" block (personas.md: it's Sue's closer, not an opener).
+//  - Real "what to expect" 90-day timeline (product-and-range-reference.md) to cut
+//    Sue's #1 churn ("3 months in, still waiting").
+//  - HONEST urgency only — the real 30%-off-first-tub price lock, genuine volume
+//    savings, cost-of-waiting. No fabricated timers/scarcity (ASA + brand-voice.md).
 //
-// No on-page buy box: CTAs send to the live Shopify product page (its own buy box).
-// No fake urgency (brand-voice.md bans invented scarcity).
+// Colour system: ORANGE = CTAs only; NAVY = secondary blocks; cream bg.
+// No on-page buy box: CTAs send to the live Shopify product page.
 
 const ORANGE = "#EF3824"; // CTAs ONLY
 const NAVY = "#16223C"; // every other coloured block/accent
@@ -132,16 +138,32 @@ type Reason = {
   proof?: string;
 };
 
+// V2 (mentor restructure): each reason is a different persuasive move, not eight
+// benefits in a row. Arc = agitate the current solution → new mechanism → proof
+// (the 3 before/after sliders, our click-magnets) → authority → ease/objection →
+// risk reversal. Charity moved OUT of the list to a late "bonus" (Sue = closer,
+// per personas.md), and a real "what to expect" timeline + honest-urgency offer
+// added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Actually targets paw licking",
-    body: "Paw licking is usually an allergic itch, with yeast on top. Most of the immune system lives in the gut, balance it and the reaction calms. Drag the slider:",
+    n: 1, title: "Squeeze any probiotic chew, it's moist, and that's why it's already dead",
+    body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they burn through their short life on the shelf and are long dead before your dog ever gets one. You don't have to take our word for it, you can feel it in your hand. (The heat used to bake most chews finishes off whatever's left.)",
+    img: "/lp/moist-chews-real.jpg", imgAlt: "Moist chews in a tub, the live cultures dying before use", pos: "center",
+  },
+  {
+    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
+    body: "No moisture, no soft chew, just a dry capsule of powder. With nothing to wake them early, all 5 billion live bacteria stay asleep and alive right up until they hit the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
+    img: "/lp/pour-food.jpg", imgAlt: "The capsule powder poured over a bowl of food", pos: "center 55%",
+  },
+  {
+    n: 3, title: "It targets the real cause of the paw licking",
+    body: "Paw licking is usually an allergic itch, not just the skin. Most of the immune system lives in the gut, so balancing it helps calm the reaction driving the licking. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore, saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
   },
   {
-    n: 2, title: "Helps clear gunky ears (without another vet bill)",
+    n: 4, title: "Cleaner, calmer ears, without another vet bill",
     body: "Gunky ears are usually the same allergy-and-yeast flare. A calmer gut helps keep both in check. Drag the slider:",
     slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
     beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
@@ -149,38 +171,27 @@ const REASONS: Reason[] = [
     proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
-    n: 3, title: "Calms itchy, irritated skin",
-    body: "Itchy skin is often an over-reacting immune system on the outside. Settle the gut, settle the reaction. Bear's owner sent us this:",
+    n: 5, title: "Calms itchy, irritated skin and coat",
+    body: "Itchy skin is often an over-reacting immune system showing on the outside. Settle the gut, settle the reaction. Bear's owner sent us this:",
     slider: true, before: "/lp/bear-before-c.jpg", after: "/lp/bear-after-c.jpg",
     beforeAlt: "Bear's skin before, red, raw and patchy", afterAlt: "Bear's skin after, calm, with a full coat",
     afterLabel: "AFTER", caption: "Bear's skin & coat, before and after (real customer, Chris S.)",
   },
   {
-    n: 4, title: "Settles the tummy, and the scooting",
-    body: "A settled tummy starts with a balanced gut. Strains, enzymes and prebiotic firm up stools and cut the wind, which means less scooting, too. Chews have none of it.",
-    img: "/lp/pour-food.jpg", imgAlt: "The capsule powder poured over a bowl of food", pos: "center 55%",
-    proof: "“No more upset tummy or sloppy poos, and no more scooting.” · Lynn S.",
-  },
-  {
-    n: 5, title: "5 billion live cultures, the UK's first double-strength capsule",
-    body: "Most chews manage about a billion. Ours has 5 billion, 5× a chew, cold-pressed so they reach the gut alive. Vet co-developed, 2.5× the original strength, made in the UK to human GMP standards.",
+    n: 6, title: "Vet co-developed, the UK's first double-strength capsule",
+    body: "5 billion live cultures, 2.5× the original strength, cold-pressed, and made in the UK to human GMP standards, the thing our customers rate most of all. Co-developed with a vet.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS with the product", pos: "center 20%",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 6, title: "Sprinkles over any food in seconds",
-    body: "Open, twist, sprinkle. No pill pockets, no crushing, even fussy dogs don't notice.",
+    n: 7, title: "Small enough to open and sprinkle in seconds",
+    body: "Twist one open and sprinkle the powder over dinner. No pill pockets, no crushing a tablet, no fighting a tiny dog to swallow it. Even fussy ones don't notice.",
     img: "/lp/sprinkle-on-food.jpg", imgAlt: "Sprinkling the capsule powder over dinner", pos: "center",
     proof: "“I just sprinkle it on his food and he eats it, no problem.” · Jazzy D.",
   },
   {
-    n: 7, title: "51% of profits go to animal rescue",
-    body: "Helping your dog helps thousands more, recent donations include Soi Dog, Jerry Green Dogs and the RSPCA. No other pet brand gives away this much.",
-    img: "/lp/charity-rescue.png", imgAlt: "Good For Pets founder with rescue dogs", pos: "center 25%",
-  },
-  {
-    n: 8, title: "It's not magic, but we'll take the risk",
-    body: "It's not magic, and it won't suit every dog. But we're so sure it'll help that we take the risk for you: try it for a full 90 days, and if you see no results, we give you every penny back.",
+    n: 8, title: "It's not magic, but we'll take the risk for you",
+    body: "It won't suit every dog, and we'll say so. But we're so sure it'll help that we take the risk for you: try it for a full 90 days, and if you see no difference, we give you every penny back.",
     img: "/lp/ugc-1.jpg", imgAlt: "A happy, comfortable dog with the tub", pos: "center 35%", seal: true,
   },
 ];
@@ -188,6 +199,7 @@ const REASONS: Reason[] = [
 /* ---------- comparison table ---------- */
 
 const TABLE = [
+  { feature: "Freshness", us: "Dry, stays alive", them: "Moist, dies in the tub" },
   { feature: "Paw Licking & Yeast", us: "5 targeted strains", them: "1–2 generic" },
   { feature: "Gunky Ears", us: "5 billion live CFU", them: "Low, barely helps" },
   { feature: "Itchy Skin", us: "Works from the gut", them: "No skin support" },
@@ -262,9 +274,12 @@ export default function EightReasonsAdvertorial() {
         <h1 className="adv-display mt-2 text-[28px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
           8 Reasons UK Dog Parents Are Ditching Expensive Probiotic Chews for <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
         </h1>
-        {/* create-emotion scene, not a sell-to question (Nick #1) */}
+        {/* stronger opening: agitate the failed-med carousel + lift the guilt, then bridge (personas.md: vet-med refugee) */}
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          It's 9pm, and there's that wet lick-lick-lick under the telly again. Not his skin, most likely. It's his gut.
+          It's 9pm, and there's that wet lick-lick-lick under the telly again. You've tried the sprays, the shampoos, the chews off Amazon, maybe vet visits that wore off in days. Nothing's stuck, and every failed try feels like you're letting them down.
+        </p>
+        <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
+          Here's what nobody tells you: it's usually not their skin at all, it's their gut. And it isn't your fault, <b style={{ color: INK }}>most probiotic chews are dead before your dog gets one, and you can feel exactly why.</b>
         </p>
         {/* proof + native byline, one compact row */}
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
@@ -303,40 +318,11 @@ export default function EightReasonsAdvertorial() {
       {/* single top-third CTA (orange) */}
       <div className="mx-auto mt-6 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
 
-      {/* problem agitation, names the failures then bridges to the mechanism (Nick layer 3) */}
+      {/* short bridge into the list — the mechanism reveal now lives in reasons 1–2 */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
         <p className="text-[15px] leading-relaxed" style={{ color: BODY }}>
-          You've done the sprays, the shampoos, the chews, the vet bills, and nothing's stuck. <span className="adv-heading font-bold" style={{ color: INK }}>Here's what nobody tells you</span> 👇
+          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons UK dog parents are switching</span> 👇
         </p>
-      </section>
-
-      {/* MECHANISM reveal, brought up front (Nick: the new-mechanism "aha" reframes the category before benefits) */}
-      <section className="mx-auto mt-6 max-w-2xl px-6">
-        <div className="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
-          <div className="relative">
-            <img src="/lp/moist-chews-real.jpg" alt="Moist chews in a tub, bacteria dying before use" className="aspect-[4/3] w-full object-cover" />
-            <span className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/55 px-3 py-1.5 text-xs font-semibold text-white">The “live” cultures in a moist chew, already dying in the tub.</span>
-          </div>
-          <div className="p-6 sm:p-7">
-            <h2 className="adv-display text-2xl leading-tight" style={{ color: INK }}>Why most probiotic chews are dead on arrival</h2>
-            <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>Live bacteria only work if they reach the gut alive. The chew format kills them twice:</p>
-            <ul className="mt-4 space-y-2.5">
-              {[
-                ["Baked", "heat kills up to 90% before the tub's even sealed."],
-                ["Full of moisture", "it wakes the survivors early, so they burn out on the shelf."],
-              ].map(([t, d]) => (
-                <li key={t} className="flex gap-3">
-                  <svg className="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#B0B0B0" strokeWidth="1.8" strokeLinecap="round" /></svg>
-                  <span className="text-[15px] leading-snug" style={{ color: BODY }}><b style={{ color: INK }}>{t}</b>, {d}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 flex gap-3 rounded-2xl p-4" style={{ background: "rgba(22,34,60,0.05)" }}>
-              <svg className="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={NAVY} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              <span className="text-[15px] leading-snug" style={{ color: INK }}><b>The fix:</b> a dry, cold-pressed capsule keeps all 5 billion cultures alive until they hit the gut.</span>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* THE 8 REASONS, heading → full-width image → body */}
@@ -366,8 +352,8 @@ export default function EightReasonsAdvertorial() {
             <p className="mt-4 text-[15px] leading-relaxed" style={{ color: BODY }}>{r.body}</p>
             {r.proof && <p className="mt-3 border-l-2 pl-3 text-sm italic" style={{ borderColor: ORANGE, color: MUTE }}>{r.proof}</p>}
           </article>
-          {/* social-proof stat bar pulled high (heatmap: bottom third is rarely reached) */}
-          {r.n === 3 && (
+          {/* social-proof stat bar, placed right after the 3 before/after sliders */}
+          {r.n === 5 && (
             <div className="!mt-12 grid grid-cols-3 overflow-hidden rounded-2xl text-center text-white" style={{ background: NAVY }}>
               {[["20,000+", "dogs helped"], ["4,500+", "reviews"], ["4.8/5", "average rating"]].map(([v, l]) => (
                 <div key={l} className="px-2 py-4">
@@ -381,27 +367,64 @@ export default function EightReasonsAdvertorial() {
         ))}
       </section>
 
+      {/* WHAT TO EXPECT — the real 90-day timeline (sets expectations, cuts Sue's #1 churn) */}
+      <section className="mx-auto mt-14 max-w-2xl px-6">
+        <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>What to expect</h2>
+        <p className="mt-1 text-center text-sm" style={{ color: MUTE }}>Every dog is different, so give it the full 90 days.</p>
+        <div className="mt-6 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
+          {[
+            ["Days 0–14", "Softer stools at first is normal, the gut is just waking up."],
+            ["Days 14–30", "Firmer stools and less wind. You start to notice."],
+            ["Days 30–60", "Less paw licking and scratching, more comfortable in their skin."],
+            ["Day 90+", "Calm skin, steady digestion, happier dog. The longer they stay on it, the better it gets."],
+          ].map(([w, d], i) => (
+            <div key={w} className="flex items-start gap-4 p-4 sm:p-5" style={{ borderTop: i ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
+              <span className="adv-heading shrink-0 rounded-full px-3 py-1 text-xs font-bold text-white" style={{ background: NAVY }}>{w}</span>
+              <p className="text-[15px] leading-snug" style={{ color: BODY }}>{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* BONUS — charity as the warm closer (personas.md: rarely opens the sale, repeatedly seals it) */}
+      <section className="mx-auto mt-14 max-w-2xl px-6">
+        <div className="overflow-hidden rounded-3xl text-white shadow-md" style={{ background: NAVY }}>
+          <img src="/lp/charity-rescue.png" alt="Good For Pets founder with rescue dogs" className="h-44 w-full object-cover" style={{ objectPosition: "center 25%" }} />
+          <div className="p-6 sm:p-7">
+            <p className="adv-heading text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.6)" }}>Bonus</p>
+            <h2 className="adv-display mt-1 text-2xl leading-tight">51% of profits go to animal rescue</h2>
+            <p className="mt-2 text-[15px] leading-relaxed text-white/85">Helping your dog helps thousands more. Recent donations include Soi Dog, Jerry Green Dogs and the RSPCA, no other pet brand gives away this much.</p>
+          </div>
+        </div>
+      </section>
+
       {/* mid CTA */}
       <div className="mx-auto mt-12 max-w-2xl px-6"><Cta label="GIVE IT A RISK-FREE TRY →" where="mid-cta" /></div>
 
-      {/* OFFER block (honest framing, no fake urgency) */}
+      {/* OFFER block — HONEST urgency only: real price-lock + cost of waiting + real volume savings */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
         <div className="overflow-hidden rounded-3xl border border-black/5 bg-white text-center shadow-xl">
           <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the capsule over food" className="h-48 w-full object-cover" />
           <div className="p-7">
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
-            <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Save up to 45% with Subscribe &amp; Save</h2>
+            <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Start today and lock your first tub at £31.49</h2>
             <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed" style={{ color: BODY }}>
-              Normally <span className="line-through" style={{ color: MUTE }}>£44.99</span> a tub, on subscription that works out around <b style={{ color: INK }}>54% cheaper per day</b> than the UK's top-10 competitor chews.
+              That's <b style={{ color: INK }}>30% off</b> the usual <span className="line-through" style={{ color: MUTE }}>£44.99</span> on your first subscription order, then £35.99 after, around <b style={{ color: INK }}>54% cheaper per day</b> than the UK's top-10 competitor chews. Ships free, pause or cancel anytime.
             </p>
+            {/* honest urgency = cost of waiting (no fake timers, no invented scarcity) */}
+            <div className="mx-auto mt-4 flex max-w-md items-start gap-3 rounded-2xl p-4 text-left" style={{ background: "rgba(22,34,60,0.05)" }}>
+              <svg className="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={NAVY} /><path d="M9 4.5v5l3 2" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span className="text-[14px] leading-snug" style={{ color: INK }}>The gut takes a few weeks to settle, so every week you put it off is another week they're licking and scratching. The sooner they start, the sooner they're comfortable.</span>
+            </div>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
               Start My Dog's Relief →
             </a>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-semibold" style={{ color: BODY }}>
-              <span className="rounded-lg bg-black/[0.04] px-3 py-2">Free 48h tracked shipping</span>
-              <span className="rounded-lg bg-black/[0.04] px-3 py-2">Pause or cancel anytime</span>
+            <div className="mt-3 grid grid-cols-3 gap-2 text-xs font-semibold" style={{ color: BODY }}>
+              <span className="rounded-lg bg-black/[0.04] px-2 py-2">Free 48h shipping</span>
+              <span className="rounded-lg bg-black/[0.04] px-2 py-2">Pause anytime</span>
+              <span className="rounded-lg bg-black/[0.04] px-2 py-2">90-day guarantee</span>
             </div>
-            <p className="mt-3 text-sm font-semibold italic" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
+            <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Stocking up saves more: 2 tubs save an extra 10%, 3 tubs an extra 15%.</p>
           </div>
         </div>
       </section>
@@ -445,12 +468,12 @@ export default function EightReasonsAdvertorial() {
 
       {/* STICKY CTA BAR */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
+        <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
-            <p className="text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b> · 90-day guarantee</p>
+            <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b> · 90-day guarantee</p>
           </div>
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-6 py-3 text-sm font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Get Relief →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-8 py-4 text-base font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Get Relief →</a>
         </div>
       </div>
     </div>

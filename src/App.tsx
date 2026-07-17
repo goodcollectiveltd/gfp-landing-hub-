@@ -6,7 +6,6 @@ import HubPage from "@/pages/HubPage";
 import PublicPage from "@/pages/PublicPage";
 import ProbioticPlusAdvertorial from "@/pages/ProbioticPlusAdvertorial";
 import EightReasonsAdvertorial from "@/pages/EightReasonsAdvertorial";
-import EightReasonsAdvertorialV2 from "@/pages/EightReasonsAdvertorialV2";
 import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -59,8 +58,6 @@ export default function App() {
       {/* Bespoke golden page — art-directed clone of the live Replo advertorial. */}
       <Route path="/p/5-strain-probiotic-plus" element={<ProbioticPlusAdvertorial />} />
       <Route path="/p/8-reasons" element={<EightReasonsAdvertorial />} />
-      {/* Draft: mentor-restructured variant for review (not linked from ads). */}
-      <Route path="/p/8-reasons-v2" element={<EightReasonsAdvertorialV2 />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />
