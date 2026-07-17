@@ -146,13 +146,13 @@ type Reason = {
 // added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "The dirty secret: most probiotic chews are dead on arrival",
-    body: "Chews are baked at high heat, which kills up to 90% of the bacteria, then sit moist in the tub, which wakes the survivors so they burn out on the shelf. You've been paying for a dead product, and nobody tells you. It isn't your fault.",
+    n: 1, title: "Squeeze any probiotic chew, it's moist, and that's why it's already dead",
+    body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they burn through their short life on the shelf and are long dead before your dog ever gets one. You don't have to take our word for it, you can feel it in your hand. (The heat used to bake most chews finishes off whatever's left.)",
     img: "/lp/moist-chews-real.jpg", imgAlt: "Moist chews in a tub, the live cultures dying before use", pos: "center",
   },
   {
-    n: 2, title: "Cold-pressed and sealed dry, so it reaches the gut alive",
-    body: "Ours is a dry, cold-pressed capsule, so all 5 billion live bacteria stay alive right up to the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
+    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
+    body: "No moisture, no soft chew, just a dry capsule of powder. With nothing to wake them early, all 5 billion live bacteria stay asleep and alive right up until they hit the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
     img: "/lp/pour-food.jpg", imgAlt: "The capsule powder poured over a bowl of food", pos: "center 55%",
   },
   {
@@ -199,6 +199,7 @@ const REASONS: Reason[] = [
 /* ---------- comparison table ---------- */
 
 const TABLE = [
+  { feature: "Freshness", us: "Dry, stays alive", them: "Moist, dies in the tub" },
   { feature: "Paw Licking & Yeast", us: "5 targeted strains", them: "1–2 generic" },
   { feature: "Gunky Ears", us: "5 billion live CFU", them: "Low, barely helps" },
   { feature: "Itchy Skin", us: "Works from the gut", them: "No skin support" },
@@ -278,7 +279,7 @@ export default function EightReasonsAdvertorialV2() {
           It's 9pm, and there's that wet lick-lick-lick under the telly again. You've tried the sprays, the shampoos, the chews off Amazon, maybe vet visits that wore off in days. Nothing's stuck, and every failed try feels like you're letting them down.
         </p>
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          Here's what nobody tells you: it's usually not their skin at all, it's their gut. And it isn't your fault, <b style={{ color: INK }}>most probiotic chews are dead before your dog gets one.</b>
+          Here's what nobody tells you: it's usually not their skin at all, it's their gut. And it isn't your fault, <b style={{ color: INK }}>most probiotic chews are dead before your dog gets one, and you can feel exactly why.</b>
         </p>
         {/* proof + native byline, one compact row */}
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
