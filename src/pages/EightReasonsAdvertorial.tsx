@@ -180,8 +180,8 @@ const REASONS: Reason[] = [
     proof: "“I was sceptical a probiotic could help, but after a few weeks his skin isn't itchy and his coat looks amazing.” · Caroline L.",
   },
   {
-    n: 6, title: "Vet co-developed, the UK's first double-strength capsule",
-    body: "5 billion live cultures, 2.5× the original strength, cold-pressed, and made in the UK to human GMP standards, the thing our customers rate most of all. Co-developed with Dr Kishan Vara, MRCVS.",
+    n: 6, title: "Vet-developed, made in a UK human-supplement factory",
+    body: "5 billion live cultures, 5 different strains. Built in partnership with Dr Kishan Vara MRCVS, and produced in a human supplement factory here in the UK. Made to actually work.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic", pos: "center",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
