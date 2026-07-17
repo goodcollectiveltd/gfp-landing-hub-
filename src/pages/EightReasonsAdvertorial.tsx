@@ -146,7 +146,7 @@ type Reason = {
 // added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Squeeze any probiotic chew, it's moist, and that's why it's already dead",
+    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)",
     body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
     img: "/lp/moist-chews-wet.jpg", imgAlt: "Moist probiotic chews glistening wet in the tub", pos: "center", imgCaption: "See the moisture? That's what kills the probiotics before your dog gets one.",
   },
@@ -246,6 +246,17 @@ function Accordion({ q, a }: { q: string; a: string }) {
 /* ---------- page ---------- */
 
 export default function EightReasonsAdvertorial() {
+  // Sticky bar reveals only once the top CTA has scrolled off-screen, so the two
+  // CTAs never fight in the hero.
+  const [showSticky, setShowSticky] = useState(false);
+  useEffect(() => {
+    const el = document.getElementById("top-cta");
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -278,15 +289,15 @@ export default function EightReasonsAdvertorial() {
         </h1>
         {/* compressed opening (mobile-first): scene → gut, then one killer mechanism line */}
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          It's 9pm, and there's that wet lick-lick-lick under the telly again. You've tried everything, and it's usually not their skin at all. It's their gut.
+          It's 9pm, and there's that wet lick-lick-lick under the telly again. It's probably not their skin, it's their gut.
         </p>
         <p className="mt-3 text-lg font-bold leading-snug" style={{ color: INK }}>
-          Most probiotic chews are dead before your dog gets one, and you can feel exactly why.
+          And most probiotic chews are dead before your dog even gets one.
         </p>
       </div>
 
       {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
-      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
+      <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
 
       {/* trust badges (icons, not a text line) — under the button */}
       <div className="mx-auto mt-5 grid max-w-md grid-cols-3 gap-2 px-6 text-center">
@@ -500,8 +511,8 @@ export default function EightReasonsAdvertorial() {
         This is an advertorial and not a news article. Good For Pets supplements support and help maintain your dog's wellbeing; they are not intended to diagnose, treat, cure or prevent any disease. Individual results vary.
       </p>
 
-      {/* STICKY CTA BAR */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur">
+      {/* STICKY CTA BAR — hidden until the top CTA scrolls away (no clash in the hero) */}
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
