@@ -155,17 +155,17 @@ function withBold(text: string, phrase?: string) {
 const REASONS: Reason[] = [
   {
     n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "moisture is what kills a probiotic", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
-    body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
+    body: "That softness is moisture, and moisture is what kills a probiotic, it wakes the bacteria in the tub so they're dead before your dog gets one. Big brands sell chews anyway because a soft treat is easier to sell than a capsule. You weren't failing them. You were sold the easy option.",
     img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
     n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "5 billion live bacteria stay asleep and alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-    body: "No moisture, no soft chew, just a dry capsule of powder. With nothing to wake them early, all 5 billion live bacteria stay asleep and alive right up until they hit the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
+    body: "A dry capsule of powder, with nothing to wake the bacteria early. So all 5 billion live bacteria stay asleep and alive until they hit the gut, 5× a typical chew. The enzymes and prebiotic then firm up stools and cut the wind. A sprinkle, not a treat.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
     n: 3, title: "It targets the real cause of the paw licking", bold: "Most of the immune system lives in the gut",
-    body: "Paw licking is usually an allergic itch, not just the skin. Most of the immune system lives in the gut, so balancing it helps calm the reaction driving the licking. Drag the slider:",
+    body: "Paw licking is usually an allergic itch, not just the skin. Most of the immune system lives in the gut, so calm that and the licking eases. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore, saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
@@ -181,7 +181,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 5, title: "Calms itchy, irritated skin and coat", bold: "Settle the gut, settle the reaction",
-    body: "Itchy skin is often an over-reacting immune system showing on the outside. Settle the gut, settle the reaction. Bear's owner sent us this:",
+    body: "Itchy skin is often the immune system over-reacting on the outside. Settle the gut, settle the reaction. Bear's owner sent us this:",
     slider: true, before: "/lp/bear-before-c.jpg", after: "/lp/bear-after-c.jpg",
     beforeAlt: "Bear's skin before, red, raw and patchy", afterAlt: "Bear's skin after, calm, with a full coat",
     afterLabel: "AFTER", caption: "Bear's skin & coat, before and after (real customer, Chris S.)",
@@ -194,14 +194,14 @@ const REASONS: Reason[] = [
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 7, title: "Small enough to open and sprinkle in seconds", bold: "No pill pockets, no crushing a tablet",
-    body: "Twist one open and sprinkle the powder over dinner. No pill pockets, no crushing a tablet, no fighting a tiny dog to swallow it. Even fussy ones don't notice.",
+    n: 7, title: "Small enough to open and sprinkle in seconds", bold: "No pill pockets, no crushing",
+    body: "Twist one open and sprinkle over dinner. No pill pockets, no crushing, no fighting a fussy dog. They don't even notice.",
     img: "/lp/capsule-open.jpg", imgAlt: "Twisting a sprinkle capsule open over a bowl of food", pos: "center",
     proof: "“I just sprinkle it on his food and he eats it, no problem.” · Jazzy D.",
   },
   {
     n: 8, title: "It's not magic, but we'll take the risk for you", bold: "we give you every penny back", proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
-    body: "It won't suit every dog, and we'll say so. But we're so sure it'll help that we take the risk for you: try it for a full 90 days, and if you see no difference, we give you every penny back.",
+    body: "It won't suit every dog, and we'll say so. But we're so sure it helps, we take the risk: try it 90 days, and if you see no difference, we give you every penny back.",
     img: "/lp/ugc-1.jpg", imgAlt: "A happy, comfortable dog with the tub", pos: "center 35%", seal: true,
   },
 ];
