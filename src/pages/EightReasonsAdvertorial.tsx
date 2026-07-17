@@ -148,7 +148,7 @@ const REASONS: Reason[] = [
   {
     n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)",
     body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
-    img: "/lp/moist-chews-wet.jpg", imgAlt: "Moist probiotic chews glistening wet in the tub", pos: "center", imgCaption: "See the moisture? That's what kills the probiotics before your dog gets one.",
+    img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
     n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
@@ -188,7 +188,7 @@ const REASONS: Reason[] = [
   {
     n: 7, title: "Small enough to open and sprinkle in seconds",
     body: "Twist one open and sprinkle the powder over dinner. No pill pockets, no crushing a tablet, no fighting a tiny dog to swallow it. Even fussy ones don't notice.",
-    img: "/lp/sprinkle-on-food.jpg", imgAlt: "Sprinkling the capsule powder over dinner", pos: "center",
+    img: "/lp/capsule-open.jpg", imgAlt: "Twisting a sprinkle capsule open over a bowl of food", pos: "center",
     proof: "“I just sprinkle it on his food and he eats it, no problem.” · Jazzy D.",
   },
   {
