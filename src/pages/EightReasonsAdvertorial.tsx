@@ -226,8 +226,8 @@ const FAQS = [
   ["Are the ingredients natural and safe?", "Yes, 100% natural, grain-free, gentle and vet co-developed. No fillers, no artificial flavourings, no unnecessary additives, in a vegan capsule shell made in the UK to GMP standards."],
   ["Does it contain any chicken?", "No, we use a meat-free natural chicken flavouring, so dogs love the taste without any risk to chicken-sensitive dogs."],
   ["How do I get my dog to take a capsule?", "The sprinkle capsules aren't meant to be swallowed whole. Just twist one open and sprinkle the powder straight over your dog's food. No pill pockets, no fighting."],
-  ["Is it suitable for all breeds and sizes?", "Yes, safe for small, medium, large and giant breeds. Just follow the weight-based dosage on the product page (roughly one capsule per 25kg)."],
-  ["How long does one tub last?", "Each tub has 90 capsules. Most dogs take one a day, so a tub lasts around 90 days. Larger dogs can take up to three a day."],
+  ["Is it suitable for all breeds and sizes?", "Yes, safe for small, medium, large and giant breeds. Just follow the weight-based dosage on the product page (one capsule per 25kg)."],
+  ["How long does one tub last?", "Each tub has 90 capsules. Most dogs take one a day, so a tub lasts 90 days. Larger dogs take two or three a day."],
 ];
 
 function Accordion({ q, a }: { q: string; a: string }) {
@@ -417,7 +417,7 @@ export default function EightReasonsAdvertorial() {
       {/* BONUS — charity as the warm closer (personas.md: rarely opens the sale, repeatedly seals it) */}
       <section className="mx-auto mt-14 max-w-2xl px-6">
         <div className="overflow-hidden rounded-3xl text-white shadow-md" style={{ background: NAVY }}>
-          <img src="/lp/charity-rescue.png" alt="Good For Pets founder with rescue dogs" className="h-44 w-full object-cover" style={{ objectPosition: "center 25%" }} />
+          <img src="/lp/charity-rescue.png" alt="Good For Pets founder with rescue dogs" className="aspect-[4/3] w-full object-cover" style={{ objectPosition: "center 30%" }} />
           <div className="p-6 sm:p-7">
             <p className="adv-heading text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.6)" }}>Bonus</p>
             <h2 className="adv-display mt-1 text-2xl leading-tight">51% of profits go to animal rescue</h2>
@@ -437,12 +437,12 @@ export default function EightReasonsAdvertorial() {
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
             <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Start today and lock your first tub at £31.49</h2>
             <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed" style={{ color: BODY }}>
-              That's <b style={{ color: INK }}>30% off</b> the usual <span className="line-through" style={{ color: MUTE }}>£44.99</span> on your first subscription order, then £35.99 after, around <b style={{ color: INK }}>54% cheaper per day</b> than the UK's top-10 competitor chews. Ships free, pause or cancel anytime.
+              That's <b style={{ color: INK }}>30% off</b> the usual <span className="line-through" style={{ color: MUTE }}>£44.99</span> on your first subscription order, then £35.99 after, <b style={{ color: INK }}>54% cheaper per day</b> than the UK's top-10 competitor chews. Ships free, pause or cancel anytime.
             </p>
             {/* honest urgency = cost of waiting (no fake timers, no invented scarcity) */}
             <div className="mx-auto mt-4 flex max-w-md items-start gap-3 rounded-2xl p-4 text-left" style={{ background: "rgba(22,34,60,0.05)" }}>
               <svg className="mt-0.5 shrink-0" width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={NAVY} /><path d="M9 4.5v5l3 2" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              <span className="text-[14px] leading-snug" style={{ color: INK }}>The gut takes a few weeks to settle, so every week you put it off is another week they're licking and scratching. The sooner they start, the sooner they're comfortable.</span>
+              <span className="text-[14px] leading-snug" style={{ color: INK }}>The gut takes 3 to 6 weeks to settle, so every week you put it off is another week they're licking and scratching. The sooner they start, the sooner they're comfortable.</span>
             </div>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
               Start My Dog's Relief →
@@ -499,7 +499,7 @@ export default function EightReasonsAdvertorial() {
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
-            <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b> · 90-day guarantee</p>
+            <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b></p>
           </div>
           <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-8 py-4 text-base font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Get Relief →</a>
         </div>
