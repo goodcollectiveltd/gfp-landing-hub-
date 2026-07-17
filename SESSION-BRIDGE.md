@@ -1,197 +1,114 @@
-# SESSION BRIDGE — read this first
+# Session Bridge — GFP `/10-reasons` advertorial (handoff)
 
-Hand-off for continuing the GFP Landing Hub in a new Claude Code session. Read
-this, then `CLAUDE.md` (the locked plan), `PROJECT-SUMMARY.md` (full overview),
-and the **visual build brief** (see §4). The owner (`will@stefanthomas.co`) is
-**non-technical** — explain plainly, work in small reviewable steps.
+Snapshot for the next session. Covers what was built, the current state, every decision + why, key
+file locations, gotchas, and what's still open. Written 16 Jul 2026.
 
 ---
 
-## UPDATE — 2026-06-26 session (read this first; supersedes §2/§5 below)
-
-Big progress. All pushed to `origin/main`. Done this session:
-
-- **Visual component library wired into the generator** (was the §5 task): all 13
-  components are typed `Section`s rendered by `PageRenderer`; `generate-page` Pass 2
-  now emits them ("default to a designed component, not flat image+text").
-- **`customVisual` escape hatch** + sanitiser (`src/lib/sanitizeCustomVisual.ts`,
-  render-time) + server-side sanitiser; **slot routing** (`src/lib/visualRouting.ts`).
-- **Image briefs**: photo slots with no library match get an `ImageBrief` attached
-  (schema in `page.ts`); shown in `SlotImage` placeholders. (Copyable-list UI = TODO.)
-- **Visual fidelity (wake-up-call brief, `~/Downloads/gfp-wake-up-call-brief.md`):**
-  v2 palette (white base #FFF, tint #FCEAE6, accent #EF3824, accentDeep #C02A18,
-  ink #161616, body #4B4B4B — in `makeColors` + PageRenderer role vars); section
-  rhythm bands (alternating white/tint, vermilion `finalCta` feature w/ wave edge);
-  **fixed Poppins Bold** (renderer now requests font weights); even section padding.
-- **Quality gate** (`src/lib/qualityGate.ts` + server port in `generate-page`):
-  flags text density (>2 paras OR >60-word para), media-variety adjacency, missing
-  component/video; **one corrective Opus pass** runs on failure before returning.
-  `video` block type added (autoplay/muted/poster-placeholder).
-- **VISUAL REPLICATION (the headline feature):** owner now **uploads a screenshot**
-  of the original advertorial on `/new`; `generate-page` runs an **Opus vision pass**
-  that reads the screenshot's *design features* and rebuilds those same feature types
-  **in the brand's style** (component or `customVisual`). Fidelity decision = "replicate
-  feature types in brand style", NOT pixel-clone. `competitorUrl` is now optional.
-- **Critical resilience fix:** added a per-section error boundary
-  (`SectionBoundary`) + defensive array defaults across components — a malformed
-  generated section no longer blanks the whole page.
-
-**Immediate next tasks (remaining roadmap):** (1) image-brief copyable list UI +
-storage (brief §5); (2) stock-photo toggle, default off (brief §6); (3) **light
-visual editor** — reorder/delete/swap/edit/regenerate a single block (the last 10%);
-(4) Meta Pixel + fbclid/UTM passthrough; (5) subdomain deploy.
-
-**Ops notes:** deploys still need a fresh Supabase access token each session (owner
-creates + deletes; reuse within a session is fine). Test a generation with
-`SB_TOKEN=… PROJECT_REF=uzpqgeodcbfgymipefwb [SCREENSHOT_URL=…] node scripts/test-generate.mjs`.
-Preview `screenshot` tool times out in this env — verify via `preview_eval` DOM checks.
+## TL;DR
+Built a bespoke **listicle advertorial** for 5 Strain Probiotic+ (a rebuild of the live Replo page
+`goodforpets.co/pages/10reasons`), plus an earlier PDP-style "golden page." Both live in the Landing Hub
+and render locally. The `/10-reasons` page went through ~15 rounds of the owner's direction and is now an
+**8-reason** page (consolidated from 10). It is content-complete and design-complete; the outstanding work
+is **tracking (Meta pixel/click-IDs), a file/route rename, and git commit** — see Open Items.
 
 ---
 
-## 1. What this is (one line)
+## The two pages built this session
+| Page | Component | Route | What it is |
+|---|---|---|---|
+| **8-reasons advertorial** (primary focus) | `src/pages/TenReasonsAdvertorial.tsx` | `/p/10-reasons` | Cold-traffic listicle advertorial. **⚠️ Name is stale** — it's 8 reasons now, route/file still say "10/Ten". |
+| **Golden page** (PDP-style advertorial) | `src/pages/ProbioticPlusAdvertorial.tsx` | `/p/5-strain-probiotic-plus` | Earlier section-by-section clone of the live `/5strainprobioticcomplex` Replo page. |
 
-An AI advertorial generator for **Good For Pets** (UK dog supplements, hero product
-**"5 Strain Probiotic+"**). Owner pastes a **competitor advertorial URL** → the app
-generates an **on-brand advertorial** that mirrors the competitor's structure,
-written in the brand's voice from the brand's own knowledge, with the brand's real
-images, reviews, fonts, colours, logo, and a Shopify buy box. Flow: Meta ad →
-advertorial (`/p/:slug`) → Shopify checkout.
+There's also a **rejected** JSON-template version at `src/data/probioticPlusPage.ts` (registered in
+`src/lib/pages.ts`) — the owner found the generic Landing-Hub components too template-looking; **bespoke
+art-directed components are the accepted approach.** Don't revive the template path.
 
-## 2. Where we are RIGHT NOW (the active phase)
+Routes are wired in `src/App.tsx`. Dev server: **port 8091** this session (8080 was held by another chat's
+quiz-funnel). `npm run dev -- --port 8091` from `GFP-Landing-Hub/`.
 
-The generator **works end-to-end** (mirrors competitor structure, writes compliant
-on-brand copy, places real reviews/images). But output looked **visually generic**.
-We are mid-way through a **VISUAL FIDELITY UPGRADE** driven by a build brief.
+---
 
-**Just completed:** a library of **13 bespoke, themed, prop-driven visual
-components** (React + SVG + CSS) in `src/components/visuals/`. View them all at
-**`/showcase`** (public route). They look great — modern, on-brand, legible.
+## Current state of `/10-reasons` (the 8-reason page)
 
-**THE IMMEDIATE NEXT TASK** (this is where to start): the generator does NOT yet
-emit these new components — it still outputs the old 13 section blocks. Wire the
-new components into generation. See §5.
+**Structure (top → bottom):**
+1. Header — real brand logo `logo-brand.png`
+2. Native byline — "By Jess M · Verified ✓ · Updated today"
+3. H1 — "8 Reasons UK Dog Parents Are Ditching Expensive Probiotic Chews for Sprinkle Capsules"
+4. **Create-emotion scene** (not a sell-to question) — "It's 9pm, and there's that wet lick-lick-lick under the telly again. Not his skin, most likely. It's his gut."
+5. Rating row — 4.8/5 · 4,500+ reviews · 20,000+ dogs helped
+6. **Comparison table** — the hero lands here (Hollow Socks structure); the whole card links to the product page
+7. Top CTA
+8. **Problem-agitation** line → "You've done the sprays, the shampoos, the chews, the vet bills, and nothing's stuck. Here's what nobody tells you 👇"
+9. **Mechanism card** — "Why most probiotic chews are dead on arrival" (Baked / Full of moisture / The fix). This is the new-mechanism reveal, moved up front.
+10. **The 8 reasons** (heading → full-width image/slider → 1–2 line body, most with a proof quote):
+    1. Paw licking — before/after **slider**
+    2. Helps clear gunky ears — **slider** + Katie S. quote
+    3. Calms itchy skin — Bear before/after **slider**
+    - → **stat bar** (20,000+ dogs · 4,500+ reviews · 4.8/5)
+    4. Settles the tummy + scooting (merged) — Lynn S. quote
+    5. 5 billion cultures / UK's first double-strength (merged potency + vet) — Dr Kishan Vara photo + quote
+    6. Sprinkles in seconds — Jazzy D. quote
+    7. 51% of profits to rescue
+    8. "It's not magic, but we'll take the risk" — 90-day guarantee + seal
+11. Mid CTA → Offer block (from 28p/day, £44.99 anchor struck, "54% cheaper per day", subscribe-save, badges, guarantee) → Reviews (6 cards) → FAQ (7) → closing CTA → advertorial disclaimer → **sticky CTA bar**.
 
-## 3. Read order for orientation
+**Design system (locked):** ORANGE `#EF3824` = CTAs + small accents ONLY (no big orange fills except CTAs);
+NAVY `#16223C` = secondary blocks (table header, stat bar); INK `#1C1C2E` headings; cream `#FBF6F1` bg.
+Fonts **Poppins (display) + Inter (body)** — verified from the live Replo page + used across GFP.
+3 before/after sliders use the `BeforeAfter` component (default `aspect-[4/3]`).
 
-1. `CLAUDE.md` — locked product decisions/architecture.
-2. `PROJECT-SUMMARY.md` — full overview + the visual-fidelity problem framing.
-3. **The build brief** — `C:\Users\will\Downloads\gfp-landing-hub-visual-fidelity-spec.md`
-   (ask the owner to re-share it in-session; it defines this whole phase: rich
-   component library is the default, a vetted `customVisual` escape hatch, slot
-   routing, image-brief schema, build order). It is the source of truth for the
-   current work.
-4. `/showcase` in the running app — see the components built so far.
+---
 
-## 4. The visual build brief — key points (full version in Downloads)
+## Key decisions & why (don't re-litigate)
+- **Bespoke art-directed component**, not the JSON template renderer (owner rejected the template look).
+- **Consolidated 10 → 8 reasons** using Nick's leverage analysis: merged tummy+scooting, merged potency+vet; back half is a deliberate conversion stack (superiority → ease → identity → guarantee). Cut the two lowest-leverage/redundant slots.
+- **No on-page buy box** — CTAs link to the live Shopify product page (`PRODUCT_URL`). Owner removed the buy box.
+- **Hero lands on the comparison table** (Hollow Socks winning-page structure). No plain product hero image (owner: a plain packshot hurts performance).
+- **Correct mechanism = gut→immune→skin axis.** Probiotics **calm the over-active allergic immune response** (which keeps yeast in check) — they do **NOT** "kill" or "crowd out" skin/ear yeast. Full write-up + papers: `company-context/products/science-behind-probiotics.md`. **Never regress to "kills the yeast."**
+- **No em dashes (—) anywhere** — brand rule; also stripped from `company-context/testimonials/testimonials.md`. Attribution uses a middot (·).
+- **No fake urgency** (no countdown/"stock running low") — brand-voice.md bans invented scarcity. This is the one place we deliberately diverge from Hollow Socks.
+- **Copy is hyper-tight** (Nick: simple > clever; owner pushed hard for brevity). Reasons are 1–2 short lines. The one place to spend words is the emotional hook/lead (the 9pm scene).
+- **Prices/specs are real:** RRP £44.99; subscribe-save 30% first order then 20%; ~28p/day; ~54% cheaper per day than top-10 competitors (all from `company-context`). Live variant IDs used on the golden page's buy box; the /10-reasons page just links to the PDP.
 
-- **Mandate:** generated pages must look like bespoke, high-converting advertorials,
-  NOT a re-skinned generic template. Default any "idea" section to a **custom-built
-  visual component**; a plain image+text is the fallback for genuine photos only.
-- **Guardrails:** audience is sceptical dog owners, female 55–65+ — large, legible,
-  calm, credible; SVG/CSS over heavy JS (paid traffic, speed matters); one hero
-  visual per idea; brand red `#EF3824`, Poppins headings, Inter body, all via CSS
-  vars. **Compliance floor:** "supports / helps maintain" only — never treat/cure/
-  prevent; never an alternative to vet treatment; product name always exactly
-  "5 Strain Probiotic+".
-- **Architecture:** rich themed component library is default; add a vetted
-  `customVisual` block (sanitised SVG/JSX, brand vars only, store its design brief);
-  structured section JSON stays (NO raw freeform HTML).
-- **Build order:** (1) components [largely DONE], (2) `customVisual` + sanitiser +
-  brief storage, (3) `visualType` in generation output, (4) slot routing
-  COMPONENT/customVisual/LIBRARY/BRIEF, (5) image-brief generation+display+storage,
-  (6) stock toggle (optional, default off), (7) light visual editor.
+---
 
-## 5. THE IMMEDIATE NEXT TASK — wire components into the generator
+## Context-hub files created/updated this session
+- **NEW** `company-context/products/science-behind-probiotics.md` — the gut→immune→skin mechanism narrative + every paper cited (PMIDs/DOIs). Pointed to from the README map and `guides/writing-copy.md`.
+- `company-context/README.md` — added the science-file pointer in the products line.
+- `company-context/guides/writing-copy.md` — added row 6 (science file) with the "probiotics don't kill yeast" correction.
+- `company-context/testimonials/testimonials.md` — em dashes removed (customer quotes untouched; only formatting).
+- Memory: `gfp-landing-hub-golden-page.md`, `probiotic-mechanism-science.md` (both indexed in MEMORY.md).
 
-Brief steps 2–4 (the components exist; now make the engine use them):
+---
 
-1. **Register the 13 new components in the renderer + section schema** so they can
-   be part of a page. They live in `src/components/visuals/`; the renderer is
-   `src/components/PageRenderer.tsx`; section types are in `src/types/page.ts`. Each
-   needs a `Section` union member (type + typed `data`/props) and a render case.
-2. **Add `visualType` slot routing** (brief §4): each visual slot the generator
-   emits carries a `visualType` enum. COMPONENT types (mechanism, gutRebalance,
-   strainBreakdown, symptomToGut, timeline, comparison, statPanel, trustBadgeRow,
-   reviewCard, vetPanel) → render a component. PHOTO types (productPhoto,
-   lifestylePhoto, ugcPhoto, beforeAfter, proofScreenshot) → resolve from the
-   captioned image library, else emit an **image brief** (brief §5) as a labelled
-   placeholder. Default bias: if a slot could be a component, make it a component.
-3. **Add the `customVisual` block** + a sanitiser (brief §2) for bespoke diagrams.
-4. **Rewire `generate-page` Pass 2** (`supabase/functions/generate-page/index.ts`)
-   to emit these component types with structured props, grounded in the Context Hub
-   docs/voice/claims, "default to a component not a photo." Then redeploy + test.
+## Analysis done (reference, not action)
+- **Full Nick Theriot matrix teardown** of the page (8-layer LP framework + emotional concepts + hooks/positioning + copy principles + listicle anatomy). Verdict: mechanically excellent; the last gap was emotional (sell-to → create-emotion), now addressed via the 9pm scene + sharpened agitation + restored byline.
+- **PostHog heatmap read** of the live `/10reasons`: #1 paid-social LP (744 visitors/7d, 29.6% bounce, 85% mobile); scroll collapses to ~14% by the offer; taps cluster on the comparison table + before/after images (→ made them interactive) + reason headings. Note: PostHog MCP here only exposes `render-ui`; read heatmaps by driving authenticated PostHog in the user's real Chrome (claude-in-chrome).
 
-Then **step 7: the light editor** (reorder/delete/swap/edit per block, regenerate a
-single block/customVisual) — the final 10%.
+---
 
-## 6. What's already built and working
+## Gotchas
+- **Dev server on 8091** (8080 taken by another chat). The in-app **preview pane screenshot is flaky** — verify visuals with **Playwright via `company-context/ad-factory`** (chromium is installed there): `node -e "const {chromium}=require('playwright')..."` pointing at `http://localhost:8091/p/10-reasons`.
+- **Image compression discipline:** image-bank photos are huge (up to 10MB). Always re-encode to ≤1200–1400px JPEG (q0.82–0.85) before putting on a page. No ImageMagick on this machine — use the canvas-in-Playwright trick (see the crop/compress scripts used this session).
+- **Image gen:** `company-context/ad-factory/scene.mjs` / `creative.mjs` use `gpt-image-2`. ⚠️ A **live OpenAI key is committed** in `company-context/ad-factory/.env` — rotate if that folder is ever pushed to a remote.
+- Page assets live in `GFP-Landing-Hub/public/lp/`. `paw-lick.jpg` is now unused (replaced by the paw before/after slider). Ear/Bear sliders use the `*-c.jpg` cropped variants; sources are the un-suffixed files.
 
-- ✅ Frontend (Vite+React+TS+Tailwind): admin `/`, generator `/new`, brand/Context
-  Hub `/hub`, public `/p/:slug`, component gallery `/showcase`, login.
-- ✅ Supabase: Postgres, Storage (`brand-assets`), Auth (owner login), Edge Functions.
-- ✅ Tables: `brand_kits`, `landing_pages`, `knowledge_docs`, `reviews`, `ad_assets`,
-  `page_events`.
-- ✅ Brand kit (Good For Pets): voice, allowed_claims, banned_words, fonts
-  (Poppins/Inter), colours (red #EF3824), logos, image library (72 images), store
-  domain. Multi-brand capable.
-- ✅ Image library with **AI vision captioning/tagging** (`analyze-image` fn).
-  NOTE: most of the 72 images are still tagged "other"/uncaptioned — owner should
-  run "Auto-caption all" in the Hub so product/vet/before-after images become
-  placeable by the generator.
-- ✅ Reviews library: 12 reviews (9 with photos), scrape + JSON import (`scrape-reviews`).
-- ✅ Context Hub: 4 docs loaded (product, customer, objection, review bank).
-- ✅ Live Shopify products/variants/subscriptions in the buy box (`list-products`).
-- ✅ Generator (`generate-page`): fetches competitor → deterministic structural
-  skeleton (headings + image positions + paragraph lengths, NOT their copy) →
-  Pass 1 (Haiku) block plan → Pass 2 (Opus) writes the page from brand docs/voice/
-  claims into the OLD 13 section blocks, placing real images/reviews. Anti-plagiarism
-  by design (Pass 2 never sees competitor text). Recent fixes: Poppins fonts, tight
-  spacing, punchy copy, object-cover images.
-- ✅ 13 new visual components in `src/components/visuals/` + `/showcase`.
-- ⏳ NOT done: wiring components into the generator (§5); `customVisual`; image-brief
-  schema; light editor; Meta Pixel + fbclid/UTM passthrough; subdomain deploy.
+---
 
-## 7. Operational how-tos
+## Open items / next steps
+1. **Rename** `TenReasonsAdvertorial` → `EightReasonsAdvertorial` and route `/p/10-reasons` → `/p/8-reasons` for accuracy (cosmetic; the URL must match whatever the paired ad links to). Also update any ad that promises "10 reasons" for congruence.
+2. **Meta pixel + fbclid/fbp/UTM passthrough** on the CTAs — **not built yet**, and it's required before this takes paid traffic (the whole point of the subdomain). This is the biggest functional gap on both advertorials.
+3. **Commit to git** — nothing has been committed this session. The repo has both advertorials, the new components/images, and the context-hub edits (context-hub is a separate folder/repo).
+4. **Ear before/after crop** is unsettled — the owner reverted a 4:5 experiment; it's currently 4:3 matched-zoom. The two Murphy ear photos are framed differently (before is a tighter shot); a clean match may need a portrait aspect for that pair or a different before image. Await direction.
+5. **Optional trims** the owner flagged: FAQ #5 ("how do I give it") is covered by Reason 6; FAQ #1 repeats the mechanism — either is a clean deletion.
+6. **Optional tests:** a symptom-led H1 variant for paw-licking ad sets (congruence); a one-line cost-of-inaction beat (the "not important enough" objection).
+7. **Phase-2 generator rebuild** (from `gfp-landing-hub-golden-page` memory) — re-point generation at `company-context/`, real headless competitor capture, blocking quality gate, auto image-briefs, and the Meta layer. Still pending; these two hand-built pages are the fidelity benchmark.
 
-- **Run app:** `npm run dev` (port 8080) — or the preview tool. Demo page:
-  `/p/demo-ear-issues`. Component gallery: `/showcase`.
-- **Supabase project ref:** `uzpqgeodcbfgymipefwb`. Good For Pets `brand_id`:
-  `07bd3c4e-485f-4bca-82a7-5af17073c209`.
-- **Deploy an edge function:** `SUPABASE_ACCESS_TOKEN=<token> npx supabase functions
-  deploy <name> --project-ref uzpqgeodcbfgymipefwb`. ⚠️ The owner creates a
-  **temporary Supabase access token** at supabase.com/dashboard/account/tokens, you
-  use it for the session, and they **delete it after** (a fresh one is needed each
-  session — it is NOT stored anywhere). Anthropic API key is already set as a
-  function secret.
-- **DB writes / migrations (privileged):** POST SQL to the Management API
-  `https://api.supabase.com/v1/projects/<ref>/database/query` with the access token.
-  Examples in `scripts/push-*.mjs`. (RLS makes the app's anon key read-only on
-  published pages; owner-only for writes.)
-- **Test a generation end-to-end:** `SB_TOKEN=<token> PROJECT_REF=uzpqgeodcbfgymipefwb
-  node scripts/test-generate.mjs [competitorUrl]` — pulls real brand/docs/reviews,
-  calls `generate-page`, prints the plan + sections, and saves to `/p/demo-ear-issues`.
-- **Edge functions:** `generate-page`, `analyze-image`, `list-products`,
-  `scrape-reviews` (Deno, in `supabase/functions/`).
-- **GitHub:** `origin` = goodcollectiveltd/gfp-landing-hub- (branch `main`). Commit +
-  push at each milestone. `.env` is gitignored (Supabase URL + anon key).
+---
 
-## 8. Locked decisions / constants
-
-- Own subdomain hosting; Shopify-native buy box; **template + components, NO raw
-  freeform HTML** (the `customVisual` escape hatch is sanitised, themeable, editable).
-- Mirror competitor **structure**, never their copy (copyright + Meta duplicate-copy
-  safety). Original copy from brand docs only.
-- Compliance: supports/helps language; approved-claims list + NEVER-SAY list in the
-  brand + docs; product name exactly "5 Strain Probiotic+".
-- Brand: red `#EF3824`, Poppins headings, Inter body. Bacteria colour code in
-  diagrams: blue = neutral, red = bad/dead, green = good/alive.
-- Models: Opus 4.8 (generation), Haiku 4.5 (extraction/captioning).
-
-## 9. Known gotchas
-
-- Generation is non-deterministic (LLM). Always review a page before publishing; the
-  editor (step 7) is how the owner does the final fixes.
-- A fresh Supabase access token is needed each session for deploys/DB writes.
-- Uncaptioned "other" images aren't placed by the generator — run "Auto-caption all".
-- `generate-page` Pass 2 output is capped; large pages need `max_tokens` headroom
-  (currently 14000) to avoid truncated tool calls (502 "did not return sections").
+## How to resume fast
+1. `cd GFP-Landing-Hub && npm run dev -- --port 8091`, open `/p/10-reasons`.
+2. Read `company-context/CLAUDE.md` + `guides/writing-copy.md` before touching copy; `science-behind-probiotics.md` before touching the mechanism.
+3. For visual checks, screenshot via Playwright in `company-context/ad-factory`, not the flaky preview pane.
+4. Keep it: no em dashes, no fake urgency, orange = CTAs only, mechanism = gut→immune→skin (never "kills yeast").

@@ -24,7 +24,10 @@ if (!isSupabaseConfigured) {
   );
 }
 
+// `||` (not `??`) so an EMPTY env var in the host (Netlify's known trap) still
+// falls through to the placeholder instead of passing "" into createClient (which
+// throws and would white-screen the whole app, advertorials included).
 export const supabase = createClient(
-  url ?? "http://localhost:54321",
-  anonKey ?? "public-anon-key-placeholder"
+  url || "http://localhost:54321",
+  anonKey || "public-anon-key-placeholder"
 );

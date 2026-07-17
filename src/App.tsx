@@ -3,6 +3,8 @@ import AdminConsole from "@/pages/AdminConsole";
 import GeneratePage from "@/pages/GeneratePage";
 import HubPage from "@/pages/HubPage";
 import PublicPage from "@/pages/PublicPage";
+import ProbioticPlusAdvertorial from "@/pages/ProbioticPlusAdvertorial";
+import TenReasonsAdvertorial from "@/pages/TenReasonsAdvertorial";
 import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -41,6 +43,9 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      {/* Bespoke golden page — art-directed clone of the live Replo advertorial. */}
+      <Route path="/p/5-strain-probiotic-plus" element={<ProbioticPlusAdvertorial />} />
+      <Route path="/p/10-reasons" element={<TenReasonsAdvertorial />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />

@@ -2,12 +2,14 @@ import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 import type { BrandKit, BuyBoxConfig, LandingPage, Section } from "@/types/page";
 import { samplePage } from "@/data/samplePage";
 import { sampleBlocks } from "@/data/sampleBlocks";
+import { probioticPlusPage } from "@/data/probioticPlusPage";
 import { makeFonts, googleFontFamilies } from "@/lib/brand";
 
 // Local-only preview pages served from the fallback (no DB row needed).
 const localSamples: Record<string, LandingPage> = {
   [samplePage.slug]: samplePage,
   [sampleBlocks.slug]: sampleBlocks,
+  [probioticPlusPage.slug]: probioticPlusPage,
 };
 
 // Read layer for landing pages. The renderer talks to Supabase through here.

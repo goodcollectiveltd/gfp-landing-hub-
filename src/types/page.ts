@@ -266,10 +266,22 @@ export interface VideoSection {
 // `src/components/visuals/`. See the visual-fidelity build brief.
 // ---------------------------------------------------------------------------
 
-/** The "potency paradox": baked chews kill live bacteria; cold-fill keeps them alive. */
+/** The "potency paradox": baked chews kill live bacteria; cold-fill keeps them alive.
+ *  `cards` optionally overrides the 2-card default — e.g. a 3-card
+ *  heat / moisture / capsule story. */
 export interface MechanismDiagramSection {
   type: "mechanismDiagram";
-  data: { heading?: string; subhead?: string };
+  data: {
+    heading?: string;
+    subhead?: string;
+    cards?: {
+      icon?: "flame" | "droplet" | "snow";
+      label: string;
+      caption: string;
+      dots?: "dead" | "fading" | "alive";
+      highlight?: boolean;
+    }[];
+  };
 }
 
 /** Good bacteria crowding out the bad — two balance rings. supports/helps framing only. */

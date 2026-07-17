@@ -34,6 +34,14 @@ function FlameIcon() {
     </svg>
   );
 }
+function DropletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden>
+      <path d="M12 2.5C9 7 5.5 10.5 5.5 14.5a6.5 6.5 0 1013 0C18.5 10.5 15 7 12 2.5z" fill="#4A90D9" />
+      <path d="M9.2 14.8a3 3 0 002 3" stroke="#fff" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.8" />
+    </svg>
+  );
+}
 function SnowIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden stroke="var(--brand-primary)" strokeWidth="1.6" strokeLinecap="round">
@@ -72,14 +80,57 @@ function Card({
   );
 }
 
+/** One configurable diagram card. `dots` picks a preset bacteria state. */
+export interface MechanismCard {
+  icon?: "flame" | "droplet" | "snow";
+  label: string;
+  caption: string;
+  dots?: "dead" | "fading" | "alive";
+  highlight?: boolean;
+}
+
 export interface MechanismDiagramProps {
   heading?: string;
   subhead?: string;
+  /** Optional card override — e.g. a 3-card heat / moisture / capsule story.
+   *  Omit for the classic 2-card baked-vs-cold-filled default. */
+  cards?: MechanismCard[];
 }
+
+const GONE = "#9aa0a6"; // burnt-out grey
+const DOT_PRESETS: Record<NonNullable<MechanismCard["dots"]>, string[]> = {
+  dead: [DEAD, DEAD, GONE, DEAD, GONE, DEAD, DEAD, GONE, DEAD, ALIVE],
+  fading: [DEAD, GONE, DEAD, GONE, DEAD, DEAD, GONE, DEAD, GONE, DEAD],
+  alive: [ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE],
+};
+const ICONS = {
+  flame: <FlameIcon />,
+  droplet: <DropletIcon />,
+  snow: <SnowIcon />,
+};
+
+const DEFAULT_CARDS: MechanismCard[] = [
+  {
+    icon: "flame",
+    label: "Most baked chews",
+    dots: "dead",
+    caption:
+      "Baking cooks the bacteria. Moisture in the tub wakes the few survivors early. Many are gone before the bowl.",
+  },
+  {
+    icon: "snow",
+    label: "5 Strain Probiotic+",
+    dots: "alive",
+    highlight: true,
+    caption:
+      "Cold-filled and sealed, heat and moisture free. The live cultures stay dormant and reach your dog's gut alive.",
+  },
+];
 
 export default function MechanismDiagram({
   heading = "Why most dog probiotics quietly fail",
   subhead = "Probiotics are live. Live bacteria are fragile — and most are dead before your dog ever eats them.",
+  cards = DEFAULT_CARDS,
 }: MechanismDiagramProps) {
   return (
     <section className="px-6 py-10">
@@ -90,20 +141,17 @@ export default function MechanismDiagram({
         <p className="lp-muted mx-auto mt-2 max-w-xl text-center text-sm leading-relaxed">
           {subhead}
         </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Card
-            icon={<FlameIcon />}
-            label="Most baked chews"
-            dots={[DEAD, DEAD, "#9aa0a6", DEAD, "#9aa0a6", DEAD, DEAD, "#9aa0a6", DEAD, ALIVE]}
-            caption="Baking cooks the bacteria. Moisture in the tub wakes the few survivors early. Many are gone before the bowl."
-          />
-          <Card
-            highlight
-            icon={<SnowIcon />}
-            label="5 Strain Probiotic+"
-            dots={[ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE, ALIVE]}
-            caption="Cold-filled and sealed, heat and moisture free. The live cultures stay dormant and reach your dog's gut alive."
-          />
+        <div className={`mt-6 grid gap-4 ${cards.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+          {cards.map((c, i) => (
+            <Card
+              key={i}
+              icon={ICONS[c.icon ?? "snow"]}
+              label={c.label}
+              dots={DOT_PRESETS[c.dots ?? "alive"]}
+              caption={c.caption}
+              highlight={c.highlight}
+            />
+          ))}
         </div>
       </div>
     </section>

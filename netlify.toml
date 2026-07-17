@@ -1,0 +1,17 @@
+# Netlify build + hosting config for the GFP Landing Hub.
+#
+# Vite builds a single-page app: React Router handles routes like /p/10-reasons
+# in the browser, but the server must serve index.html for those paths (a direct
+# hit or refresh would otherwise 404). The SPA fallback below does that.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Serve index.html for any path the CDN can't match to a real file, so deep links
+# (e.g. an ad landing on /p/8-reasons) load the app instead of 404ing. Real assets
+# under /assets/* are matched first, so this only catches app routes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
