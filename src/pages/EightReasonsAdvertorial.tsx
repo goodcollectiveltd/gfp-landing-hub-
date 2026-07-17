@@ -274,22 +274,26 @@ export default function EightReasonsAdvertorial() {
         <h1 className="adv-display mt-2 text-[28px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
           8 Reasons UK Dog Parents Are Ditching Expensive Probiotic Chews for <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
         </h1>
-        {/* stronger opening: agitate the failed-med carousel + lift the guilt, then bridge (personas.md: vet-med refugee) */}
+        {/* compressed opening (mobile-first): scene → gut, then one killer mechanism line */}
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          It's 9pm, and there's that wet lick-lick-lick under the telly again. You've tried the sprays, the shampoos, the chews off Amazon, maybe vet visits that wore off in days. Nothing's stuck, and every failed try feels like you're letting them down.
+          It's 9pm, and there's that wet lick-lick-lick under the telly again. You've tried everything, and it's usually not their skin at all. It's their gut.
         </p>
-        <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          Here's what nobody tells you: it's usually not their skin at all, it's their gut. And it isn't your fault, <b style={{ color: INK }}>most probiotic chews are dead before your dog gets one, and you can feel exactly why.</b>
+        <p className="mt-3 text-lg font-bold leading-snug" style={{ color: INK }}>
+          Most probiotic chews are dead before your dog gets one, and you can feel exactly why.
         </p>
-        {/* proof + native byline, one compact row */}
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-          <span className="flex items-center gap-1.5"><Stars size={16} /><span className="adv-heading font-bold" style={{ color: INK }}>4.8/5</span></span>
-          <span style={{ color: MUTE }}>· 4,500+ reviews · 20,000+ dogs helped</span>
-        </div>
       </div>
 
-      {/* comparison table, the hero lands here (Hollow Socks structure) */}
-      <section className="mx-auto mt-7 max-w-2xl px-6">
+      {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
+      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
+
+      {/* social proof, now under the button */}
+      <div className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 text-sm">
+        <span className="flex items-center gap-1.5"><Stars size={16} /><span className="adv-heading font-bold" style={{ color: INK }}>4.8/5</span></span>
+        <span style={{ color: MUTE }}>· 4,500+ reviews · 20,000+ dogs helped</span>
+      </div>
+
+      {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
+      <section className="mx-auto mt-8 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>Sprinkle Capsules <span style={{ color: ORANGE }}>vs</span> Traditional Chews</h2>
         <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-4 block w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-lg">
           <div className="grid grid-cols-[1fr_1fr_0.9fr]">
@@ -297,26 +301,23 @@ export default function EightReasonsAdvertorial() {
             <div className="adv-heading flex items-center justify-center px-2 py-2.5 text-center" style={{ background: NAVY }}>
               <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-4 w-auto" />
             </div>
-            <div className="adv-heading flex items-center justify-center px-2 py-2.5 text-center text-[11px] font-bold" style={{ color: MUTE, background: "#F1F1F1" }}>Chews</div>
+            <div className="adv-heading flex items-center justify-center px-2 py-2.5 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F1F1F1" }}>Chews</div>
           </div>
           {TABLE.map((r, i) => (
             <div key={i} className="grid grid-cols-[1fr_1fr_0.9fr] border-t border-black/5">
-              <div className="flex items-center px-2.5 py-2 text-[12px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
-              <div className="flex items-center gap-1 px-2 py-2 text-[12px] font-semibold leading-tight" style={{ background: "rgba(22,34,60,0.04)", color: NAVY }}>
-                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <div className="flex items-center px-2.5 py-2.5 text-[13px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
+              <div className="flex items-center gap-1.5 px-2 py-2.5 text-[13px] font-semibold leading-tight" style={{ background: "rgba(22,34,60,0.04)", color: NAVY }}>
+                <svg className="shrink-0" width="15" height="15" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 {r.us}
               </div>
-              <div className="flex items-center gap-1 px-2 py-2 text-[12px] leading-tight" style={{ color: MUTE }}>
-                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
+              <div className="flex items-center gap-1.5 px-2 py-2.5 text-[13px] leading-tight" style={{ color: MUTE }}>
+                <svg className="shrink-0" width="15" height="15" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 {r.them}
               </div>
             </div>
           ))}
         </a>
       </section>
-
-      {/* single top-third CTA (orange) */}
-      <div className="mx-auto mt-6 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
 
       {/* short bridge into the list — the mechanism reveal now lives in reasons 1–2 */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
