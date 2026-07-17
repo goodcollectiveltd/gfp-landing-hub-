@@ -286,10 +286,29 @@ export default function EightReasonsAdvertorial() {
       {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
       <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
 
-      {/* social proof, now under the button */}
-      <div className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 text-sm">
-        <span className="flex items-center gap-1.5"><Stars size={16} /><span className="adv-heading font-bold" style={{ color: INK }}>4.8/5</span></span>
-        <span style={{ color: MUTE }}>· 4,500+ reviews · 20,000+ dogs helped</span>
+      {/* trust badges (icons, not a text line) — under the button */}
+      <div className="mx-auto mt-5 grid max-w-md grid-cols-3 gap-2 px-6 text-center">
+        <div className="flex flex-col items-center gap-1">
+          <Stars size={14} />
+          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>4.8/5</span>
+          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>4,500+ reviews</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={NAVY} aria-hidden>
+            <circle cx="6" cy="10.5" r="2.1" /><circle cx="10.3" cy="7.4" r="2.1" /><circle cx="14.7" cy="7.4" r="2.1" /><circle cx="18.6" cy="11" r="2.1" />
+            <path d="M12.3 12.2c-3 0-5.2 2.1-5.2 4.3 0 2 2 2.6 5.2 2.6s5.2-.6 5.2-2.6c0-2.2-2.2-4.3-5.2-4.3z" />
+          </svg>
+          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>20,000+</span>
+          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>dogs helped</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill={NAVY} aria-hidden>
+            <path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" />
+            <path d="M5.4 8.1l1.8 1.8 3.6-3.7" stroke="#fff" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>90-day</span>
+          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>money-back</span>
+        </div>
       </div>
 
       {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
@@ -350,8 +369,8 @@ export default function EightReasonsAdvertorial() {
                 )}
               </div>
             ) : null}
-            <p className="mt-4 text-[15px] leading-relaxed" style={{ color: BODY }}>{r.body}</p>
-            {r.proof && <p className="mt-3 border-l-2 pl-3 text-sm italic" style={{ borderColor: ORANGE, color: MUTE }}>{r.proof}</p>}
+            <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>{r.body}</p>
+            {r.proof && <p className="mt-3 border-l-2 pl-3 text-[15px] italic" style={{ borderColor: ORANGE, color: MUTE }}>{r.proof}</p>}
           </article>
           {/* social-proof stat bar, placed right after the 3 before/after sliders */}
           {r.n === 5 && (
@@ -372,16 +391,22 @@ export default function EightReasonsAdvertorial() {
       <section className="mx-auto mt-14 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>What to expect</h2>
         <p className="mt-1 text-center text-sm" style={{ color: MUTE }}>Every dog is different, so give it the full 90 days.</p>
-        <div className="mt-6 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
+        <div className="mt-6 rounded-3xl border border-black/5 bg-white p-5 shadow-sm sm:p-6">
           {[
-            ["Days 0–14", "Softer stools at first is normal, the gut is just waking up."],
-            ["Days 14–30", "Firmer stools and less wind. You start to notice."],
-            ["Days 30–60", "Less paw licking and scratching, more comfortable in their skin."],
-            ["Day 90+", "Calm skin, steady digestion, happier dog. The longer they stay on it, the better it gets."],
-          ].map(([w, d], i) => (
-            <div key={w} className="flex items-start gap-4 p-4 sm:p-5" style={{ borderTop: i ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
-              <span className="adv-heading shrink-0 rounded-full px-3 py-1 text-xs font-bold text-white" style={{ background: NAVY }}>{w}</span>
-              <p className="text-[15px] leading-snug" style={{ color: BODY }}>{d}</p>
+            ["Days 0–14", "Settling in", "Softer stools at first is normal, the gut is just waking up."],
+            ["Days 14–30", "First signs", "Firmer stools and less wind. You start to notice."],
+            ["Days 30–60", "Real change", "Less paw licking and scratching, more comfortable in their skin."],
+            ["Day 90+", "Comfortable", "Calm skin, steady digestion, a happier dog. The longer they stay on it, the better it gets."],
+          ].map(([w, tag, d], i, arr) => (
+            <div key={w} className="flex gap-4">
+              <div className="flex flex-col items-center">
+                <span className="mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full" style={{ background: ORANGE }} />
+                {i < arr.length - 1 && <span className="my-1 w-0.5 flex-1" style={{ background: "rgba(22,34,60,0.15)" }} />}
+              </div>
+              <div className={i < arr.length - 1 ? "pb-6" : ""}>
+                <p className="adv-heading text-[15px] font-bold leading-tight" style={{ color: INK }}>{w} · <span style={{ color: NAVY }}>{tag}</span></p>
+                <p className="mt-1 text-[16px] leading-snug" style={{ color: BODY }}>{d}</p>
+              </div>
             </div>
           ))}
         </div>
