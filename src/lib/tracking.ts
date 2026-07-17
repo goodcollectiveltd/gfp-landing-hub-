@@ -5,7 +5,7 @@
  * SAME Meta pixel the Shopify store fires Purchase to, so the ad → advertorial →
  * store journey stays on one pixel and attribution lines up. On every CTA we
  * forward the ad-click ids (fbclid) + Meta browser cookies (_fbp/_fbc) + UTMs to
- * the Shopify URL, because cookies do NOT cross from lp.goodforpets.co to
+ * the Shopify URL, because cookies do NOT cross from hello.goodforpets.co to
  * goodforpets.co — the query params are what let the store attribute the sale.
  *
  *   VITE_META_PIXEL_ID  Meta (Facebook) Pixel ID (optional override)

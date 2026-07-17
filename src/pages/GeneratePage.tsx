@@ -224,7 +224,7 @@ export default function GeneratePage() {
               Competitor URL + your product → an on-brand page
             </p>
           </div>
-          <Link to="/" className="text-sm text-neutral-600 underline">
+          <Link to="/admin" className="text-sm text-neutral-600 underline">
             ← Back to console
           </Link>
         </div>

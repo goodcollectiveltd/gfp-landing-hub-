@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import AdminConsole from "@/pages/AdminConsole";
 import GeneratePage from "@/pages/GeneratePage";
@@ -11,16 +12,27 @@ import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Surfaces:
+//   /          → bounce to the main store (public root of the ad subdomain)
 //   /login     → owner sign-in (public)
-//   /          → admin console      (gated)
+//   /admin     → admin console      (gated)
 //   /new       → generator          (gated)
 //   /p/:slug   → public landing page (public — Meta-ad traffic)
+//
+// The bare subdomain root is for public ad traffic, so it sends visitors to the
+// store. netlify.toml redirects it at the edge (no app load); this client-side
+// route is the fallback for any in-app <Link to="/">.
+function StoreRedirect() {
+  useEffect(() => { window.location.replace("https://goodforpets.co"); }, []);
+  return null;
+}
+
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<StoreRedirect />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/"
+        path="/admin"
         element={
           <ProtectedRoute>
             <AdminConsole />

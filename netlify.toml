@@ -8,6 +8,16 @@
   command = "npm run build"
   publish = "dist"
 
+# Bare subdomain root → the main store. This is a public ad subdomain, so nobody
+# should land on its root; force = true makes it win over the SPA index.html so
+# the redirect happens at the edge with no app load. Matches "/" exactly, so
+# /p/* and /admin fall through to the SPA rule below.
+[[redirects]]
+  from = "/"
+  to = "https://goodforpets.co"
+  status = 302
+  force = true
+
 # Serve index.html for any path the CDN can't match to a real file, so deep links
 # (e.g. an ad landing on /p/8-reasons) load the app instead of 404ing. Real assets
 # under /assets/* are matched first, so this only catches app routes.

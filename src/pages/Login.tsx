@@ -14,7 +14,7 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
 
   // Already signed in → go to the console.
-  if (!loading && session) return <Navigate to="/" replace />;
+  if (!loading && session) return <Navigate to="/admin" replace />;
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function Login() {
       setError(error.message);
       return;
     }
-    navigate("/", { replace: true });
+    navigate("/admin", { replace: true });
   }
 
   return (
