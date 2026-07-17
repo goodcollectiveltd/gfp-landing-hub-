@@ -161,6 +161,7 @@ const REASONS: Reason[] = [
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore, saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
+    proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
   },
   {
     n: 4, title: "Cleaner, calmer ears, without another vet bill",
@@ -176,10 +177,11 @@ const REASONS: Reason[] = [
     slider: true, before: "/lp/bear-before-c.jpg", after: "/lp/bear-after-c.jpg",
     beforeAlt: "Bear's skin before, red, raw and patchy", afterAlt: "Bear's skin after, calm, with a full coat",
     afterLabel: "AFTER", caption: "Bear's skin & coat, before and after (real customer, Chris S.)",
+    proof: "“I was sceptical a probiotic could help, but after a few weeks his skin isn't itchy and his coat looks amazing.” · Caroline L.",
   },
   {
     n: 6, title: "Vet co-developed, the UK's first double-strength capsule",
-    body: "5 billion live cultures, 2.5× the original strength, cold-pressed, and made in the UK to human GMP standards, the thing our customers rate most of all. Co-developed with a vet.",
+    body: "5 billion live cultures, 2.5× the original strength, cold-pressed, and made in the UK to human GMP standards, the thing our customers rate most of all. Co-developed with Dr Kishan Vara, MRCVS.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS with the product", pos: "center 20%",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
