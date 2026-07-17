@@ -299,31 +299,6 @@ export default function EightReasonsAdvertorial() {
       {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
       <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
 
-      {/* trust badges (icons, not a text line) — under the button */}
-      <div className="mx-auto mt-5 grid max-w-md grid-cols-3 gap-2 px-6 text-center">
-        <div className="flex flex-col items-center gap-1">
-          <Stars size={14} />
-          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>4.8/5</span>
-          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>4,500+ reviews</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill={NAVY} aria-hidden>
-            <circle cx="6" cy="10.5" r="2.1" /><circle cx="10.3" cy="7.4" r="2.1" /><circle cx="14.7" cy="7.4" r="2.1" /><circle cx="18.6" cy="11" r="2.1" />
-            <path d="M12.3 12.2c-3 0-5.2 2.1-5.2 4.3 0 2 2 2.6 5.2 2.6s5.2-.6 5.2-2.6c0-2.2-2.2-4.3-5.2-4.3z" />
-          </svg>
-          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>20,000+</span>
-          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>dogs helped</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill={NAVY} aria-hidden>
-            <path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" />
-            <path d="M5.4 8.1l1.8 1.8 3.6-3.7" stroke="#fff" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="adv-heading text-sm font-extrabold leading-none" style={{ color: INK }}>90-day</span>
-          <span className="text-[11px] leading-tight" style={{ color: MUTE }}>money-back</span>
-        </div>
-      </div>
-
       {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
       <section className="mx-auto mt-8 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>Sprinkle Capsules <span style={{ color: ORANGE }}>vs</span> Traditional Chews</h2>
@@ -357,7 +332,7 @@ export default function EightReasonsAdvertorial() {
       {/* short bridge into the list — the mechanism reveal now lives in reasons 1–2 */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
         <p className="text-[15px] leading-relaxed" style={{ color: BODY }}>
-          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons UK dog parents are switching</span> 👇
+          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons over 20,000 UK owners have switched</span> 👇
         </p>
       </section>
 
