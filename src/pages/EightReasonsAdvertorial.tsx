@@ -153,7 +153,7 @@ const REASONS: Reason[] = [
   {
     n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
     body: "No moisture, no soft chew, just a dry capsule of powder. With nothing to wake them early, all 5 billion live bacteria stay asleep and alive right up until they hit the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
-    img: "/lp/sprinkle-kitchen.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of fresh dog food", pos: "center",
+    img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
     n: 3, title: "It targets the real cause of the paw licking",
