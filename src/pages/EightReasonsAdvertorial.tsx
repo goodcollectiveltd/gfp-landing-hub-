@@ -135,8 +135,16 @@ type Reason = {
   n: number; title: string; body: string;
   img?: string; imgAlt?: string; pos?: string; seal?: boolean; imgCaption?: string;
   slider?: boolean; before?: string; after?: string; beforeAlt?: string; afterAlt?: string; afterLabel?: string; caption?: string; aspect?: string;
-  proof?: string;
+  proof?: string; bold?: string;
 };
+
+/** Bold one key phrase inside a reason body so skimmers catch the point. */
+function withBold(text: string, phrase?: string) {
+  if (!phrase) return text;
+  const i = text.indexOf(phrase);
+  if (i < 0) return text;
+  return (<>{text.slice(0, i)}<b style={{ color: INK }}>{phrase}</b>{text.slice(i + phrase.length)}</>);
+}
 
 // V2 (mentor restructure): each reason is a different persuasive move, not eight
 // benefits in a row. Arc = agitate the current solution → new mechanism → proof
@@ -146,17 +154,17 @@ type Reason = {
 // added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)",
+    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "moisture is what kills a probiotic", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
     body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
     img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
-    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
+    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "5 billion live bacteria stay asleep and alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
     body: "No moisture, no soft chew, just a dry capsule of powder. With nothing to wake them early, all 5 billion live bacteria stay asleep and alive right up until they hit the gut, 5× what a typical chew even claims. The strains, enzymes and prebiotic then firm up stools and cut the wind and scooting. A sprinkle, not a treat.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
-    n: 3, title: "It targets the real cause of the paw licking",
+    n: 3, title: "It targets the real cause of the paw licking", bold: "Most of the immune system lives in the gut",
     body: "Paw licking is usually an allergic itch, not just the skin. Most of the immune system lives in the gut, so balancing it helps calm the reaction driving the licking. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore, saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
@@ -164,7 +172,7 @@ const REASONS: Reason[] = [
     proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
   },
   {
-    n: 4, title: "Cleaner, calmer ears, without another vet bill",
+    n: 4, title: "Cleaner, calmer ears, without another vet bill", bold: "A calmer gut helps keep both in check",
     body: "Gunky ears are usually the same allergy-and-yeast flare. A calmer gut helps keep both in check. Drag the slider:",
     slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
     beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
@@ -172,7 +180,7 @@ const REASONS: Reason[] = [
     proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
-    n: 5, title: "Calms itchy, irritated skin and coat",
+    n: 5, title: "Calms itchy, irritated skin and coat", bold: "Settle the gut, settle the reaction",
     body: "Itchy skin is often an over-reacting immune system showing on the outside. Settle the gut, settle the reaction. Bear's owner sent us this:",
     slider: true, before: "/lp/bear-before-c.jpg", after: "/lp/bear-after-c.jpg",
     beforeAlt: "Bear's skin before, red, raw and patchy", afterAlt: "Bear's skin after, calm, with a full coat",
@@ -180,19 +188,19 @@ const REASONS: Reason[] = [
     proof: "“I was sceptical a probiotic could help, but after a few weeks his skin isn't itchy and his coat looks amazing.” · Caroline L.",
   },
   {
-    n: 6, title: "Vet-developed, made in a UK human-supplement factory",
+    n: 6, title: "Vet-developed, made in a UK human-supplement factory", bold: "Made to actually work",
     body: "5 billion live cultures, 5 different strains. Built in partnership with Dr Kishan Vara MRCVS, and produced in a human supplement factory here in the UK. Made to actually work.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic", pos: "center",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 7, title: "Small enough to open and sprinkle in seconds",
+    n: 7, title: "Small enough to open and sprinkle in seconds", bold: "No pill pockets, no crushing a tablet",
     body: "Twist one open and sprinkle the powder over dinner. No pill pockets, no crushing a tablet, no fighting a tiny dog to swallow it. Even fussy ones don't notice.",
     img: "/lp/capsule-open.jpg", imgAlt: "Twisting a sprinkle capsule open over a bowl of food", pos: "center",
     proof: "“I just sprinkle it on his food and he eats it, no problem.” · Jazzy D.",
   },
   {
-    n: 8, title: "It's not magic, but we'll take the risk for you",
+    n: 8, title: "It's not magic, but we'll take the risk for you", bold: "we give you every penny back", proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
     body: "It won't suit every dog, and we'll say so. But we're so sure it'll help that we take the risk for you: try it for a full 90 days, and if you see no difference, we give you every penny back.",
     img: "/lp/ugc-1.jpg", imgAlt: "A happy, comfortable dog with the tub", pos: "center 35%", seal: true,
   },
@@ -285,7 +293,7 @@ export default function EightReasonsAdvertorial() {
         {/* native byline (advertorial credibility device) */}
         <p className="text-xs font-semibold" style={{ color: MUTE }}>By Jess M · Verified ✓ · Updated today</p>
         <h1 className="adv-display mt-2 text-[28px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
-          8 Reasons UK Dog Parents Are Ditching Expensive Probiotic Chews for <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
+          How Thousands of UK Dog Parents Finally Stopped the Constant <span style={{ color: ORANGE }}>Paw Licking, Itchy Skin &amp; Gunky Ears</span> (Without Expensive Vet Visits)
         </h1>
         {/* compressed opening (mobile-first): scene → gut, then one killer mechanism line */}
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
@@ -297,7 +305,7 @@ export default function EightReasonsAdvertorial() {
       </div>
 
       {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
-      <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SHOW ME THE CAPSULE →" where="top-cta" /></div>
+      <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="START YOUR DOG'S RELIEF →" where="top-cta" /></div>
 
       {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
       <section className="mx-auto mt-8 max-w-2xl px-6">
@@ -372,7 +380,7 @@ export default function EightReasonsAdvertorial() {
                 )}
               </div>
             ) : null}
-            <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>{r.body}</p>
+            <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>{withBold(r.body, r.bold)}</p>
             {r.proof && <p className="mt-3 border-l-2 pl-3 text-[15px] italic" style={{ borderColor: ORANGE, color: MUTE }}>{r.proof}</p>}
           </article>
           {/* social-proof stat bar, placed right after the 3 before/after sliders */}
