@@ -316,27 +316,30 @@ export default function EightReasonsAdvertorial() {
       {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
       <section className="mx-auto mt-8 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>Sprinkle Capsules <span style={{ color: ORANGE }}>vs</span> Traditional Chews</h2>
-        <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-4 block w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-lg">
-          <div className="grid grid-cols-[1fr_1fr_0.9fr]">
+        <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-5 block w-full overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-black/5">
+          <div className="grid grid-cols-[1.1fr_1fr_0.85fr]">
             <div className="p-2" />
-            <div className="adv-heading flex items-center justify-center px-2 py-2.5 text-center" style={{ background: NAVY }}>
+            <div className="adv-heading flex items-center justify-center px-2 py-3 text-center" style={{ background: NAVY, borderTop: `3px solid ${ORANGE}` }}>
               <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-4 w-auto" />
             </div>
-            <div className="adv-heading flex items-center justify-center px-2 py-2.5 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F1F1F1" }}>Chews</div>
+            <div className="adv-heading flex items-center justify-center px-2 py-3 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F3F3F3" }}>Chews</div>
           </div>
           {TABLE.map((r, i) => (
-            <div key={i} className="grid grid-cols-[1fr_1fr_0.9fr] border-t border-black/5">
-              <div className="flex items-center px-2.5 py-2.5 text-[13px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
-              <div className="flex items-center gap-1.5 px-2 py-2.5 text-[13px] font-semibold leading-tight" style={{ background: "rgba(22,34,60,0.04)", color: NAVY }}>
-                <svg className="shrink-0" width="15" height="15" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div key={i} className="grid grid-cols-[1.1fr_1fr_0.85fr] border-t" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+              <div className="flex items-center px-3 py-3 text-[13px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
+              <div className="flex items-center gap-1.5 px-2.5 py-3 text-[13px] font-bold leading-tight" style={{ background: "rgba(22,34,60,0.05)", color: NAVY }}>
+                <svg className="shrink-0" width="16" height="16" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 {r.us}
               </div>
-              <div className="flex items-center gap-1.5 px-2 py-2.5 text-[13px] leading-tight" style={{ color: MUTE }}>
-                <svg className="shrink-0" width="15" height="15" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
+              <div className="flex items-center gap-1.5 px-2.5 py-3 text-[13px] leading-tight" style={{ color: MUTE }}>
+                <svg className="shrink-0" width="16" height="16" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 {r.them}
               </div>
             </div>
           ))}
+          <div className="adv-heading flex items-center justify-center gap-2 border-t py-3 text-sm font-extrabold" style={{ borderColor: "rgba(0,0,0,0.06)", background: "rgba(22,34,60,0.03)", color: INK }}>
+            See the capsule <span style={{ color: ORANGE }}>→</span>
+          </div>
         </a>
       </section>
 
