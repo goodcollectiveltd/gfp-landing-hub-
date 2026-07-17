@@ -147,7 +147,7 @@ type Reason = {
 const REASONS: Reason[] = [
   {
     n: 1, title: "Squeeze any probiotic chew, it's moist, and that's why it's already dead",
-    body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they burn through their short life on the shelf and are long dead before your dog ever gets one. You don't have to take our word for it, you can feel it in your hand. (The heat used to bake most chews finishes off whatever's left.)",
+    body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
     img: "/lp/moist-chews-real.jpg", imgAlt: "Moist chews in a tub, the live cultures dying before use", pos: "center",
   },
   {
@@ -435,8 +435,11 @@ export default function EightReasonsAdvertorial() {
         </div>
       </section>
 
-      {/* mid CTA */}
-      <div className="mx-auto mt-12 max-w-2xl px-6"><Cta label="GIVE IT A RISK-FREE TRY →" where="mid-cta" /></div>
+      {/* honest cost-of-inaction (Nick: create urgency in the desire), then mid CTA */}
+      <p className="mx-auto mt-12 max-w-2xl px-6 text-center text-[17px] font-bold leading-snug" style={{ color: INK }}>
+        Every week you wait is another week they're licking and scratching. The sooner they start, the sooner they settle.
+      </p>
+      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GIVE IT A RISK-FREE TRY →" where="mid-cta" /></div>
 
       {/* OFFER block — tight: "up to 45% off" is the real max (30% first-sub + 15% for 3 tubs off RRP) */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
