@@ -182,7 +182,7 @@ const REASONS: Reason[] = [
   {
     n: 6, title: "Vet co-developed, the UK's first double-strength capsule",
     body: "5 billion live cultures, 2.5× the original strength, cold-pressed, and made in the UK to human GMP standards, the thing our customers rate most of all. Co-developed with Dr Kishan Vara, MRCVS.",
-    img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS with the product", pos: "center 20%",
+    img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic", pos: "center",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
@@ -363,10 +363,19 @@ export default function EightReasonsAdvertorial() {
               <div className="relative mt-4">
                 <img src={r.img} alt={r.imgAlt} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: r.pos ?? "center" }} />
                 {r.seal && (
-                  <svg width="92" height="92" viewBox="0 0 76 76" aria-hidden className="absolute left-4 top-4 drop-shadow-md">
-                    <path d="M38 4l8 5 9-1 4 8 8 4-1 9 5 8-5 8 1 9-8 4-4 8-9-1-8 5-8-5-9 1-4-8-8-4 1-9-5-8 5-8-1-9 8-4 4-8 9 1z" fill={ORANGE} />
-                    <text x="38" y="35" textAnchor="middle" fill="#fff" fontSize="19" fontWeight="800" fontFamily="Poppins, sans-serif">90</text>
-                    <text x="38" y="50" textAnchor="middle" fill="#fff" fontSize="8" fontWeight="700" letterSpacing="1">DAY</text>
+                  <svg width="118" height="118" viewBox="0 0 120 120" aria-hidden className="absolute left-4 top-4 drop-shadow-lg">
+                    <defs><path id="sealTop" d="M18 62 A 42 42 0 0 1 102 62" /></defs>
+                    {[...Array(32)].map((_, i) => {
+                      const a = (i / 32) * Math.PI * 2;
+                      return <circle key={i} cx={60 + Math.cos(a) * 52} cy={60 + Math.sin(a) * 52} r="5.2" fill={NAVY} />;
+                    })}
+                    <circle cx="60" cy="60" r="50" fill={NAVY} />
+                    <circle cx="60" cy="60" r="43" fill="none" stroke={ORANGE} strokeWidth="1.6" />
+                    <text fill="#fff" fontSize="7.3" fontWeight="700" letterSpacing="0.7" fontFamily="Poppins, sans-serif">
+                      <textPath href="#sealTop" startOffset="50%" textAnchor="middle">MONEY-BACK GUARANTEE</textPath>
+                    </text>
+                    <text x="60" y="74" textAnchor="middle" fill={ORANGE} fontSize="36" fontWeight="900" fontFamily="Poppins, sans-serif">90</text>
+                    <text x="60" y="90" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="800" letterSpacing="4" fontFamily="Poppins, sans-serif">DAYS</text>
                   </svg>
                 )}
               </div>
