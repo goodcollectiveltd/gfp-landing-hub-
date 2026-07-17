@@ -133,7 +133,7 @@ function BeforeAfter({ before, after, beforeAlt, afterAlt, afterLabel = "AFTER",
 
 type Reason = {
   n: number; title: string; body: string;
-  img?: string; imgAlt?: string; pos?: string; seal?: boolean;
+  img?: string; imgAlt?: string; pos?: string; seal?: boolean; imgCaption?: string;
   slider?: boolean; before?: string; after?: string; beforeAlt?: string; afterAlt?: string; afterLabel?: string; caption?: string; aspect?: string;
   proof?: string;
 };
@@ -148,7 +148,7 @@ const REASONS: Reason[] = [
   {
     n: 1, title: "Squeeze any probiotic chew, it's moist, and that's why it's already dead",
     body: "That softness is moisture, and moisture is what kills a probiotic. It wakes the live bacteria up inside the sealed tub, so they're long dead before your dog ever gets one, you can feel it in your hand. The big brands know this. They keep selling chews because a soft, tasty treat is easier to sell than a capsule, not because it's better for your dog. You weren't failing them. You were sold the easy option.",
-    img: "/lp/moist-chews-real.jpg", imgAlt: "Moist chews in a tub, the live cultures dying before use", pos: "center",
+    img: "/lp/moist-chews-wet.jpg", imgAlt: "Moist probiotic chews glistening wet in the tub", pos: "center", imgCaption: "See the moisture? That's what kills the probiotics before your dog gets one.",
   },
   {
     n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early",
@@ -362,6 +362,9 @@ export default function EightReasonsAdvertorial() {
             ) : r.img ? (
               <div className="relative mt-4">
                 <img src={r.img} alt={r.imgAlt} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: r.pos ?? "center" }} />
+                {r.imgCaption && (
+                  <span className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white">{r.imgCaption}</span>
+                )}
                 {r.seal && (
                   <svg width="118" height="118" viewBox="0 0 120 120" aria-hidden className="absolute left-4 top-4 drop-shadow-lg">
                     <defs><path id="sealTop" d="M18 62 A 42 42 0 0 1 102 62" /></defs>
