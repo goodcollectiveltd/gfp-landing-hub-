@@ -206,16 +206,6 @@ const REASONS: Reason[] = [
   },
 ];
 
-/* ---------- comparison table ---------- */
-
-const TABLE = [
-  { feature: "Freshness", us: "Stays alive", them: "Dies in tub" },
-  { feature: "Paw Licking", us: "5 live strains", them: "1–2 generic" },
-  { feature: "Gunky Ears", us: "5 billion CFU", them: "Barely helps" },
-  { feature: "Itchy Skin", us: "From the gut", them: "No support" },
-  { feature: "Value", us: "From 28p a day", them: "Often double" },
-];
-
 /* ---------- reviews ---------- */
 
 const REVIEWS = [
@@ -257,7 +247,7 @@ export default function EightReasonsAdvertorial() {
   // CTAs never fight in the hero.
   const [showSticky, setShowSticky] = useState(false);
   useEffect(() => {
-    const el = document.getElementById("top-cta");
+    const el = document.getElementById("reasons-anchor");
     if (!el) return;
     const io = new IntersectionObserver(([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 });
     io.observe(el);
@@ -291,55 +281,15 @@ export default function EightReasonsAdvertorial() {
       <div className="mx-auto max-w-2xl px-6 pt-6">
         {/* native byline (advertorial credibility device) */}
         <p className="text-xs font-semibold" style={{ color: MUTE }}>By Jess M · Verified ✓ · Updated today</p>
-        <h1 className="adv-display mt-2 text-[28px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
-          How UK Dog Parents Finally Stopped the <span style={{ color: ORANGE }}>Paw Licking, Itchy Skin &amp; Gunky Ears</span> (Without the Vet Bills)
+        <h1 className="adv-display mt-2 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
+          Why 20,000+ UK Dog Owners Chose <span style={{ color: ORANGE }}>This Gut Fix</span>
         </h1>
-        {/* compressed opening (mobile-first): scene → gut, then one killer mechanism line */}
-        <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
-          It's 9pm, and there's that wet lick-lick-lick under the telly again. It's probably not their skin, it's their gut.
-        </p>
-        <p className="mt-3 text-lg font-bold leading-snug" style={{ color: INK }}>
-          And most probiotic chews are dead before your dog even gets one.
-        </p>
       </div>
 
-      {/* CTA high up (mobile: hook → solution → CTA); social proof moved BELOW the button */}
-      <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="START YOUR DOG'S RELIEF →" where="top-cta" /></div>
-
-      {/* comparison table — real HTML text (not an image); the us-vs-them contrast is the point */}
-      <section className="mx-auto mt-8 max-w-2xl px-6">
-        <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>Sprinkle Capsules <span style={{ color: ORANGE }}>vs</span> Traditional Chews</h2>
-        <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-5 block w-full overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-black/5">
-          <div className="grid grid-cols-[1.05fr_1fr_0.9fr]">
-            <div className="p-2" />
-            <div className="adv-heading flex items-center justify-center px-2 py-2 text-center" style={{ background: NAVY, borderTop: `3px solid ${ORANGE}` }}>
-              <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-3.5 w-auto" />
-            </div>
-            <div className="adv-heading flex items-center justify-center px-2 py-2 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F3F3F3" }}>Chews</div>
-          </div>
-          {TABLE.map((r, i) => (
-            <div key={i} className="grid grid-cols-[1.05fr_1fr_0.9fr] border-t" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
-              <div className="flex items-center px-3 py-2 text-[12px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
-              <div className="flex items-center gap-1 px-2 py-2 text-[12px] font-bold leading-tight" style={{ background: "rgba(22,34,60,0.05)", color: NAVY }}>
-                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                {r.us}
-              </div>
-              <div className="flex items-center gap-1 px-2 py-2 text-[12px] leading-tight" style={{ color: MUTE }}>
-                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
-                {r.them}
-              </div>
-            </div>
-          ))}
-          <div className="adv-heading flex items-center justify-center gap-2 border-t py-2.5 text-sm font-extrabold" style={{ borderColor: "rgba(0,0,0,0.06)", background: "rgba(22,34,60,0.03)", color: INK }}>
-            See the capsule <span style={{ color: ORANGE }}>→</span>
-          </div>
-        </a>
-      </section>
-
-      {/* short bridge into the list — the mechanism reveal now lives in reasons 1–2 */}
-      <section className="mx-auto mt-12 max-w-2xl px-6">
-        <p className="text-[15px] leading-relaxed" style={{ color: BODY }}>
-          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons over 20,000 UK owners have switched</span> 👇
+      {/* single angle: headline → mechanism reveal → the 8 reasons (no hero clutter) */}
+      <section id="reasons-anchor" className="mx-auto mt-6 max-w-2xl px-6">
+        <p className="text-base leading-relaxed" style={{ color: BODY }}>
+          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons they switched</span> 👇
         </p>
       </section>
 
