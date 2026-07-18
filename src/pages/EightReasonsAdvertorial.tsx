@@ -64,8 +64,8 @@ function Cta({ label = "SEE THE DIFFERENCE IN HIS SKIN →", where = "cta" }: { 
       >
         {label}
       </a>
-      <span className="flex items-center gap-1.5 text-center text-xs font-semibold" style={{ color: MUTE }}>
-        <svg width="13" height="13" viewBox="0 0 16 16" fill={NAVY} aria-hidden>
+      <span className="max-w-md text-center text-xs font-semibold leading-snug" style={{ color: MUTE }}>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill={NAVY} aria-hidden className="mr-1 inline-block" style={{ verticalAlign: "-1px" }}>
           <path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" />
         </svg>
         90-day money-back guarantee · 51% of profits to animal rescue
