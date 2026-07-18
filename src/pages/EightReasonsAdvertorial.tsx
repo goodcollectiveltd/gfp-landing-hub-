@@ -164,8 +164,8 @@ const REASONS: Reason[] = [
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
-    n: 3, title: "It targets the real cause of the paw licking", bold: "Most of the immune system lives in the gut",
-    body: "Paw licking is usually an allergic itch, not just the skin. Most of the immune system lives in the gut, so calm that and the licking eases. Drag the slider:",
+    n: 3, title: "It targets the real cause of the paw licking", bold: "70% of the immune system lives in the gut",
+    body: "Paw licking is usually an allergic itch, not just the skin. 70% of the immune system lives in the gut, so calm that and the licking eases. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore, saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
