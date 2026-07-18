@@ -310,7 +310,7 @@ export default function EightReasonsAdvertorial() {
       <section className="mx-auto mt-8 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>Sprinkle Capsules <span style={{ color: ORANGE }}>vs</span> Traditional Chews</h2>
         <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-5 block w-full overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-black/5">
-          <div className="grid grid-cols-[1.1fr_1fr_0.85fr]">
+          <div className="grid grid-cols-[1.05fr_1fr_0.9fr]">
             <div className="p-2" />
             <div className="adv-heading flex items-center justify-center px-2 py-2 text-center" style={{ background: NAVY, borderTop: `3px solid ${ORANGE}` }}>
               <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-3.5 w-auto" />
