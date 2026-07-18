@@ -247,7 +247,7 @@ export default function EightReasonsAdvertorial() {
   // CTAs never fight in the hero.
   const [showSticky, setShowSticky] = useState(false);
   useEffect(() => {
-    const el = document.getElementById("reasons-anchor");
+    const el = document.getElementById("top-cta");
     if (!el) return;
     const io = new IntersectionObserver(([e]) => setShowSticky(!e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 });
     io.observe(el);
@@ -287,11 +287,14 @@ export default function EightReasonsAdvertorial() {
       </div>
 
       {/* single angle: headline → mechanism reveal → the 8 reasons (no hero clutter) */}
-      <section id="reasons-anchor" className="mx-auto mt-6 max-w-2xl px-6">
+      <section className="mx-auto mt-6 max-w-2xl px-6">
         <p className="text-base leading-relaxed" style={{ color: BODY }}>
           No more guessing games. <span className="adv-heading font-bold" style={{ color: INK }}>Here are 8 proven reasons this works when chews don't</span> 👇
         </p>
       </section>
+
+      {/* early offer CTA (captures warm / most-aware traffic; sticky watches this so they never clash) */}
+      <div id="top-cta" className="mx-auto mt-5 max-w-2xl px-6"><Cta label="SAVE 45% + FREE SHIPPING →" where="hero-cta" /></div>
 
       {/* THE 8 REASONS, heading → full-width image → body */}
       <section className="mx-auto mt-12 max-w-2xl space-y-10 px-6">
