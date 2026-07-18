@@ -202,7 +202,7 @@ const REASONS: Reason[] = [
   {
     n: 8, title: "It's not magic, but we'll take the risk for you", bold: "we give you every penny back", proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
     body: "It won't suit every dog, and we'll say so. But we're so sure it helps, we take the risk: try it 90 days, and if you see no difference, we give you every penny back.",
-    img: "/lp/ugc-1.jpg", imgAlt: "A happy, comfortable dog with the tub", pos: "center 35%", seal: true,
+    img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+", pos: "center", seal: true,
   },
 ];
 
