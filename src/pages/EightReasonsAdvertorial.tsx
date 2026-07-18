@@ -293,7 +293,7 @@ export default function EightReasonsAdvertorial() {
         {/* native byline (advertorial credibility device) */}
         <p className="text-xs font-semibold" style={{ color: MUTE }}>By Jess M · Verified ✓ · Updated today</p>
         <h1 className="adv-display mt-2 text-[28px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
-          How Thousands of UK Dog Parents Finally Stopped the Constant <span style={{ color: ORANGE }}>Paw Licking, Itchy Skin &amp; Gunky Ears</span> (Without Expensive Vet Visits)
+          How UK Dog Parents Finally Stopped the <span style={{ color: ORANGE }}>Paw Licking, Itchy Skin &amp; Gunky Ears</span> (Without the Vet Bills)
         </h1>
         {/* compressed opening (mobile-first): scene → gut, then one killer mechanism line */}
         <p className="mt-3 text-base leading-relaxed" style={{ color: BODY }}>
@@ -430,7 +430,7 @@ export default function EightReasonsAdvertorial() {
           <div className="p-6 sm:p-7">
             <p className="adv-heading text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.6)" }}>Bonus</p>
             <h2 className="adv-display mt-1 text-2xl leading-tight">51% of profits go to animal rescue</h2>
-            <p className="mt-2 text-[15px] leading-relaxed text-white/85">Helping your dog helps thousands more. Recent donations include Soi Dog, Jerry Green Dogs and the RSPCA, no other pet brand gives away this much.</p>
+            <p className="mt-2 text-[15px] leading-relaxed text-white/85">Helping your dog helps thousands more, recent donations to Soi Dog, Jerry Green Dogs and the RSPCA. No other pet brand gives this much.</p>
           </div>
         </div>
       </section>
