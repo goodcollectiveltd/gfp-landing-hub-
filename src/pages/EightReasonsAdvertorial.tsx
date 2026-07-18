@@ -289,7 +289,7 @@ export default function EightReasonsAdvertorial() {
       {/* single angle: headline → mechanism reveal → the 8 reasons (no hero clutter) */}
       <section id="reasons-anchor" className="mx-auto mt-6 max-w-2xl px-6">
         <p className="text-base leading-relaxed" style={{ color: BODY }}>
-          Once you see how a chew is actually made, you can't unsee it. <span className="adv-heading font-bold" style={{ color: INK }}>Here are the 8 reasons they switched</span> 👇
+          No more guessing games. <span className="adv-heading font-bold" style={{ color: INK }}>Here are 8 proven reasons this works when chews don't</span> 👇
         </p>
       </section>
 
