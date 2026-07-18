@@ -202,18 +202,17 @@ const REASONS: Reason[] = [
   {
     n: 8, title: "It's not magic, but we'll take the risk for you", bold: "we give you every penny back", proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
     body: "It won't suit every dog, and we'll say so. But we're so sure it helps, we take the risk: try it 90 days, and if you see no difference, we give you every penny back.",
-    img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+", pos: "center", seal: true,
+    img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+", pos: "center",
   },
 ];
 
 /* ---------- comparison table ---------- */
 
 const TABLE = [
-  { feature: "Freshness", us: "Dry, stays alive", them: "Moist, dies in the tub" },
-  { feature: "Paw Licking & Yeast", us: "5 targeted strains", them: "1–2 generic" },
-  { feature: "Gunky Ears", us: "5 billion live CFU", them: "Low, barely helps" },
-  { feature: "Itchy Skin", us: "Works from the gut", them: "No skin support" },
-  { feature: "Digestion", us: "Enzymes + prebiotic", them: "None added" },
+  { feature: "Freshness", us: "Stays alive", them: "Dies in tub" },
+  { feature: "Paw Licking", us: "5 live strains", them: "1–2 generic" },
+  { feature: "Gunky Ears", us: "5 billion CFU", them: "Barely helps" },
+  { feature: "Itchy Skin", us: "From the gut", them: "No support" },
   { feature: "Value", us: "From 28p a day", them: "Often double" },
 ];
 
@@ -313,25 +312,25 @@ export default function EightReasonsAdvertorial() {
         <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("comparison-table"); }} className="mt-5 block w-full overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-black/5">
           <div className="grid grid-cols-[1.1fr_1fr_0.85fr]">
             <div className="p-2" />
-            <div className="adv-heading flex items-center justify-center px-2 py-3 text-center" style={{ background: NAVY, borderTop: `3px solid ${ORANGE}` }}>
-              <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-4 w-auto" />
+            <div className="adv-heading flex items-center justify-center px-2 py-2 text-center" style={{ background: NAVY, borderTop: `3px solid ${ORANGE}` }}>
+              <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-3.5 w-auto" />
             </div>
-            <div className="adv-heading flex items-center justify-center px-2 py-3 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F3F3F3" }}>Chews</div>
+            <div className="adv-heading flex items-center justify-center px-2 py-2 text-center text-[12px] font-bold" style={{ color: MUTE, background: "#F3F3F3" }}>Chews</div>
           </div>
           {TABLE.map((r, i) => (
-            <div key={i} className="grid grid-cols-[1.1fr_1fr_0.85fr] border-t" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
-              <div className="flex items-center px-3 py-3 text-[13px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
-              <div className="flex items-center gap-1.5 px-2.5 py-3 text-[13px] font-bold leading-tight" style={{ background: "rgba(22,34,60,0.05)", color: NAVY }}>
-                <svg className="shrink-0" width="16" height="16" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div key={i} className="grid grid-cols-[1.05fr_1fr_0.9fr] border-t" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+              <div className="flex items-center px-3 py-2 text-[12px] font-bold leading-tight" style={{ color: INK }}>{r.feature}</div>
+              <div className="flex items-center gap-1 px-2 py-2 text-[12px] font-bold leading-tight" style={{ background: "rgba(22,34,60,0.05)", color: NAVY }}>
+                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill={ORANGE} /><path d="M5 9.2l2.6 2.6L13 6.4" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 {r.us}
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-3 text-[13px] leading-tight" style={{ color: MUTE }}>
-                <svg className="shrink-0" width="16" height="16" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
+              <div className="flex items-center gap-1 px-2 py-2 text-[12px] leading-tight" style={{ color: MUTE }}>
+                <svg className="shrink-0" width="14" height="14" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8.2" fill="none" stroke="#C9C9C9" strokeWidth="1.6" /><path d="M6 6l6 6M12 6l-6 6" stroke="#C9C9C9" strokeWidth="1.8" strokeLinecap="round" /></svg>
                 {r.them}
               </div>
             </div>
           ))}
-          <div className="adv-heading flex items-center justify-center gap-2 border-t py-3 text-sm font-extrabold" style={{ borderColor: "rgba(0,0,0,0.06)", background: "rgba(22,34,60,0.03)", color: INK }}>
+          <div className="adv-heading flex items-center justify-center gap-2 border-t py-2.5 text-sm font-extrabold" style={{ borderColor: "rgba(0,0,0,0.06)", background: "rgba(22,34,60,0.03)", color: INK }}>
             See the capsule <span style={{ color: ORANGE }}>→</span>
           </div>
         </a>
@@ -450,7 +449,7 @@ export default function EightReasonsAdvertorial() {
             <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
             <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping.</p>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
-              Start My Dog's Relief →
+              Save 45% + Free Shipping →
             </a>
             <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
           </div>
@@ -501,7 +500,7 @@ export default function EightReasonsAdvertorial() {
             <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
             <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b></p>
           </div>
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-8 py-4 text-base font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Get Relief →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-8 py-4 text-base font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Save 45% →</a>
         </div>
       </div>
     </div>
