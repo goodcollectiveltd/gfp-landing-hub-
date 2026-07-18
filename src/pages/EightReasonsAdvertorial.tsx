@@ -154,13 +154,13 @@ function withBold(text: string, phrase?: string) {
 // added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "moisture is what kills a probiotic", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
-    body: "That softness is moisture, and moisture is what kills a probiotic, it wakes the bacteria in the tub so they're dead before your dog gets one. Big brands sell chews anyway because a soft treat is easier to sell than a capsule. You weren't failing them. You were sold the easy option.",
+    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "moisture kills the bacteria in the tub", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
+    body: "That softness is moisture, and moisture kills the bacteria in the tub, dead before your dog gets one. Big brands sell chews anyway, a soft treat sells easier than a capsule. You weren't failing them. You were sold the easy option.",
     img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
-    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "5 billion live bacteria stay asleep and alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-    body: "A dry capsule of powder, with nothing to wake the bacteria early. So all 5 billion live bacteria stay asleep and alive until they hit the gut, 5× a typical chew. The enzymes and prebiotic then firm up stools and cut the wind. A sprinkle, not a treat.",
+    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
+    body: "A dry capsule of powder. Nothing wakes the bacteria early, so all 5 billion reach the gut alive, 5× a typical chew. The enzymes and prebiotic firm up stools and cut the wind. A sprinkle, not a treat.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
