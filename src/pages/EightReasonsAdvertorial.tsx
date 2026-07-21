@@ -448,12 +448,8 @@ export default function EightReasonsAdvertorial() {
 
       {/* STICKY CTA BAR — hidden until the top CTA scrolls away (no clash in the hero) */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
-        <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3">
-          <div className="min-w-0">
-            <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
-            <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b></p>
-          </div>
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-5 py-3 text-center text-sm font-extrabold uppercase leading-tight text-white shadow-md" style={{ background: ORANGE }}>Save 45% +<br />Free Shipping →</a>
+        <div className="mx-auto max-w-2xl px-4 py-3">
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Save 45% + Free Shipping →</a>
         </div>
       </div>
     </div>
