@@ -453,7 +453,7 @@ export default function EightReasonsAdvertorial() {
             <p className="adv-heading truncate text-sm font-bold" style={{ color: INK }}>5 Strain Probiotic+</p>
             <p className="truncate text-xs" style={{ color: MUTE }}>From <b style={{ color: ORANGE }}>28p a day</b></p>
           </div>
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-8 py-4 text-base font-extrabold text-white shadow-md" style={{ background: ORANGE }}>Save 45% →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading shrink-0 rounded-full px-5 py-3 text-center text-sm font-extrabold uppercase leading-tight text-white shadow-md" style={{ background: ORANGE }}>Save 45% +<br />Free Shipping →</a>
         </div>
       </div>
     </div>
