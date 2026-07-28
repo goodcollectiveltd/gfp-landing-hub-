@@ -154,8 +154,8 @@ function withBold(text: string, phrase?: string) {
 // added below. Grounded in personas.md, listicles.md, product-and-range-reference.md.
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "moisture kills the bacteria in the tub", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
-    body: "That softness is moisture, and moisture kills the bacteria in the tub, dead before your dog gets one. Big brands sell chews anyway, a soft treat sells easier than a capsule. You weren't failing them. You were sold the easy option.",
+    n: 1, title: "Most probiotic chews are dead before your dog even gets one (here's how you can tell)", bold: "Dead in the tub before your dog gets one.", proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
+    body: "Most chews are baked first, and heat kills up to 90% of the live bacteria before they leave the factory. Then the moisture that keeps them soft finishes off the rest. Dead in the tub before your dog gets one.\n\nYou weren't failing him. You were sold the easy option.",
     img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
@@ -332,7 +332,9 @@ export default function EightReasonsAdvertorial() {
                 )}
               </div>
             ) : null}
-            <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>{withBold(r.body, r.bold)}</p>
+            {r.body.split("\n\n").map((para, i) => (
+              <p key={i} className={`${i === 0 ? "mt-4" : "mt-3"} text-[17px] leading-relaxed`} style={{ color: BODY }}>{withBold(para, r.bold)}</p>
+            ))}
             {r.proof && <p className="mt-3 border-l-2 pl-3 text-[15px] italic" style={{ borderColor: ORANGE, color: MUTE }}>{r.proof}</p>}
           </article>
           {/* social-proof stat bar, placed right after the 3 before/after sliders */}
