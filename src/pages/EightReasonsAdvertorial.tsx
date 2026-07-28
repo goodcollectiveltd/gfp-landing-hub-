@@ -160,7 +160,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-    body: "A dry capsule of powder. Nothing wakes the bacteria early, so all 5 billion reach the gut alive, 5× a typical chew. The enzymes and prebiotic firm up stools and cut the wind. A sprinkle, not a treat.",
+    body: "A dry capsule of powder. No heat to bake them, no moisture to wake them, so all 5 billion reach the gut alive, 5× a typical chew. The enzymes and prebiotic firm up stools and cut the wind. A sprinkle, not a treat.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
