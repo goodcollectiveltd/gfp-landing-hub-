@@ -159,7 +159,7 @@ const REASONS: Reason[] = [
     img: "/lp/chew-squish.jpg", imgAlt: "A soft, damp probiotic chew being squished apart between two fingers", pos: "center", imgCaption: "Squeeze one, it's soft and damp. That's the moisture that kills the probiotics.",
   },
   {
-    n: 2, title: "Ours is bone-dry, so nothing wakes the bacteria early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
+    n: 2, title: "No heat, no moisture, nothing kills it early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
     body: "A dry capsule of powder. No heat to bake them, no moisture to wake them, so all 5 billion reach the gut alive, 5× a typical chew. The enzymes and prebiotic firm up stools and cut the wind. A sprinkle, not a treat.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
