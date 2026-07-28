@@ -282,7 +282,7 @@ export default function EightReasonsAdvertorial() {
         {/* native byline (advertorial credibility device) */}
         <p className="text-xs font-semibold" style={{ color: MUTE }}>By Jess M · Verified ✓ · Updated today</p>
         <h1 className="adv-display mt-2 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
-          How 20,000+ Dog Owners Fixed <span style={{ color: ORANGE }}>Itching, Ear Gunk &amp; Paw Licking</span> (Without Another Vet Visit)
+          How 20,000 owners finally fixed <span style={{ color: ORANGE }}>endless paw licking</span> (without another vet visit)
         </h1>
       </div>
 
