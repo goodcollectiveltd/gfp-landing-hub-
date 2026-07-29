@@ -48,6 +48,7 @@ type PostHogLike = {
   init?: (key: string, config: Record<string, unknown>) => void;
   capture?: (event: string, props?: Record<string, unknown>) => void;
   register?: (props: Record<string, unknown>) => void;
+  get_distinct_id?: () => string | undefined;
 };
 type AnyWin = typeof window & {
   fbq?: (...a: unknown[]) => void;
@@ -128,6 +129,13 @@ export function withAttribution(url: string): string {
     }
     const fbp = getCookie("_fbp"); if (fbp) u.searchParams.set("fbp", fbp);
     const fbc = getCookie("_fbc"); if (fbc) u.searchParams.set("fbc", fbc);
+    // PostHog visitor id, so a Shopify-side Purchase pixel can stitch the sale back to THIS
+    // landing-page visitor. Checkout is a different root domain, so PostHog's .goodforpets.co
+    // cookie can't follow — the id must ride the URL, then be read by the pixel (identify()).
+    try {
+      const did = (window as AnyWin).posthog?.get_distinct_id?.();
+      if (did) u.searchParams.set("ph_did", did);
+    } catch { /* ignore */ }
     return u.toString();
   } catch { return url; }
 }
