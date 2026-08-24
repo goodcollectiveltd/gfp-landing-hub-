@@ -297,7 +297,7 @@ export default function FiveReasonsAllergyAdvertorial() {
           Steroids and sprays <b style={{ color: INK }}>suppress</b> the reaction, so it fades for a week, then roars back the moment you stop. And most probiotic chews are baked, killing up to 90% of the bacteria before they reach the tub.
         </p>
         <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          5 Strain Probiotic+ is a cold-processed sprinkle, so <b style={{ color: INK }}>all 5 billion live cultures reach the gut alive</b>, where 70% of the immune system lives. Settle the gut, and the itching, licking and yeast calm at the source.
+          5 Strain Probiotic+ is a cold-processed sprinkle, so <b style={{ color: INK }}>all 5 billion live cultures reach the gut alive</b>, where 70% of the immune system lives. Settle the gut, and the itching, licking and yeast flare-ups ease at the source.
         </p>
       </section>
 
