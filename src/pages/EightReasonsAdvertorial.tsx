@@ -160,7 +160,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 2, title: "No heat, no moisture, nothing kills it early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-    body: "A dry capsule of powder. No heat to bake them, no moisture to wake them, so all 5 billion reach the gut alive, 5× a typical chew. The enzymes and prebiotic firm up stools and cut the wind. A sprinkle, not a treat.",
+    body: "A dry capsule of powder. No heat to bake them, no moisture to wake them, so all 5 billion reach the gut alive, up to 20× the live cultures of a typical chew. Plus a 6-enzyme digestive complex most chews skip, so your dog gets more from every meal. A sprinkle, not a treat, and 54% cheaper per serving.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
@@ -189,7 +189,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 6, title: "Vet-developed, made in a UK human-supplement factory", bold: "Made to actually work",
-    body: "5 billion live cultures, 5 different strains. Built in partnership with Dr Kishan Vara MRCVS, and produced in a human supplement factory here in the UK. Made to actually work.",
+    body: "5 billion live cultures across 5 strains, not the single strain most chews use. Built in partnership with Dr Kishan Vara MRCVS and produced in a human supplement factory here in the UK. Made to actually work.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic", pos: "center",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
