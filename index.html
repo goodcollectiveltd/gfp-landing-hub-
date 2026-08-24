@@ -9,6 +9,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/logos/gfp-favicon-32.png" />
     <link rel="icon" type="image/png" sizes="any" href="/logos/gfp-favicon-orange.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logos/gfp-favicon-180.png" />
+    <!-- SEO: these are paid ad landing pages. They must not compete with goodforpets.co
+         in organic search, so they are noindexed here and via the X-Robots-Tag header in
+         netlify.toml (belt and braces — the header also covers non-HTML responses).
+         The canonical points at the custom domain so the netlify.app alias never wins. -->
+    <meta name="robots" content="noindex, nofollow" />
     <title>Good for Pets</title>
   </head>
   <body>

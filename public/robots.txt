@@ -1,0 +1,13 @@
+# Good For Pets — ad landing pages (hello.goodforpets.co).
+#
+# These are paid-traffic advertorials. They duplicate selling copy from the main store's
+# product pages, so we don't want them competing with goodforpets.co in organic search.
+#
+# Crawling is deliberately ALLOWED so crawlers can read the `X-Robots-Tag: noindex`
+# header set in netlify.toml. Blocking here would hide the noindex and could leave
+# bare URLs indexed with no content — the opposite of what we want.
+
+User-agent: *
+Allow: /
+
+# No sitemap: nothing here is meant to be indexed.

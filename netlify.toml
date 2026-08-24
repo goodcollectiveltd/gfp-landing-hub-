@@ -18,6 +18,22 @@
   status = 302
   force = true
 
+# The bare *.netlify.app alias served the exact same pages as hello.goodforpets.co with
+# no canonical — two hosts, one set of content, classic duplicate content. Send it to the
+# real subdomain so there is only ever one address for these pages.
+[[redirects]]
+  from = "https://gfp-landing-hub.netlify.app/*"
+  to = "https://hello.goodforpets.co/:splat"
+  status = 301
+  force = true
+
+# SEO: paid ad landing pages must not compete with goodforpets.co in organic search.
+# Crawling stays allowed (see public/robots.txt) so this header is actually seen.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Old routes → the live page. 10→8 was the rename; 8-reasons-v2 was the review
 # draft that's now been promoted to /p/8-reasons. Keep both alive so stray links land.
 [[redirects]]
