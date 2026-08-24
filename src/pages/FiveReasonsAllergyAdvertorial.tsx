@@ -277,7 +277,7 @@ export default function FiveReasonsAllergyAdvertorial() {
         <h1 className="adv-display mt-3 text-[31px] leading-[1.08] sm:text-4xl" style={{ color: INK }}>
           5 Reasons Your Dog <span style={{ color: ORANGE }}>Can't Stop Scratching</span> (and the Gut Fix 20,000+ Owners Swear By)
         </h1>
-        <img src="/lp/hero-tub.jpg" alt="5 Strain Probiotic+ tub" className="mt-5 aspect-[4/3] w-full rounded-2xl object-cover shadow-sm" />
+        <img src="/lp/ugc-1.jpg" alt="A happy, healthy dog on the grass beside Good For Pets 5 Strain Probiotic+" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 40%" }} />
         <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>
           You've tried the creams. The drops. Maybe the steroids from the vet. They quiet it for a week, then the scratching, licking and head shaking come straight back.
         </p>
