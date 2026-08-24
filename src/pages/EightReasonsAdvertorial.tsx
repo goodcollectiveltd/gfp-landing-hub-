@@ -160,7 +160,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 2, title: "No heat, no moisture, nothing kills it early", bold: "all 5 billion reach the gut alive", proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-    body: "A dry capsule of powder. No heat to bake them, no moisture to wake them, so all 5 billion reach the gut alive, up to 20× the live cultures of a typical chew. Plus a 6-enzyme digestive complex most chews skip, so your dog gets more from every meal. A sprinkle, not a treat, and 54% cheaper per serving.",
+    body: "Because we use a pure powder, not a baked chew, nothing kills the cultures early, so all 5 billion reach the gut alive. That lets our formula be up to 20× stronger and 5× more diverse in bacteria than a typical chew, with a 6-enzyme complex most chews skip. And because you aren't paying for unhealthy fillers, it works out 54% cheaper per serving.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the dry capsule powder over a bowl of food in the kitchen", pos: "center",
   },
   {
