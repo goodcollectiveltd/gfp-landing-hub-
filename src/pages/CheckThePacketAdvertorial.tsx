@@ -290,7 +290,7 @@ export default function CheckThePacketAdvertorial() {
       {/* honest scarcity banner (real: sold out every restock) */}
       <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
         <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
-          ⚡ Sold out every restock, <span style={{ color: "#FFB4A8" }}>save 45% + free shipping today</span>
+          ⚡ Sold out every restock, <span style={{ color: ORANGE }}>save 45% + free shipping today</span>
         </p>
       </div>
 
@@ -306,7 +306,7 @@ export default function CheckThePacketAdvertorial() {
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Dr Kishan Vara, MRCVS · Verified ✓ · Updated today</p>
         </div>
         <h1 className="adv-display mt-3 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
-          Don't Give Your Dog Another Probiotic Until You've <span style={{ color: ORANGE }}>Checked the Back of the Packet</span>
+          Don't Give Your Dog Probiotics Until You've <span style={{ color: ORANGE }}>Checked the Back of the Packet</span>
         </h1>
         <img src="/lp/hero-label-tubs.jpg" alt="Three different dog-probiotic tubs stacked, each ingredients label listing glycerine and fillers" className="mt-5 aspect-square w-full rounded-2xl object-cover shadow-sm" />
         <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>
@@ -357,7 +357,7 @@ export default function CheckThePacketAdvertorial() {
                 <div className="grid grid-cols-3 gap-2.5 text-center text-white">
                   {[["20×", "more good bacteria"], ["100%", "pure powder, no fillers"], ["54%", "cheaper per serving"]].map(([v, l]) => (
                     <div key={l} className="rounded-2xl px-2 py-4" style={{ background: NAVY }}>
-                      <div className="adv-display text-2xl leading-none sm:text-3xl" style={{ color: "#FFB4A8" }}>{v}</div>
+                      <div className="adv-display text-2xl leading-none sm:text-3xl" style={{ color: ORANGE }}>{v}</div>
                       <div className="mt-1.5 text-[11px] leading-tight opacity-90">{l}</div>
                     </div>
                   ))}
