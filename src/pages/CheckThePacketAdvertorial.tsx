@@ -227,9 +227,9 @@ const REASONS: Reason[] = [
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 8, title: "We sell out every restock, and we still take the risk for you",
+    n: 8, title: "We're so sure, we take the risk for you",
     bold: "try it 90 days, and if you see no difference, we give you every penny back",
-    body: "We've sold out every restock since launch, so this batch won't hang around. And we're so sure it helps, we take the risk. Try it 90 days, and if you see no difference, we give you every penny back.",
+    body: "This won't suit every dog, and we'll say so. But we're so sure it helps that we take the risk for you: try it 90 days, and if you see no difference, we give you every penny back.",
     img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+",
     proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
   },
@@ -422,7 +422,7 @@ export default function CheckThePacketAdvertorial() {
       <p className="mx-auto mt-12 max-w-2xl px-6 text-center text-[17px] font-bold leading-snug" style={{ color: INK }}>
         Every week you wait is another week they're licking and scratching. The sooner they start, the sooner they settle.
       </p>
-      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET HIM OFF THE FILLERS →" where="mid-cta" /></div>
+      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET THEM OFF THE FILLERS →" where="mid-cta" /></div>
 
       {/* OFFER */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
@@ -431,9 +431,9 @@ export default function CheckThePacketAdvertorial() {
           <div className="p-7">
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
             <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
-            <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping. Sold out every restock, so grab this batch before it's gone.</p>
+            <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping.</p>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
-              Get Him the Pure Powder →
+              Get the Pure Powder →
             </a>
             <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
           </div>
@@ -454,7 +454,7 @@ export default function CheckThePacketAdvertorial() {
       </section>
 
       {/* closing CTA */}
-      <section className="mx-auto mt-12 max-w-2xl px-6"><Cta label="SETTLE HIS GUT FOR GOOD →" where="closing-cta" /></section>
+      <section className="mx-auto mt-12 max-w-2xl px-6"><Cta label="SETTLE THEIR GUT FOR GOOD →" where="closing-cta" /></section>
       <p className="mx-auto mt-10 max-w-2xl px-6 text-center text-[11px] leading-relaxed" style={{ color: "#A8A8A8" }}>
         This is an advertorial and not a news article. Good For Pets supplements support and help maintain your dog's wellbeing; they are not intended to diagnose, treat, cure or prevent any disease. Individual results vary.
       </p>
@@ -462,7 +462,7 @@ export default function CheckThePacketAdvertorial() {
       {/* STICKY CTA BAR */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
         <div className="mx-auto max-w-2xl px-4 py-3">
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Him Relief →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Them Relief →</a>
         </div>
       </div>
     </div>
