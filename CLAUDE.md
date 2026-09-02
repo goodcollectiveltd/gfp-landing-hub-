@@ -4,6 +4,10 @@ Guidance for Claude Code working in this repo. This is a **separate project** fr
 `clever-logistics-pal` (a sibling folder). Do not blend the two. This file is the
 source of truth for what we're building and the decisions already made.
 
+> **Building or editing a landing page? Read [`LANDING-PAGE-SOP.md`](LANDING-PAGE-SOP.md) first.**
+> It is the operational how-to for shipping an on-brand, mobile-first, high-converting page:
+> brand tokens, the section kit, copy rules, the 390px verify + ship discipline, and the git fork trap.
+
 ## What this is
 
 An **AI advertorial / landing-page generator and hub** for a DTC e-commerce brand
