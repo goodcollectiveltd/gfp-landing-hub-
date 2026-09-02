@@ -281,7 +281,7 @@ export default function CheckThePacketAdvertorial() {
       {/* honest scarcity banner (real: sold out every restock) */}
       <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
         <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
-          ⚡ Sold out every restock, <span style={{ color: ORANGE }}>save 45% + free shipping today</span>
+          ⚡ Sold out every restock since launch
         </p>
       </div>
 
