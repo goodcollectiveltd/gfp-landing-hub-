@@ -315,7 +315,7 @@ export default function CheckThePacketAdvertorial() {
       </section>
 
       {/* early CTA */}
-      <div id="top-cta" className="mx-auto mt-6 max-w-2xl px-6"><Cta label="SAVE 45% + FREE SHIPPING →" where="hero-cta" /></div>
+      <div id="top-cta" className="mx-auto mt-6 max-w-2xl px-6"><Cta label="SHOW ME THE CLEAN FORMULA →" where="hero-cta" /></div>
 
       {/* THE REASONS */}
       <section className="mx-auto mt-12 max-w-2xl space-y-10 px-6">
@@ -422,7 +422,7 @@ export default function CheckThePacketAdvertorial() {
       <p className="mx-auto mt-12 max-w-2xl px-6 text-center text-[17px] font-bold leading-snug" style={{ color: INK }}>
         Every week you wait is another week they're licking and scratching. The sooner they start, the sooner they settle.
       </p>
-      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GIVE IT A RISK-FREE TRY →" where="mid-cta" /></div>
+      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET HIM OFF THE FILLERS →" where="mid-cta" /></div>
 
       {/* OFFER */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
@@ -433,7 +433,7 @@ export default function CheckThePacketAdvertorial() {
             <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
             <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping. Sold out every restock, so grab this batch before it's gone.</p>
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-6 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
-              Save 45% + Free Shipping →
+              Get Him the Pure Powder →
             </a>
             <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
           </div>
@@ -454,7 +454,7 @@ export default function CheckThePacketAdvertorial() {
       </section>
 
       {/* closing CTA */}
-      <section className="mx-auto mt-12 max-w-2xl px-6"><Cta label="HELP HIM FEEL COMFORTABLE AGAIN →" where="closing-cta" /></section>
+      <section className="mx-auto mt-12 max-w-2xl px-6"><Cta label="SETTLE HIS GUT FOR GOOD →" where="closing-cta" /></section>
       <p className="mx-auto mt-10 max-w-2xl px-6 text-center text-[11px] leading-relaxed" style={{ color: "#A8A8A8" }}>
         This is an advertorial and not a news article. Good For Pets supplements support and help maintain your dog's wellbeing; they are not intended to diagnose, treat, cure or prevent any disease. Individual results vary.
       </p>
@@ -462,7 +462,7 @@ export default function CheckThePacketAdvertorial() {
       {/* STICKY CTA BAR */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
         <div className="mx-auto max-w-2xl px-4 py-3">
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Save 45% + Free Shipping →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Him Relief →</a>
         </div>
       </div>
     </div>
