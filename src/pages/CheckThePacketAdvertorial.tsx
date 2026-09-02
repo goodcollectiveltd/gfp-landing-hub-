@@ -214,8 +214,8 @@ const REASONS: Reason[] = [
     n: 6, title: "The most advanced formula on the market",
     bold: "UK vets, canine nutritionists and the latest veterinary research",
     body: "We're obsessed with helping dogs, so we built this with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, in a human-supplement factory here in the UK.",
-    img: "/lp/vet-james-hansen.jpg", imgAlt: "Dr James Hansen MRCVS with a patient in his veterinary clinic",
-    proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr James Hansen, MRCVS",
+    img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic",
+    proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
     n: 7, title: "We're so sure, we take the risk for you",
