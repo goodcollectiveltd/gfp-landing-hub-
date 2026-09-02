@@ -17,7 +17,7 @@ const NAVY = "#16223C";
 const INK = "#1C1C2E";
 const BODY = "#4B4B4B";
 const MUTE = "#8A8A8A";
-const CREAM = "#FBF6F1";
+const PAGE_BG = "#FFFFFF"; // bright white page background (was cream)
 const PRODUCT_URL = "https://goodforpets.co/products/5-strain-probiotic";
 
 function goToProduct(placement: string) {
@@ -146,7 +146,7 @@ function ReviewSlider() {
   const go = (d: number) => setI((p) => (p + d + REVIEWS.length) % REVIEWS.length);
   return (
     <div className="mt-6">
-      <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
         <Stars size={15} />
         <blockquote className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>“{rv.quote}”</blockquote>
         <div className="mt-4 flex items-center gap-3">
@@ -281,7 +281,7 @@ export default function CheckThePacketAdvertorial() {
   }, []);
 
   return (
-    <div className="min-h-screen pb-24" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: INK, background: CREAM }}>
+    <div className="min-h-screen pb-24" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: INK, background: PAGE_BG }}>
       <style>{`
         .adv-heading { font-family: 'Poppins', system-ui, sans-serif; }
         .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 800; }
@@ -390,7 +390,7 @@ export default function CheckThePacketAdvertorial() {
       <section className="mx-auto mt-14 max-w-2xl px-6">
         <h2 className="adv-display text-center text-2xl sm:text-3xl" style={{ color: INK }}>What to expect</h2>
         <p className="mt-1 text-center text-sm" style={{ color: MUTE }}>Every dog is different, so give it the full 90 days.</p>
-        <div className="mt-6 rounded-3xl border border-black/5 bg-white p-5 shadow-sm sm:p-6">
+        <div className="mt-6 rounded-3xl border border-black/10 bg-white p-5 shadow-sm sm:p-6">
           {TIMELINE.map(([w, tag, d], i, arr) => (
             <div key={w} className="flex gap-4">
               <div className="flex flex-col items-center">
@@ -426,7 +426,7 @@ export default function CheckThePacketAdvertorial() {
 
       {/* OFFER */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
-        <div className="overflow-hidden rounded-3xl border border-black/5 bg-white text-center shadow-xl">
+        <div className="overflow-hidden rounded-3xl border border-black/10 bg-white text-center shadow-xl">
           <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the pure powder over food" className="h-48 w-full object-cover" />
           <div className="p-7">
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
