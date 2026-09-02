@@ -214,8 +214,8 @@ const REASONS: Reason[] = [
     n: 6, title: "The most advanced formula on the market",
     bold: "UK vets, canine nutritionists and the latest veterinary research",
     body: "We're obsessed with helping dogs, so we built this with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, in a human-supplement factory here in the UK.",
-    img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic",
-    proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
+    img: "/lp/vet-james-hansen.jpg", imgAlt: "Dr James Hansen MRCVS with a patient in his veterinary clinic",
+    proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr James Hansen, MRCVS",
   },
   {
     n: 7, title: "We're so sure, we take the risk for you",
@@ -293,8 +293,8 @@ export default function CheckThePacketAdvertorial() {
       {/* hero: byline + warning headline + dog-first UGC + subhead */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
         <div className="flex items-center gap-2.5">
-          <img src="/lp/vet-kishan.jpg" alt="Dr Kishan Vara MRCVS" className="h-9 w-9 rounded-full object-cover" />
-          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Dr Kishan Vara, MRCVS · Verified ✓ · Updated today</p>
+          <img src="/lp/vet-james-hansen.jpg" alt="Dr James Hansen MRCVS" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "62% 26%" }} />
+          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Dr James Hansen, MRCVS · Verified ✓ · Updated today</p>
         </div>
         <h1 className="adv-display mt-3 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
           Don't Give Your Dog Probiotics Until You've <span style={{ color: ORANGE }}>Checked the Back of the Packet</span>
