@@ -308,7 +308,7 @@ export default function CheckThePacketAdvertorial() {
         <h1 className="adv-display mt-3 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
           Don't Give Your Dog Another Probiotic Until You've <span style={{ color: ORANGE }}>Checked the Back of the Packet</span>
         </h1>
-        <img src="/lp/ugc-2.jpg" alt="A calm, healthy dog beside Good For Pets 5 Strain Probiotic+" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" />
+        <img src="/lp/hero-label-tubs.jpg" alt="Three different dog-probiotic tubs stacked, each ingredients label listing glycerine and fillers" className="mt-5 aspect-square w-full rounded-2xl object-cover shadow-sm" />
         <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>
           Most are packed with fillers to make them easy to sell. <span className="adv-heading font-bold" style={{ color: INK }}>Here's what to look for, and what we did differently</span> 👇
         </p>
