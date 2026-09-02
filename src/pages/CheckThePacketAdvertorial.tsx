@@ -281,7 +281,7 @@ export default function CheckThePacketAdvertorial() {
       {/* honest scarcity banner (real: sold out every restock) */}
       <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
         <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
-          ⚡ Sold out every restock since launch
+          ⚡ Only 13 left in stock ⚡
         </p>
       </div>
 
@@ -413,7 +413,7 @@ export default function CheckThePacketAdvertorial() {
       <p className="mx-auto mt-12 max-w-2xl px-6 text-center text-[17px] font-bold leading-snug" style={{ color: INK }}>
         Every week you wait is another week they're licking and scratching. The sooner they start, the sooner they settle.
       </p>
-      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET THEM OFF THE FILLERS →" where="mid-cta" /></div>
+      <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET THEM STARTED TODAY →" where="mid-cta" /></div>
 
       {/* OFFER */}
       <section className="mx-auto mt-12 max-w-2xl px-6">
@@ -454,7 +454,7 @@ export default function CheckThePacketAdvertorial() {
       {/* STICKY CTA BAR */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
         <div className="mx-auto max-w-2xl px-4 py-3">
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Them Relief →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Them Relief Today →</a>
         </div>
       </div>
     </div>
