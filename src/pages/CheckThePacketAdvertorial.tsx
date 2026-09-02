@@ -205,29 +205,20 @@ const REASONS: Reason[] = [
     proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
-    n: 5, title: "Calmer skin, fewer allergy flare-ups",
-    bold: "Settle the gut, settle the reaction",
-    body: "Itchy skin is often the immune system over-reacting on the outside. Settle the gut, settle the reaction, and the flare-ups ease. Bear's owner sent us this:",
-    slider: true, before: "/lp/bear-before-c.jpg", after: "/lp/bear-after-c.jpg",
-    beforeAlt: "Bear's skin before, red, raw and patchy", afterAlt: "Bear's skin after, calm, with a full coat",
-    afterLabel: "AFTER", caption: "Bear's skin & coat, before and after (real customer)",
-    proof: "“I was sceptical a probiotic could help, but after a few weeks his skin isn't itchy and his coat looks amazing.” · Caroline L.",
-  },
-  {
-    n: 6, title: "No nasty extras to pay for, so it costs 54% less per serving",
+    n: 5, title: "No nasty extras to pay for, so it costs 54% less per serving",
     bold: "54% less per serving",
     body: "You aren't paying to turn powder into a chew. Cut out the fillers and the extra manufacturing, and the maths changes. 5 Strain Probiotic+ works out 54% less per serving than a typical chew, even though it's far stronger.",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
   },
   {
-    n: 7, title: "The most advanced formula on the market",
+    n: 6, title: "The most advanced formula on the market",
     bold: "UK vets, canine nutritionists and the latest veterinary research",
     body: "We're obsessed with helping dogs, so we built this with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, in a human-supplement factory here in the UK.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 8, title: "We're so sure, we take the risk for you",
+    n: 7, title: "We're so sure, we take the risk for you",
     bold: "try it 90 days, and if you see no difference, we give you every penny back",
     body: "This won't suit every dog, and we'll say so. But we're so sure it helps that we take the risk for you: try it 90 days, and if you see no difference, we give you every penny back.",
     img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+",
@@ -340,7 +331,7 @@ export default function CheckThePacketAdvertorial() {
             </article>
 
             {/* social-proof stat bar after the 3 sliders */}
-            {r.n === 5 && (
+            {r.n === 4 && (
               <div className="!mt-12 grid grid-cols-3 overflow-hidden rounded-2xl text-center text-white" style={{ background: NAVY }}>
                 {[["20,000+", "dogs helped"], ["4,500+", "reviews"], ["4.8/5", "average rating"]].map(([v, l]) => (
                   <div key={l} className="px-2 py-4">
@@ -352,7 +343,7 @@ export default function CheckThePacketAdvertorial() {
             )}
 
             {/* pure-powder comparison after the value reason */}
-            {r.n === 6 && (
+            {r.n === 5 && (
               <div className="!mt-8">
                 <div className="grid grid-cols-3 gap-2.5 text-center text-white">
                   {[["20×", "more good bacteria"], ["100%", "pure powder, no fillers"], ["54%", "cheaper per serving"]].map(([v, l]) => (
