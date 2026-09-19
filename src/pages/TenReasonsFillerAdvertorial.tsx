@@ -169,7 +169,7 @@ const GRID_ROWS: [string, string, string][] = [
   ["What's actually inside", "Pure probiotic powder, zero fillers", "Glycerine, starch, grains, oils & fats"],
   ["The probiotics", "20× more good bacteria, 5 live strains", "An afterthought, 1 generic strain"],
   ["Digestive support", "6-enzyme complex + prebiotic fuel", "None"],
-  ["Reaches the gut alive", "Cold-processed, stays alive", "Baked, most bacteria dead on arrival"],
+  ["Quality", "Human-grade pure powder", "Bulked out with cheap fillers"],
   ["Cost per serving", "54% cheaper, you pay for the good stuff", "You pay for the fillers"],
 ];
 
@@ -231,76 +231,74 @@ type Reason = {
 
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Most chews are mostly filler (check the back of the tub)",
-    bold: "you have been buying cheap padding and calling it a supplement",
-    body: "Glycerine. Starches. Grains. Oils and fats. Turn a typical probiotic chew over and read it properly, because most of what you handed your money for is cheap filler. It is in there to bind a soft chew that sells, not to help your dog. Put bluntly, you have been buying cheap padding and calling it a supplement.",
-    img: "/lp/chew-squish.jpg", imgAlt: "A soft filler-bound probiotic chew squished apart between two fingers", imgCaption: "A soft chew is mostly binders and fillers. Read the label.",
-    proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
+    n: 1, title: "It calms the itchy, flaky skin at the source",
+    bold: "70% of that immune system lives in the gut",
+    body: "The relentless scratching. The flaky patches. The angry red skin you have thrown every cream and spray at, and nothing holds. It is usually an allergic flare, and it starts in the gut, because 70% of that immune system lives there. Because 5 Strain Probiotic+ is a pure human-grade powder and not a filler-packed chew, it gets 20× more live bacteria down to the gut, where the itch actually begins.",
+    proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
-    n: 2, title: "The probiotics are an afterthought",
-    bold: "It was never going to fix your dog",
-    body: "Strip out the glycerine and the starch and what is actually left? A pinch of one generic strain, buried at the very bottom of the list. It was never going to fix your dog. No wonder nothing changed. No wonder the money kept walking out the door month after month.",
-    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
-    proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-  },
-  {
-    n: 3, title: "Baking kills what little bacteria they add",
-    bold: "you paid full price for fillers and a scoop of dead bacteria",
-    body: "Then they bake them. Heat and moisture wipe out most of the cultures long before the tub lands on your doorstep. So you paid full price for fillers and a scoop of dead bacteria. That is the quiet truth the front of the packet will never tell you.",
-    img: "/lp/moist-chews-wet.jpg", imgAlt: "A soft, moist probiotic chew, damp to the touch", imgCaption: "Baked and moist. The heat kills the cultures before the tub reaches you.",
-    proof: "“Saw the advert saying non-baked is better. Two and a half weeks on these and the difference is already massive.” · Katie S.",
-  },
-  {
-    n: 4, title: "So we built 5 Strain Probiotic+ completely differently",
-    bold: "20× more good bacteria than standard dog probiotics",
-    body: "We were angry at what passes for a dog probiotic, so we built the exact opposite. No binders, no fillers, no grains. Just a pure powder you twist open and sprinkle over dinner. That is how we pack in 20× more good bacteria than standard dog probiotics, and get them to the gut alive, where they can finally do something.",
-    img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the pure powder over a bowl of food", imgCaption: "A pure powder. Nothing but the good stuff.",
-    proof: "“A real success for our pug Rolo. His skin isn't itchy, his coat looks amazing and he's far more comfortable.” · Caroline L.",
-  },
-  {
-    n: 5, title: "The itchy skin and paw licking calm down at the source",
-    bold: "it starts in the gut, where 70% of the immune system lives",
-    body: "You know the sound. The 3am licking. The scratching that never stops. The raw pink skin you have tried everything to soothe and nothing holds. It is usually one allergic flare, and it starts in the gut, where 70% of the immune system lives. Settle the gut and the itch finally eases. Drag the slider:",
-    slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
-    beforeAlt: "A dog's paw before, pink, sore and saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
-    afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
-    proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
-  },
-  {
-    n: 6, title: "Cleaner, calmer ears, without another vet bill",
-    bold: "more money thrown at a problem that keeps coming back",
-    body: "Gunky, smelly ears are the same flare showing up somewhere else. And it turns into more drops, more vet bills, more money thrown at a problem that keeps coming back. A calmer gut helps keep it in check for good. Drag the slider:",
+    n: 2, title: "It clears gunky, smelly ears without another vet bill",
+    bold: "a calmer gut keeps it in check for good",
+    body: "Gunky, smelly ears are that same flare showing up somewhere else, and it keeps dragging you back to the vet for more drops that never last. Calm the gut and you calm the cause, so a calmer gut keeps it in check for good, not just this week. Drag the slider:",
     slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
     beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
     afterLabel: "AFTER · 3 WEEKS", caption: "Murphy's ear, before and after (real customer photo)",
     proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
-    n: 7, title: "Real digestive support the chews leave out",
-    bold: "Filler chews give you neither",
-    body: "We add a 6-enzyme complex and a chicory-root prebiotic (250mg). The enzymes unlock every nutrient in their bowl, the prebiotic feeds the good bacteria once they land. Filler chews give you neither, because neither one leaves room for the cheap padding they would rather sell you.",
-    proof: "“No longer scooting or eating grass, her eyes are clearer, she's full of energy again.” · Elaine C.",
+    n: 3, title: "It stops the endless paw licking",
+    bold: "the itch finally eases",
+    body: "You know the 3am sound. The licking that never stops, the paws chewed raw and pink. It is that gut-driven itch again, not just the skin, so once the good bacteria take hold the itch finally eases. Because it is pure powder and not padding, enough of them actually survive to get there. Drag the slider:",
+    slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
+    beforeAlt: "A dog's paw before, pink, sore and saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
+    afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
+    proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
   },
   {
-    n: 8, title: "No fillers to pay for, so it costs 54% less per serving",
+    n: 4, title: "It settles sensitive stomachs and firms up stools",
+    bold: "a 6-enzyme complex and a prebiotic that chews leave out",
+    body: "Loose stools, wind, the bowl they turn their nose up at. Because it is pure powder with no cheap fillers bulking it out, we had room to add a 6-enzyme complex and a prebiotic that chews leave out. The enzymes unlock every nutrient in their bowl, the prebiotic feeds the good bacteria once they land.",
+    proof: "“Gave them to my Pom for her tummy upsets and she's had nothing since. It's been a year.” · Sherry B.",
+  },
+  {
+    n: 5, title: "Less scooting and fewer gland problems",
+    bold: "firmer stools mean the glands empty naturally",
+    body: "The scooting across the carpet, the repeat trips to have the glands squeezed. A balanced gut firms up the stools, and firmer stools mean the glands empty naturally the way they should. One more thing that quietly stops draining your evenings and your wallet.",
+    proof: "“No longer scooting or eating grass, her eyes are clearer, and she's full of energy again.” · Elaine C.",
+  },
+  {
+    n: 6, title: "20× more live bacteria that actually reach the gut",
+    bold: "20× more good bacteria than a standard chew",
+    body: "This is why it works when the chews did nothing. A typical chew is mostly glycerine, starch and grains, with a pinch of probiotic thrown in as an afterthought. Ours is the opposite: a pure powder you twist open over dinner, packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed.",
+    img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the pure powder over a bowl of food", imgCaption: "A pure powder. Nothing but the good stuff.",
+    proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
+  },
+  {
+    n: 7, title: "Just pure, human-grade powder. Zero fillers",
+    bold: "no glycerine, no starch, no grains, no nasties",
+    body: "Turn a chew over and read it: glycerine, starch, grains, oils and fats, all in there to bind a soft chew that sells. Ours has none of it. No glycerine, no starch, no grains, no nasties. Five clinically-backed strains and nothing your dog does not need, made to human-supplement standard here in the UK.",
+    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
+    proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
+  },
+  {
+    n: 8, title: "It costs 54% less per serving than a chew",
     bold: "54% less per serving",
-    body: "Here is the part that really stings. You have been paying a premium to turn cheap powder into a pretty chew. Take that away and 5 Strain Probiotic+ works out 54% less per serving than a typical chew, and it is far stronger. Better for your dog, and it stops quietly draining your bank account.",
+    body: "Here is the part that really stings. You have been paying a premium to turn cheap powder into a pretty, filler-bound chew. Take the fillers away and 5 Strain Probiotic+ works out 54% less per serving than a typical chew, and it is far stronger. Better for your dog, and it stops quietly draining your bank account.",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
   },
   {
-    n: 9, title: "The most advanced formula on the market",
+    n: 9, title: "Built with UK vets, not a marketing team",
     bold: "This is what you hoped you were buying all along",
-    body: "We are obsessed with getting this right, so we built it with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, made in a human-supplement factory here in the UK. This is what you hoped you were buying all along.",
+    body: "We were angry at what passes for a dog probiotic, so we built the opposite with UK vets, canine nutritionists and the latest research. Five clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, made in a human-supplement factory here in the UK. This is what you hoped you were buying all along.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
     n: 10, title: "51% to rescue, and we take all the risk",
     bold: "51% of our profits goes to dog rescues",
-    body: "Here is the part that feels good. 51% of our profits goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA. So you help your own dog and thousands of forgotten ones at the same time. And because we have seen what this does, we take all the risk: try it for 90 days, and if you see no change, we give you every penny back.",
+    body: "Here is the part that feels good. 51% of our profits goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA, so you help your own dog and thousands of forgotten ones at the same time. And because we have seen what this does, we take all the risk: try it for 90 days, and if you see no change, we give you every penny back.",
     img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+",
-    proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
+    proof: "“Wouldn't give them anything else.” · Sherry B.",
   },
 ];
 
@@ -320,7 +318,7 @@ const TIMELINE: [string, string, string][] = [
 
 const FAQS: [string, string][] = [
   ["What's in it, and what's not?", "5 clinically-backed live strains, a chicory-root prebiotic and a 6-enzyme digestive complex. That's it. No glycerine, no starch fillers, no grains, no oils, no artificial flavours or colours, in a vegan capsule made in the UK to GMP standards."],
-  ["Will this actually help my dog's itching, paw licking or ear issues?", "These symptoms are usually driven by the gut, which is why creams and drops keep failing. Because the powder is cold-processed (not baked like chews), the live cultures stay effective and work on digestion, yeast balance and skin. It won't suit every case, but the 90-day guarantee means you find out risk-free."],
+  ["Will this actually help my dog's itching, paw licking or ear issues?", "These symptoms are usually driven by the gut, which is why creams and drops keep failing. Because it is a pure human-grade powder with no fillers diluting it, far more live cultures reach the gut and work on digestion, yeast balance and skin. It won't suit every case, but the 90-day guarantee means you find out risk-free."],
   ["How long does it take to see results?", "Most owners notice changes in 3 to 6 weeks. Digestion improves first, then calmer skin, less paw licking and fewer flare-ups. Give it a good 90 days."],
   ["How do I give it to a fussy dog?", "Don't swallow it whole. Twist one capsule open and sprinkle the powder over your dog's food. No pill pockets, no fighting."],
   ["Is it suitable for all breeds and sizes?", "Yes, safe for small, medium, large and giant breeds. Follow the weight-based dosage on the product page (one capsule per 25kg)."],
@@ -371,7 +369,7 @@ export default function TenReasonsFillerAdvertorial() {
       {/* hero: headline + byline + top testimonial */}
       <section className="mx-auto max-w-2xl px-6 pt-6 text-center">
         <h1 className="adv-display text-[28px] leading-[1.12] sm:text-4xl" style={{ color: INK }}>
-          10 Reasons Why UK Dog Parents Are Ditching Expensive Probiotic Chews For <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
+          10 Reasons Why <span style={{ color: ORANGE }}>20,000 Dog Parents</span> Have Ditched Probiotic Chews
         </h1>
         <div className="mt-4 flex items-center justify-center gap-2.5">
           <img src="/lp/vet-james-hansen.jpg" alt="Dr James Hansen MRCVS" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "62% 26%" }} />
@@ -418,7 +416,7 @@ export default function TenReasonsFillerAdvertorial() {
             </article>
 
             {/* social-proof stat bar after the 2 sliders */}
-            {r.n === 6 && (
+            {r.n === 3 && (
               <div className="!mt-12 grid grid-cols-3 overflow-hidden rounded-2xl text-center text-white" style={{ background: NAVY }}>
                 {[["20,000+", "dogs helped"], ["4,500+", "reviews"], ["4.8/5", "average rating"]].map(([v, l]) => (
                   <div key={l} className="px-2 py-4">
