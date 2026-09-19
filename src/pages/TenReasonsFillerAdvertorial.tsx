@@ -232,15 +232,15 @@ type Reason = {
 const REASONS: Reason[] = [
   {
     n: 1, title: "Turn the tub over. Most chews are mostly filler",
-    bold: "the actual probiotics are an afterthought",
-    body: "This is the part they hope you never check. Turn a typical probiotic chew over and read the back: glycerine, starch, grains, oils and fats, all in there to bind a soft chew that sells. The actual probiotics are an afterthought, a pinch of one generic strain buried at the bottom of the list. You have been paying for cheap padding, calling it a supplement, and quietly wondering why nothing ever changed.",
+    bold: "It is mostly filler",
+    body: "Flip a chew over and read the back. Glycerine, starch, grains, oils, fats. It is mostly filler, there to bind a soft chew that sells. The probiotics are a tiny afterthought at the bottom of the list. You paid for padding, and wondered why nothing ever changed.",
     img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
     n: 2, title: "It calms the itchy, flaky skin at the source",
-    bold: "70% of that immune system lives in the gut",
-    body: "The relentless scratching. The flaky patches. The angry red skin you have thrown every cream and spray at, and nothing holds. It is usually an allergic flare, and it starts in the gut, because 70% of that immune system lives there. Because ours is a pure human-grade powder and not a filler-packed chew, it gets 20× more live bacteria down to the gut, where the itch actually begins.",
+    bold: "70% of the immune system lives",
+    body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a filler chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
     proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
