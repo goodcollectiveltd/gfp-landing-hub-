@@ -177,9 +177,10 @@ function ComparisonGrid() {
   return (
     <div className="mx-auto max-w-2xl px-4">
       <h2 className="adv-display text-center text-xl uppercase leading-tight sm:text-2xl" style={{ color: INK }}>
-        Pure powder vs <span style={{ color: ORANGE }}>filler chews</span>
+        Pure powder vs <span style={{ color: ORANGE }}>probiotic chews</span>
       </h2>
-      <div className="mt-5 grid items-stretch" style={{ gridTemplateColumns: "1.15fr 1fr 1fr" }}>
+      <div className="mt-5 rounded-3xl border border-black/10 bg-white px-3 py-3 shadow-lg sm:px-5">
+        <div className="grid items-stretch" style={{ gridTemplateColumns: "1.15fr 1fr 1fr" }}>
         {/* header row (row 1) — every cell explicitly placed so the column-2 frame
             below does not push auto-placed cells out of column 2. Extra top padding
             on the highlighted column so the logo sits inside the frame, not on it. */}
@@ -188,7 +189,7 @@ function ComparisonGrid() {
           <img src="/lp/logo-brand.png" alt="Good For Pets" className="h-6 w-auto sm:h-8" />
         </div>
         <div className="flex items-center justify-center px-1 pb-4 pt-5" style={{ gridColumn: 3, gridRow: 1 }}>
-          <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Filler Chews</span>
+          <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Probiotic Chews</span>
         </div>
 
         {/* body rows (rows 2..N). Separator lines run only in the outer columns so
@@ -213,6 +214,7 @@ function ComparisonGrid() {
 
         {/* highlighted GFP column frame (the "capsule" outline), aligned to column 2 */}
         <div className="pointer-events-none rounded-2xl border-2 shadow-md" style={{ gridColumn: 2, gridRow: `1 / ${GRID_ROWS.length + 2}`, borderColor: ORANGE }} />
+        </div>
       </div>
     </div>
   );
