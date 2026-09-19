@@ -300,7 +300,7 @@ const REASONS: Reason[] = [
     n: 10, title: "51% to rescue, and we take all the risk",
     bold: "51% of our profits goes to dog rescues",
     body: "Here is the part that feels good. 51% of our profits goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA, so you help your own dog and thousands of forgotten ones at the same time. And because we have seen what this does, we take all the risk: try it for 90 days, and if you see no change, we give you every penny back.",
-    img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+",
+    img: "/lp/founder-rescue-collage.jpg", imgAlt: "Good For Pets founder with rescue dogs at a shelter",
     proof: "“Wouldn't give them anything else.” · Sherry B.",
   },
 ];
