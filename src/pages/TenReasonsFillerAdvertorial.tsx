@@ -231,13 +231,20 @@ type Reason = {
 
 const REASONS: Reason[] = [
   {
-    n: 1, title: "It calms the itchy, flaky skin at the source",
+    n: 1, title: "Turn the tub over. Most chews are mostly filler",
+    bold: "the actual probiotics are an afterthought",
+    body: "This is the part they hope you never check. Turn a typical probiotic chew over and read the back: glycerine, starch, grains, oils and fats, all in there to bind a soft chew that sells. The actual probiotics are an afterthought, a pinch of one generic strain buried at the bottom of the list. You have been paying for cheap padding, calling it a supplement, and quietly wondering why nothing ever changed.",
+    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
+    proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
+  },
+  {
+    n: 2, title: "It calms the itchy, flaky skin at the source",
     bold: "70% of that immune system lives in the gut",
-    body: "The relentless scratching. The flaky patches. The angry red skin you have thrown every cream and spray at, and nothing holds. It is usually an allergic flare, and it starts in the gut, because 70% of that immune system lives there. Because 5 Strain Probiotic+ is a pure human-grade powder and not a filler-packed chew, it gets 20× more live bacteria down to the gut, where the itch actually begins.",
+    body: "The relentless scratching. The flaky patches. The angry red skin you have thrown every cream and spray at, and nothing holds. It is usually an allergic flare, and it starts in the gut, because 70% of that immune system lives there. Because ours is a pure human-grade powder and not a filler-packed chew, it gets 20× more live bacteria down to the gut, where the itch actually begins.",
     proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
-    n: 2, title: "It clears gunky, smelly ears without another vet bill",
+    n: 3, title: "It clears gunky, smelly ears without another vet bill",
     bold: "a calmer gut keeps it in check for good",
     body: "Gunky, smelly ears are that same flare showing up somewhere else, and it keeps dragging you back to the vet for more drops that never last. Calm the gut and you calm the cause, so a calmer gut keeps it in check for good, not just this week. Drag the slider:",
     slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
@@ -246,7 +253,7 @@ const REASONS: Reason[] = [
     proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
-    n: 3, title: "It stops the endless paw licking",
+    n: 4, title: "It stops the endless paw licking",
     bold: "the itch finally eases",
     body: "You know the 3am sound. The licking that never stops, the paws chewed raw and pink. It is that gut-driven itch again, not just the skin, so once the good bacteria take hold the itch finally eases. Because it is pure powder and not padding, enough of them actually survive to get there. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
@@ -255,29 +262,22 @@ const REASONS: Reason[] = [
     proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
   },
   {
-    n: 4, title: "It settles sensitive stomachs and firms up stools",
+    n: 5, title: "It settles sensitive stomachs and firms up stools",
     bold: "a 6-enzyme complex and a prebiotic that chews leave out",
     body: "Loose stools, wind, the bowl they turn their nose up at. Because it is pure powder with no cheap fillers bulking it out, we had room to add a 6-enzyme complex and a prebiotic that chews leave out. The enzymes unlock every nutrient in their bowl, the prebiotic feeds the good bacteria once they land.",
     proof: "“Gave them to my Pom for her tummy upsets and she's had nothing since. It's been a year.” · Sherry B.",
   },
   {
-    n: 5, title: "Less scooting and fewer gland problems",
+    n: 6, title: "Less scooting and fewer gland problems",
     bold: "firmer stools mean the glands empty naturally",
     body: "The scooting across the carpet, the repeat trips to have the glands squeezed. A balanced gut firms up the stools, and firmer stools mean the glands empty naturally the way they should. One more thing that quietly stops draining your evenings and your wallet.",
     proof: "“No longer scooting or eating grass, her eyes are clearer, and she's full of energy again.” · Elaine C.",
   },
   {
-    n: 6, title: "20× more live bacteria that actually reach the gut",
+    n: 7, title: "Just pure, human-grade powder. 20× stronger",
     bold: "20× more good bacteria than a standard chew",
-    body: "This is why it works when the chews did nothing. A typical chew is mostly glycerine, starch and grains, with a pinch of probiotic thrown in as an afterthought. Ours is the opposite: a pure powder you twist open over dinner, packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed.",
+    body: "Ours is the exact opposite of a filler chew. No glycerine, no starch, no grains, no nasties. Just a pure powder you twist open over dinner, five clinically-backed strains packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed. Nothing your dog does not need, made to human-supplement standard here in the UK.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the pure powder over a bowl of food", imgCaption: "A pure powder. Nothing but the good stuff.",
-    proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
-  },
-  {
-    n: 7, title: "Just pure, human-grade powder. Zero fillers",
-    bold: "no glycerine, no starch, no grains, no nasties",
-    body: "Turn a chew over and read it: glycerine, starch, grains, oils and fats, all in there to bind a soft chew that sells. Ours has none of it. No glycerine, no starch, no grains, no nasties. Five clinically-backed strains and nothing your dog does not need, made to human-supplement standard here in the UK.",
-    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
   },
   {
@@ -416,7 +416,7 @@ export default function TenReasonsFillerAdvertorial() {
             </article>
 
             {/* social-proof stat bar after the 2 sliders */}
-            {r.n === 3 && (
+            {r.n === 4 && (
               <div className="!mt-12 grid grid-cols-3 overflow-hidden rounded-2xl text-center text-white" style={{ background: NAVY }}>
                 {[["20,000+", "dogs helped"], ["4,500+", "reviews"], ["4.8/5", "average rating"]].map(([v, l]) => (
                   <div key={l} className="px-2 py-4">
