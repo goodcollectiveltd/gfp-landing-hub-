@@ -286,6 +286,7 @@ const REASONS: Reason[] = [
     n: 7, title: "It costs 54% less per serving than a chew",
     bold: "54% less per serving",
     body: "Here is the part that stings. You have been paying more to turn cheap powder into a pretty chew. Cut the fillers and 5 Strain Probiotic+ costs 54% less per serving than a typical chew, and it is stronger. Better for your dog, easier on your wallet.",
+    img: "/lp/ugc-1.jpg", imgAlt: "A happy dog on the grass beside the 5 Strain Probiotic+ tub",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
   },
   {
@@ -302,9 +303,9 @@ const REASONS: Reason[] = [
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 10, title: "51% to rescue, and we take all the risk",
+    n: 10, title: "51% of our profits go to dog rescues",
     bold: "51% of our profits goes to dog rescues",
-    body: "Here is the part that feels good. 51% of our profits goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA, so you help your own dog and thousands of forgotten ones at the same time. And because we have seen what this does, we take all the risk: try it for 90 days, and if you see no change, we give you every penny back.",
+    body: "Here is the part that feels good. More than half of everything we make, 51% of our profits, goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA. So every tub helps your own dog and thousands of forgotten ones at the same time. No other pet brand gives away this much.",
     img: "/lp/founder-rescue-collage.jpg", imgAlt: "Good For Pets founder with rescue dogs at a shelter",
     proof: "“Wouldn't give them anything else.” · Sherry B.",
   },
@@ -492,7 +493,10 @@ export default function TenReasonsFillerAdvertorial() {
             <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-3 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
               Get the Pure Powder →
             </a>
-            <p className="mt-3 text-sm font-semibold" style={{ color: MUTE }}>Try it with our 90-day money-back guarantee.</p>
+            <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-bold" style={{ color: INK }}>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill={NAVY} aria-hidden><path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" /></svg>
+              Backed by our 90-day money-back guarantee
+            </p>
           </div>
         </div>
       </section>
