@@ -232,9 +232,9 @@ type Reason = {
 
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Turn the tub over. Most chews are mostly filler",
-    bold: "It is mostly filler",
-    body: "Flip a chew over and read the back. Glycerine, starch, grains, oils, fats. It is mostly filler, there to bind a soft chew that sells. The probiotics are a tiny afterthought at the bottom of the list. You paid for padding, and wondered why nothing ever changed.",
+    n: 1, title: "Chews are full of nasties (just read the label)",
+    bold: "We changed that.",
+    body: "Glycerine, starches, grains, oils, fats. That is what most probiotic chews are really made of, with the actual probiotics thrown in as an afterthought. We changed that. Pure, human-grade powder. Nothing to hide, and nothing your dog does not need.",
     img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
