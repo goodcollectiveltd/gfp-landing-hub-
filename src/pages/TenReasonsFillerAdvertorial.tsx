@@ -181,28 +181,30 @@ function ComparisonGrid() {
       </h2>
       <div className="mt-5 grid items-stretch" style={{ gridTemplateColumns: "1.15fr 1fr 1fr" }}>
         {/* header row (row 1) — every cell explicitly placed so the column-2 frame
-            below does not push auto-placed cells out of column 2 */}
+            below does not push auto-placed cells out of column 2. Extra top padding
+            on the highlighted column so the logo sits inside the frame, not on it. */}
         <div style={{ gridColumn: 1, gridRow: 1 }} />
-        <div className="flex items-center justify-center px-1 pb-3" style={{ gridColumn: 2, gridRow: 1 }}>
+        <div className="flex items-center justify-center px-2 pb-4 pt-5" style={{ gridColumn: 2, gridRow: 1 }}>
           <img src="/lp/logo-brand.png" alt="Good For Pets" className="h-6 w-auto sm:h-8" />
         </div>
-        <div className="flex items-center justify-center px-1 pb-3" style={{ gridColumn: 3, gridRow: 1 }}>
+        <div className="flex items-center justify-center px-1 pb-4 pt-5" style={{ gridColumn: 3, gridRow: 1 }}>
           <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Filler Chews</span>
         </div>
 
-        {/* body rows (rows 2..N) */}
+        {/* body rows (rows 2..N). Separator lines run only in the outer columns so
+            the highlighted middle column stays a clean capsule (no internal rules). */}
         {GRID_ROWS.map(([label, us, them], i) => {
           const row = i + 2;
           const sep = i > 0 ? { borderTop: "1px solid rgba(0,0,0,0.08)" } : undefined;
           return (
             <Fragment key={label}>
-              <div className="flex items-center py-4 pr-2" style={{ gridColumn: 1, gridRow: row, ...sep }}>
+              <div className="flex items-center py-4 pr-3" style={{ gridColumn: 1, gridRow: row, ...sep }}>
                 <span className="adv-heading text-[13px] font-bold leading-tight sm:text-sm" style={{ color: INK }}>{label}</span>
               </div>
-              <div className="flex items-center justify-center px-2 py-4 text-center" style={{ gridColumn: 2, gridRow: row, ...sep }}>
+              <div className="flex items-center justify-center px-2.5 py-4 text-center" style={{ gridColumn: 2, gridRow: row }}>
                 <span className="text-[11px] font-semibold leading-snug sm:text-[13px]" style={{ color: INK }}>{us}</span>
               </div>
-              <div className="flex items-center justify-center px-2 py-4 text-center" style={{ gridColumn: 3, gridRow: row, ...sep }}>
+              <div className="flex items-center justify-center px-1 py-4 text-center" style={{ gridColumn: 3, gridRow: row, ...sep }}>
                 <span className="text-[11px] leading-snug sm:text-[13px]" style={{ color: MUTE }}>{them}</span>
               </div>
             </Fragment>
@@ -236,12 +238,14 @@ const REASONS: Reason[] = [
     n: 2, title: "The probiotics are an afterthought",
     bold: "a tiny dose of one generic strain, buried under the fillers",
     body: "Once you strip out the glycerine and starch, what's left? Usually a tiny dose of one generic strain, buried under the fillers. Barely enough to matter, nowhere near enough to shift a real gut problem.",
+    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
     n: 3, title: "Baking kills what little bacteria they add",
     bold: "heat and moisture kill most of the cultures",
     body: "Chews are baked. Heat and moisture kill most of the cultures before the tub even reaches you. So you're paying for fillers, plus a dose of bacteria that's half dead on arrival.",
+    img: "/lp/moist-chews-wet.jpg", imgAlt: "A soft, moist probiotic chew, damp to the touch", imgCaption: "Baked and moist. The heat kills the cultures before the tub reaches you.",
     proof: "“Saw the advert saying non-baked is better. Two and a half weeks on these and the difference is already massive.” · Katie S.",
   },
   {
@@ -252,9 +256,9 @@ const REASONS: Reason[] = [
     proof: "“A real success for our pug Rolo. His skin isn't itchy, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
-    n: 5, title: "It targets the real cause of the paw licking",
+    n: 5, title: "The itchy skin and paw licking calm down at the source",
     bold: "70% of the immune system lives in the gut",
-    body: "Paw licking is usually an allergic itch, not just the skin. 70% of the immune system lives in the gut, so settle the gut and the licking eases. Drag the slider:",
+    body: "Itchy skin, endless scratching and paw licking are usually one allergic flare, not just the skin. 70% of the immune system lives in the gut, so settle the gut and the itch eases. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore and saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
@@ -336,7 +340,7 @@ export default function TenReasonsFillerAdvertorial() {
     link.rel = "stylesheet";
     link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap";
     document.head.appendChild(link);
-    document.title = "10 Reasons Owners Are Ditching Filler Chews, Good For Pets";
+    document.title = "10 Reasons, Good For Pets";
     initTracking();
     track("ViewContent", { content_name: "10 Reasons Filler Advertorial", content_ids: ["5-strain-probiotic"], content_type: "product" });
     return () => { document.head.removeChild(link); };
@@ -364,7 +368,7 @@ export default function TenReasonsFillerAdvertorial() {
       {/* hero: headline + byline + top testimonial */}
       <section className="mx-auto max-w-2xl px-6 pt-6 text-center">
         <h1 className="adv-display text-[28px] leading-[1.12] sm:text-4xl" style={{ color: INK }}>
-          10 Reasons UK Dog Owners Are Ditching <span style={{ color: ORANGE }}>Filler-Packed Chews</span> For A Pure Probiotic Powder
+          10 Reasons Why UK Dog Parents Are Ditching Expensive Probiotic Chews For <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
         </h1>
         <div className="mt-4 flex items-center justify-center gap-2.5">
           <img src="/lp/vet-james-hansen.jpg" alt="Dr James Hansen MRCVS" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "62% 26%" }} />
