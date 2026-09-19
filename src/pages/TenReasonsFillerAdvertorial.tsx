@@ -369,7 +369,7 @@ export default function TenReasonsFillerAdvertorial() {
       {/* hero: headline + byline + top testimonial */}
       <section className="mx-auto max-w-2xl px-6 pt-6 text-center">
         <h1 className="adv-display text-[28px] leading-[1.12] sm:text-4xl" style={{ color: INK }}>
-          10 Reasons Why <span style={{ color: ORANGE }}>20,000 Dog Parents</span> Have Ditched Probiotic Chews
+          10 Reasons Why UK Dog Parents Are Ditching Expensive Probiotic Chews For <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
         </h1>
         <div className="mt-4 flex items-center justify-center gap-2.5">
           <img src="/lp/vet-james-hansen.jpg" alt="Dr James Hansen MRCVS" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "62% 26%" }} />
