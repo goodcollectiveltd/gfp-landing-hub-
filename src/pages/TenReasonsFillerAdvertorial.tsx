@@ -239,29 +239,29 @@ const REASONS: Reason[] = [
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
-    n: 2, title: "It calms the itchy, flaky skin at the source",
-    bold: "70% of the immune system lives",
-    body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a filler chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
-    video: "/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4",
-    proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
-  },
-  {
-    n: 3, title: "It clears gunky, smelly ears without another vet bill",
-    bold: "a calmer gut keeps it in check for good",
-    body: "Gunky, smelly ears are that same flare showing up somewhere else, and it keeps dragging you back to the vet for more drops that never last. Calm the gut and you calm the cause, so a calmer gut keeps it in check for good, not just this week. Drag the slider:",
-    slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
-    beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
-    afterLabel: "AFTER · 3 WEEKS", caption: "Murphy's ear, before and after (real customer photo)",
-    proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
-  },
-  {
-    n: 4, title: "It stops the endless paw licking",
+    n: 2, title: "It stops the endless paw licking",
     bold: "the itch finally eases",
     body: "You know the 3am sound. The licking that never stops, the paws chewed raw and pink. It is that gut-driven itch again, not just the skin, so once the good bacteria take hold the itch finally eases. Because it is pure powder and not padding, enough of them actually survive to get there. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore and saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
     proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
+  },
+  {
+    n: 3, title: "It calms the itchy, flaky skin at the source",
+    bold: "70% of the immune system lives",
+    body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a filler chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
+    video: "/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4",
+    proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
+  },
+  {
+    n: 4, title: "It clears gunky, smelly ears without another vet bill",
+    bold: "a calmer gut keeps it in check for good",
+    body: "Gunky, smelly ears are that same flare showing up somewhere else, and it keeps dragging you back to the vet for more drops that never last. Calm the gut and you calm the cause, so a calmer gut keeps it in check for good, not just this week. Drag the slider:",
+    slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
+    beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
+    afterLabel: "AFTER · 3 WEEKS", caption: "Murphy's ear, before and after (real customer photo)",
+    proof: "“Her ears are practically clean, no itching at all, after two and a half weeks.” · Katie S.",
   },
   {
     n: 5, title: "It settles sensitive stomachs and stops the scooting",
@@ -439,7 +439,7 @@ export default function TenReasonsFillerAdvertorial() {
               <div className="!mt-8 grid grid-cols-3 gap-2.5 text-center text-white">
                 {[["20×", "more good bacteria"], ["100%", "pure powder, no fillers"], ["54%", "cheaper per serving"]].map(([v, l]) => (
                   <div key={l} className="rounded-2xl px-2 py-4" style={{ background: NAVY }}>
-                    <div className="adv-display text-2xl leading-none sm:text-3xl" style={{ color: ORANGE }}>{v}</div>
+                    <div className="adv-display text-2xl leading-none text-white sm:text-3xl">{v}</div>
                     <div className="mt-1.5 text-[11px] leading-tight opacity-90">{l}</div>
                   </div>
                 ))}
