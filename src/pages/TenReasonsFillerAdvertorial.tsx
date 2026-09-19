@@ -188,8 +188,8 @@ function ComparisonGrid() {
         <div className="flex items-center justify-center rounded-t-2xl px-2 py-3.5" style={{ gridColumn: 2, gridRow: 1, background: ORANGE, zIndex: 10 }}>
           <img src="/lp/logo-brand-white.png" alt="Good For Pets" className="h-6 w-auto sm:h-8" />
         </div>
-        <div className="flex items-center justify-center px-1 pb-1.5 pt-4" style={{ gridColumn: 3, gridRow: 1 }}>
-          <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Probiotic Chews</span>
+        <div className="flex items-center justify-center px-1 py-3" style={{ gridColumn: 3, gridRow: 1 }}>
+          <span className="adv-heading text-center text-xs font-bold leading-tight sm:text-sm" style={{ color: MUTE }}>Probiotic Chews</span>
         </div>
 
         {/* body rows (rows 2..N). Separator lines run only in the outer columns so
@@ -202,7 +202,7 @@ function ComparisonGrid() {
               <div className="flex items-center py-2.5 pr-3" style={{ gridColumn: 1, gridRow: row, ...sep }}>
                 <span className="adv-heading text-[13px] font-bold leading-tight sm:text-sm" style={{ color: INK }}>{label}</span>
               </div>
-              <div className="flex items-center justify-center px-2.5 py-2.5 text-center" style={{ gridColumn: 2, gridRow: row, zIndex: 10 }}>
+              <div className="flex items-center justify-center px-2.5 py-2.5 text-center" style={{ gridColumn: 2, gridRow: row, zIndex: 10, ...sep }}>
                 <span className="text-[11px] font-semibold leading-snug sm:text-[13px]" style={{ color: INK }}>{us}</span>
               </div>
               <div className="flex items-center justify-center px-1 py-2.5 text-center" style={{ gridColumn: 3, gridRow: row, ...sep }}>
@@ -231,37 +231,37 @@ type Reason = {
 
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Most chews are mostly filler (check the back of the packet)",
-    bold: "to bind it into a soft chew that's easy to sell, not to help your dog",
-    body: "Glycerine, starches, grains, oils and fats. Flip a typical probiotic chew over and that's most of what you're paying for. It's there to bind it into a soft chew that's easy to sell, not to help your dog.",
+    n: 1, title: "Most chews are mostly filler (check the back of the tub)",
+    bold: "you have been buying cheap padding and calling it a supplement",
+    body: "Glycerine. Starches. Grains. Oils and fats. Turn a typical probiotic chew over and read it properly, because most of what you handed your money for is cheap filler. It is in there to bind a soft chew that sells, not to help your dog. Put bluntly, you have been buying cheap padding and calling it a supplement.",
     img: "/lp/chew-squish.jpg", imgAlt: "A soft filler-bound probiotic chew squished apart between two fingers", imgCaption: "A soft chew is mostly binders and fillers. Read the label.",
     proof: "“I had my boy on the baked chews before these. These are another level completely, what a difference they've made.” · Tanya S.",
   },
   {
     n: 2, title: "The probiotics are an afterthought",
-    bold: "a tiny dose of one generic strain, buried under the fillers",
-    body: "Once you strip out the glycerine and starch, what's left? Usually a tiny dose of one generic strain, buried under the fillers. Barely enough to matter, nowhere near enough to shift a real gut problem.",
+    bold: "It was never going to fix your dog",
+    body: "Strip out the glycerine and the starch and what is actually left? A pinch of one generic strain, buried at the very bottom of the list. It was never going to fix your dog. No wonder nothing changed. No wonder the money kept walking out the door month after month.",
     img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
     n: 3, title: "Baking kills what little bacteria they add",
-    bold: "heat and moisture kill most of the cultures",
-    body: "Chews are baked. Heat and moisture kill most of the cultures before the tub even reaches you. So you're paying for fillers, plus a dose of bacteria that's half dead on arrival.",
+    bold: "you paid full price for fillers and a scoop of dead bacteria",
+    body: "Then they bake them. Heat and moisture wipe out most of the cultures long before the tub lands on your doorstep. So you paid full price for fillers and a scoop of dead bacteria. That is the quiet truth the front of the packet will never tell you.",
     img: "/lp/moist-chews-wet.jpg", imgAlt: "A soft, moist probiotic chew, damp to the touch", imgCaption: "Baked and moist. The heat kills the cultures before the tub reaches you.",
     proof: "“Saw the advert saying non-baked is better. Two and a half weeks on these and the difference is already massive.” · Katie S.",
   },
   {
     n: 4, title: "So we built 5 Strain Probiotic+ completely differently",
     bold: "20× more good bacteria than standard dog probiotics",
-    body: "No binders, no fillers, no grains. Just a pure powder you twist open and sprinkle over dinner. That is how we pack in 20× more good bacteria than standard dog probiotics, and get them to the gut alive.",
+    body: "We were angry at what passes for a dog probiotic, so we built the exact opposite. No binders, no fillers, no grains. Just a pure powder you twist open and sprinkle over dinner. That is how we pack in 20× more good bacteria than standard dog probiotics, and get them to the gut alive, where they can finally do something.",
     img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the pure powder over a bowl of food", imgCaption: "A pure powder. Nothing but the good stuff.",
     proof: "“A real success for our pug Rolo. His skin isn't itchy, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
     n: 5, title: "The itchy skin and paw licking calm down at the source",
-    bold: "70% of the immune system lives in the gut",
-    body: "Itchy skin, endless scratching and paw licking are usually one allergic flare, not just the skin. 70% of the immune system lives in the gut, so settle the gut and the itch eases. Drag the slider:",
+    bold: "it starts in the gut, where 70% of the immune system lives",
+    body: "You know the sound. The 3am licking. The scratching that never stops. The raw pink skin you have tried everything to soothe and nothing holds. It is usually one allergic flare, and it starts in the gut, where 70% of the immune system lives. Settle the gut and the itch finally eases. Drag the slider:",
     slider: true, before: "/lp/paw-before.jpg", after: "/lp/paw-after.jpg",
     beforeAlt: "A dog's paw before, pink, sore and saliva-stained from licking", afterAlt: "The same paw after, calm skin with the fur grown back",
     afterLabel: "AFTER", caption: "a real customer's paw, before and after the switch",
@@ -269,8 +269,8 @@ const REASONS: Reason[] = [
   },
   {
     n: 6, title: "Cleaner, calmer ears, without another vet bill",
-    bold: "A calmer gut helps keep both in check",
-    body: "Gunky ears are usually the same allergy-and-yeast flare. A calmer gut helps keep both in check. Drag the slider:",
+    bold: "more money thrown at a problem that keeps coming back",
+    body: "Gunky, smelly ears are the same flare showing up somewhere else. And it turns into more drops, more vet bills, more money thrown at a problem that keeps coming back. A calmer gut helps keep it in check for good. Drag the slider:",
     slider: true, before: "/lp/ear-before-c.jpg", after: "/lp/ear-after-c.jpg",
     beforeAlt: "Dog's ear before, gunky and inflamed", afterAlt: "Dog's ear after, clean and calm",
     afterLabel: "AFTER · 3 WEEKS", caption: "Murphy's ear, before and after (real customer photo)",
@@ -278,27 +278,27 @@ const REASONS: Reason[] = [
   },
   {
     n: 7, title: "Real digestive support the chews leave out",
-    bold: "a 6-enzyme complex and a chicory-root prebiotic",
-    body: "We add a 6-enzyme complex and a chicory-root prebiotic (250mg). The enzymes unlock every nutrient in the bowl, the prebiotic feeds the good bacteria once they arrive. Filler chews have neither.",
+    bold: "Filler chews give you neither",
+    body: "We add a 6-enzyme complex and a chicory-root prebiotic (250mg). The enzymes unlock every nutrient in their bowl, the prebiotic feeds the good bacteria once they land. Filler chews give you neither, because neither one leaves room for the cheap padding they would rather sell you.",
     proof: "“No longer scooting or eating grass, her eyes are clearer, she's full of energy again.” · Elaine C.",
   },
   {
     n: 8, title: "No fillers to pay for, so it costs 54% less per serving",
     bold: "54% less per serving",
-    body: "You aren't paying to turn powder into a chew. Cut out the fillers and the extra manufacturing and the maths changes. 5 Strain Probiotic+ works out 54% less per serving than a typical chew, even though it's far stronger.",
+    body: "Here is the part that really stings. You have been paying a premium to turn cheap powder into a pretty chew. Take that away and 5 Strain Probiotic+ works out 54% less per serving than a typical chew, and it is far stronger. Better for your dog, and it stops quietly draining your bank account.",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
   },
   {
     n: 9, title: "The most advanced formula on the market",
-    bold: "UK vets, canine nutritionists and the latest veterinary research",
-    body: "We're obsessed with helping dogs, so we built this with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, made in a human-supplement factory here in the UK.",
+    bold: "This is what you hoped you were buying all along",
+    body: "We are obsessed with getting this right, so we built it with UK vets, canine nutritionists and the latest veterinary research. 5 clinically-backed strains, a chicory-root prebiotic and a 6-enzyme complex, made in a human-supplement factory here in the UK. This is what you hoped you were buying all along.",
     img: "/lp/vet-kishan.jpg", imgAlt: "Dr Kishan Vara MRCVS in his veterinary clinic",
     proof: "“A genuinely proactive choice for dogs with sensitive stomachs, inflamed ears or recurring upset.” · Dr Kishan Vara, MRCVS",
   },
   {
-    n: 10, title: "51% to rescue, and we take the risk for you",
-    bold: "try it 90 days, and if you see no difference, we give you every penny back",
-    body: "More than half of every order goes to rescues like Soi Dog, Jerry Green Dogs and the RSPCA. And we're so sure it helps that we take the risk for you: try it 90 days, and if you see no difference, we give you every penny back.",
+    n: 10, title: "51% to rescue, and we take all the risk",
+    bold: "51% of our profits goes to dog rescues",
+    body: "Here is the part that feels good. 51% of our profits goes to dog rescues like Soi Dog, Jerry Green Dogs and the RSPCA. So you help your own dog and thousands of forgotten ones at the same time. And because we have seen what this does, we take all the risk: try it for 90 days, and if you see no change, we give you every penny back.",
     img: "/lp/ugc-grid.jpg", imgAlt: "A grid of real customer dogs with 5 Strain Probiotic+",
     proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
   },
@@ -389,7 +389,7 @@ export default function TenReasonsFillerAdvertorial() {
 
       {/* TLDR */}
       <p className="mx-auto mt-8 max-w-2xl px-6 text-center text-[15px] font-semibold leading-relaxed" style={{ color: INK }}>
-        <span style={{ color: ORANGE }}>TLDR:</span> Once you read the back of the packet, you can't unsee it. Most chews are mostly filler, and the probiotics are an afterthought. Here are 10 reasons owners are switching to a pure powder.
+        <span style={{ color: ORANGE }}>TLDR:</span> Read the back of the tub and you'll see. Probiotic chews are full of fillers and nasties, with the actual probiotics as an afterthought.
       </p>
 
       {/* early CTA */}
@@ -466,7 +466,7 @@ export default function TenReasonsFillerAdvertorial() {
 
       {/* cost-of-inaction + mid CTA */}
       <p className="mx-auto mt-12 max-w-2xl px-6 text-center text-[17px] font-bold leading-snug" style={{ color: INK }}>
-        Every week you wait is another week they're licking and scratching. The sooner they start, the sooner they settle.
+        Every week you wait is another week they suffer, and more money handed to a chew that was never going to work. The sooner they start, the sooner they settle.
       </p>
       <div className="mx-auto mt-5 max-w-2xl px-6"><Cta label="GET THEM STARTED TODAY →" where="mid-cta" /></div>
 
