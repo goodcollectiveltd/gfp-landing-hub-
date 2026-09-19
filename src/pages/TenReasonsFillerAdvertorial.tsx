@@ -21,7 +21,12 @@ const PAGE_BG = "#FFFFFF";
 const PRODUCT_URL = "https://goodforpets.co/products/5-strain-probiotic";
 
 function goToProduct(placement: string) {
+  // Custom event, for granular per-placement analysis in PostHog.
   track("CTAClick", { placement, content_ids: ["5-strain-probiotic"], content_type: "product" });
+  // Meta STANDARD funnel event, so the pixel records checkout intent from this landing page.
+  // The Purchase itself fires on the Shopify thank-you page (off this domain); withAttribution
+  // below forwards the click ids + _fbp/_fbc so Meta and WeTracked attribute that sale back here.
+  track("InitiateCheckout", { placement, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: 1 });
   window.location.href = withAttribution(PRODUCT_URL);
 }
 
