@@ -226,6 +226,7 @@ function ComparisonGrid() {
 type Reason = {
   n: number; title: string; body: string; bold?: string; proof?: string;
   img?: string; imgAlt?: string; imgCaption?: string;
+  video?: string;
   slider?: boolean; before?: string; after?: string; beforeAlt?: string; afterAlt?: string; afterLabel?: string; caption?: string;
 };
 
@@ -241,6 +242,7 @@ const REASONS: Reason[] = [
     n: 2, title: "It calms the itchy, flaky skin at the source",
     bold: "70% of the immune system lives",
     body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a filler chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
+    video: "/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4",
     proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
   {
@@ -262,29 +264,30 @@ const REASONS: Reason[] = [
     proof: "“My bulldog licked her paws raw for two and a half years. I tried everything. Three weeks on these and no paw licking at all.” · Chris B.",
   },
   {
-    n: 5, title: "It settles sensitive stomachs and firms up stools",
+    n: 5, title: "It settles sensitive stomachs and stops the scooting",
     bold: "a 6-enzyme complex and a prebiotic that chews leave out",
-    body: "Loose stools, wind, the bowl they turn their nose up at. Because it is pure powder with no cheap fillers bulking it out, we had room to add a 6-enzyme complex and a prebiotic that chews leave out. The enzymes unlock every nutrient in their bowl, the prebiotic feeds the good bacteria once they land.",
-    proof: "“Gave them to my Pom for her tummy upsets and she's had nothing since. It's been a year.” · Sherry B.",
-  },
-  {
-    n: 6, title: "Less scooting and fewer gland problems",
-    bold: "firmer stools mean the glands empty naturally",
-    body: "The scooting across the carpet, the repeat trips to have the glands squeezed. A balanced gut firms up the stools, and firmer stools mean the glands empty naturally the way they should. One more thing that quietly stops draining your evenings and your wallet.",
+    body: "Loose stools, wind, scooting across the carpet, the trips to have the glands squeezed. It nearly always comes back to the gut. Because it is pure powder with no fillers bulking it out, we had room to add a 6-enzyme complex and a prebiotic that chews leave out. Firmer stools, a settled tummy, glands that empty on their own.",
+    video: "/lp/videos/10reasons-3b93f94382094d12bf0d634486fb2f67.mp4",
     proof: "“No longer scooting or eating grass, her eyes are clearer, and she's full of energy again.” · Elaine C.",
   },
   {
-    n: 7, title: "Just pure, human-grade powder. 20× stronger",
+    n: 6, title: "Just pure, human-grade powder. 20× stronger",
     bold: "20× more good bacteria than a standard chew",
-    body: "Ours is the exact opposite of a filler chew. No glycerine, no starch, no grains, no nasties. Just a pure powder you twist open over dinner, five clinically-backed strains packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed. Nothing your dog does not need, made to human-supplement standard here in the UK.",
-    img: "/lp/sprinkle-lifestyle.jpg", imgAlt: "Sprinkling the pure powder over a bowl of food", imgCaption: "A pure powder. Nothing but the good stuff.",
+    body: "Ours is the exact opposite of a filler chew. No glycerine, no starch, no grains, no nasties. Just a pure powder you twist open over dinner, five clinically-backed strains packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed. Made to human-supplement standard here in the UK.",
+    video: "/lp/videos/10reasons-d90dc50c28864baaae8f775a0c7b140e.mp4",
     proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
   },
   {
-    n: 8, title: "It costs 54% less per serving than a chew",
+    n: 7, title: "It costs 54% less per serving than a chew",
     bold: "54% less per serving",
     body: "Here is the part that really stings. You have been paying a premium to turn cheap powder into a pretty, filler-bound chew. Take the fillers away and 5 Strain Probiotic+ works out 54% less per serving than a typical chew, and it is far stronger. Better for your dog, and it stops quietly draining your bank account.",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
+  },
+  {
+    n: 8, title: "It sprinkles over any food in seconds",
+    bold: "no pills to hide, no chews spat on the floor",
+    body: "No pills to hide, no chews spat on the floor. Twist one open, sprinkle the powder over dinner, done. Even the fussiest dogs eat it without noticing, because it is fine powder and not a lump they can pick out.",
+    video: "/lp/videos/10reasons-988e548931e14d5cb4b2085b692e72a5.mp4",
   },
   {
     n: 9, title: "Built with UK vets, not a marketing team",
@@ -405,9 +408,13 @@ export default function TenReasonsFillerAdvertorial() {
                 <div className="mt-4">
                   <BeforeAfter before={r.before!} after={r.after!} beforeAlt={r.beforeAlt!} afterAlt={r.afterAlt!} afterLabel={r.afterLabel} caption={r.caption!} />
                 </div>
+              ) : r.video ? (
+                <div className="mt-4">
+                  <video src={r.video} className="aspect-square w-full rounded-2xl object-cover shadow-sm" muted loop playsInline autoPlay controls preload="metadata" />
+                </div>
               ) : r.img ? (
                 <div className="relative mt-4">
-                  <img src={r.img} alt={r.imgAlt} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm" />
+                  <img src={r.img} alt={r.imgAlt} className="aspect-square w-full rounded-2xl object-cover shadow-sm" />
                   {r.imgCaption && <span className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white">{r.imgCaption}</span>}
                 </div>
               ) : null}
@@ -428,7 +435,7 @@ export default function TenReasonsFillerAdvertorial() {
             )}
 
             {/* pure-powder stat cards after the value reason */}
-            {r.n === 8 && (
+            {r.n === 7 && (
               <div className="!mt-8 grid grid-cols-3 gap-2.5 text-center text-white">
                 {[["20×", "more good bacteria"], ["100%", "pure powder, no fillers"], ["54%", "cheaper per serving"]].map(([v, l]) => (
                   <div key={l} className="rounded-2xl px-2 py-4" style={{ background: NAVY }}>
