@@ -184,9 +184,7 @@ function ComparisonGrid() {
             below does not push auto-placed cells out of column 2 */}
         <div style={{ gridColumn: 1, gridRow: 1 }} />
         <div className="flex items-center justify-center px-1 pb-3" style={{ gridColumn: 2, gridRow: 1 }}>
-          <span className="adv-display inline-block rounded-xl px-2.5 py-2 text-center text-xs leading-tight text-white shadow-sm sm:text-sm" style={{ background: ORANGE }}>
-            5 Strain<br />Probiotic+
-          </span>
+          <img src="/lp/logo-brand.png" alt="Good For Pets" className="h-6 w-auto sm:h-8" />
         </div>
         <div className="flex items-center justify-center px-1 pb-3" style={{ gridColumn: 3, gridRow: 1 }}>
           <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Filler Chews</span>
