@@ -185,10 +185,10 @@ function ComparisonGrid() {
             below does not push auto-placed cells out of column 2. Extra top padding
             on the highlighted column so the logo sits inside the frame, not on it. */}
         <div style={{ gridColumn: 1, gridRow: 1 }} />
-        <div className="flex items-center justify-center px-2 pb-4 pt-5" style={{ gridColumn: 2, gridRow: 1 }}>
+        <div className="flex items-center justify-center px-2 pb-1.5 pt-4" style={{ gridColumn: 2, gridRow: 1 }}>
           <img src="/lp/logo-brand.png" alt="Good For Pets" className="h-6 w-auto sm:h-8" />
         </div>
-        <div className="flex items-center justify-center px-1 pb-4 pt-5" style={{ gridColumn: 3, gridRow: 1 }}>
+        <div className="flex items-center justify-center px-1 pb-1.5 pt-4" style={{ gridColumn: 3, gridRow: 1 }}>
           <span className="adv-heading text-xs font-bold sm:text-sm" style={{ color: MUTE }}>Probiotic Chews</span>
         </div>
 
@@ -199,13 +199,13 @@ function ComparisonGrid() {
           const sep = i > 0 ? { borderTop: "1px solid rgba(0,0,0,0.08)" } : undefined;
           return (
             <Fragment key={label}>
-              <div className="flex items-center py-4 pr-3" style={{ gridColumn: 1, gridRow: row, ...sep }}>
+              <div className="flex items-center py-2.5 pr-3" style={{ gridColumn: 1, gridRow: row, ...sep }}>
                 <span className="adv-heading text-[13px] font-bold leading-tight sm:text-sm" style={{ color: INK }}>{label}</span>
               </div>
-              <div className="flex items-center justify-center px-2.5 py-4 text-center" style={{ gridColumn: 2, gridRow: row }}>
+              <div className="flex items-center justify-center px-2.5 py-2.5 text-center" style={{ gridColumn: 2, gridRow: row }}>
                 <span className="text-[11px] font-semibold leading-snug sm:text-[13px]" style={{ color: INK }}>{us}</span>
               </div>
-              <div className="flex items-center justify-center px-1 py-4 text-center" style={{ gridColumn: 3, gridRow: row, ...sep }}>
+              <div className="flex items-center justify-center px-1 py-2.5 text-center" style={{ gridColumn: 3, gridRow: row, ...sep }}>
                 <span className="text-[11px] leading-snug sm:text-[13px]" style={{ color: MUTE }}>{them}</span>
               </div>
             </Fragment>
