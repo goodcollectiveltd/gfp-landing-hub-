@@ -63,7 +63,7 @@ export default function App() {
       <Route path="/p/8-reasons" element={<EightReasonsAdvertorial />} />
       <Route path="/p/5-reasons" element={<FiveReasonsAllergyAdvertorial />} />
       <Route path="/p/check-the-packet" element={<CheckThePacketAdvertorial />} />
-      <Route path="/p/10-reasons" element={<TenReasonsFillerAdvertorial />} />
+      <Route path="/p/checkthelabel" element={<TenReasonsFillerAdvertorial />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />
