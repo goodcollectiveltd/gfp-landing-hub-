@@ -250,7 +250,7 @@ const REASONS: Reason[] = [
   {
     n: 3, title: "It calms the itchy, flaky skin at the source",
     bold: "70% of the immune system lives",
-    body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a filler chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
+    body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
     video: "/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4",
     proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",
   },
@@ -273,14 +273,14 @@ const REASONS: Reason[] = [
   {
     n: 6, title: "Just pure, human-grade powder. 20× stronger",
     bold: "20× more good bacteria than a standard chew",
-    body: "Ours is the exact opposite of a filler chew. No glycerine, no starch, no grains, no nasties. Just a pure powder you twist open over dinner, five clinically-backed strains packing 20× more good bacteria than a standard chew, delivered alive to where they are actually needed. Made to human-supplement standard here in the UK.",
+    body: "Ours is the opposite of a chew. No glycerine, no starch, no grains. Just a pure powder you sprinkle over dinner, with 20× more good bacteria than a standard chew, delivered alive. Made to human-supplement standard here in the UK.",
     video: "/lp/videos/10reasons-d90dc50c28864baaae8f775a0c7b140e.mp4",
     proof: "“Two years of vets not solving it, and within weeks his skin cleared. It ain't no scam.” · Dawn L.",
   },
   {
     n: 7, title: "It costs 54% less per serving than a chew",
     bold: "54% less per serving",
-    body: "Here is the part that really stings. You have been paying a premium to turn cheap powder into a pretty, filler-bound chew. Take the fillers away and 5 Strain Probiotic+ works out 54% less per serving than a typical chew, and it is far stronger. Better for your dog, and it stops quietly draining your bank account.",
+    body: "Here is the part that stings. You have been paying more to turn cheap powder into a pretty chew. Cut the fillers and 5 Strain Probiotic+ costs 54% less per serving than a typical chew, and it is stronger. Better for your dog, easier on your wallet.",
     proof: "“The vet was £140 every two weeks, this is £33 and lasts two months.” · Chris B.",
   },
   {
