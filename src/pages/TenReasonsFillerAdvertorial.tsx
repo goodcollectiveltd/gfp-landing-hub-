@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
 
 // "10 REASONS" FILLER-EXPOSE LISTICLE, 5 Strain Probiotic+. Route /p/10-reasons.
@@ -125,11 +126,27 @@ function BeforeAfter({ before, after, beforeAlt, afterAlt, afterLabel = "AFTER",
   );
 }
 
-function withBold(text: string, phrase?: string) {
-  if (!phrase) return text;
-  const i = text.indexOf(phrase);
-  if (i < 0) return text;
-  return (<>{text.slice(0, i)}<b style={{ color: INK }}>{phrase}</b>{text.slice(i + phrase.length)}</>);
+function withBold(text: string, phrase?: string | string[]): ReactNode {
+  const phrases = !phrase ? [] : Array.isArray(phrase) ? phrase : [phrase];
+  if (!phrases.length) return text;
+  let parts: ReactNode[] = [text];
+  phrases.forEach((ph) => {
+    const next: ReactNode[] = [];
+    parts.forEach((node) => {
+      if (typeof node !== "string") { next.push(node); return; }
+      let rest = node;
+      let idx = rest.indexOf(ph);
+      while (idx >= 0) {
+        if (idx > 0) next.push(rest.slice(0, idx));
+        next.push(<b style={{ color: INK }}>{ph}</b>);
+        rest = rest.slice(idx + ph.length);
+        idx = rest.indexOf(ph);
+      }
+      if (rest) next.push(rest);
+    });
+    parts = next;
+  });
+  return parts.map((n, i) => <span key={i}>{n}</span>);
 }
 
 function Accordion({ q, a }: { q: string; a: string }) {
@@ -229,7 +246,7 @@ function ComparisonGrid() {
 /* ---------- content ---------- */
 
 type Reason = {
-  n: number; title: string; body: string; bold?: string; proof?: string;
+  n: number; title: string; body: string; bold?: string | string[]; proof?: string;
   img?: string; imgAlt?: string; imgCaption?: string;
   video?: string;
   slider?: boolean; before?: string; after?: string; beforeAlt?: string; afterAlt?: string; afterLabel?: string; caption?: string;
@@ -238,7 +255,7 @@ type Reason = {
 const REASONS: Reason[] = [
   {
     n: 1, title: "Chews are full of nasties (just read the label)",
-    bold: "We changed that.",
+    bold: ["thrown in as an afterthought", "We changed that.", "Pure, human-grade powder"],
     body: "Glycerine, starches, grains, oils, fats. That is what most probiotic chews are really made of, with the actual probiotics thrown in as an afterthought. We changed that. Pure, human-grade powder. Nothing to hide, and nothing your dog does not need.",
     img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
@@ -254,7 +271,7 @@ const REASONS: Reason[] = [
   },
   {
     n: 3, title: "It calms the itchy, flaky skin at the source",
-    bold: "70% of the immune system lives",
+    bold: ["70% of the immune system lives", "20× more live bacteria"],
     body: "The scratching. The flaky, red skin no cream ever fixes. That itch usually starts in the gut, where 70% of the immune system lives. Ours is pure powder, not a chew, so it sends 20× more live bacteria to the gut, where the itch begins.",
     video: "/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4",
     proof: "“His skin isn't itchy anymore, his coat looks amazing and he's far more comfortable.” · Caroline L.",

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
 import { BUYBOX_HTML } from "@/data/fiveReasonsBuyBox";
 
@@ -91,6 +91,29 @@ function Accordion({ q, a }: { q: string; a: string }) {
   );
 }
 
+// Bold every occurrence of each key phrase in a line (for scannability).
+function boldify(text: string, phrases?: string[]): ReactNode {
+  if (!phrases?.length) return text;
+  let parts: ReactNode[] = [text];
+  phrases.forEach((ph) => {
+    const next: ReactNode[] = [];
+    parts.forEach((node) => {
+      if (typeof node !== "string") { next.push(node); return; }
+      let rest = node;
+      let idx = rest.indexOf(ph);
+      while (idx >= 0) {
+        if (idx > 0) next.push(rest.slice(0, idx));
+        next.push(<strong className="font-semibold" style={{ color: INK }}>{ph}</strong>);
+        rest = rest.slice(idx + ph.length);
+        idx = rest.indexOf(ph);
+      }
+      if (rest) next.push(rest);
+    });
+    parts = next;
+  });
+  return parts.map((n, i) => <span key={i}>{n}</span>);
+}
+
 /* ---------- data ---------- */
 
 const REASONS = [
@@ -100,6 +123,7 @@ const REASONS = [
       "Thousands of owners report less paw licking, calmer skin and firmer poos after using the 5 Strain Probiotic+.",
       "In a recent survey 93% of customers said our 5 Strain Probiotic+ to helped with skin issues.",
     ],
+    bold: ["less paw licking, calmer skin and firmer poos", "93% of customers"],
     img: A + "replo-d83ca05c.jpg",
   },
   {
@@ -108,6 +132,7 @@ const REASONS = [
       "The 5 Strain Probiotic+ helps end relentless paw licking by supporting the root causes: the gut microbiome, immune system and yeast balance.",
       "It helps itchy paws, inflamed paws and even smelly paws.",
     ],
+    bold: ["end relentless paw licking", "the gut microbiome, immune system and yeast balance"],
     cta: "END THE LICK FROM WITHIN 👉",
     video: "/lp/videos/10reasons-1432d7b21f7c43229918508ca5d5f1db.mp4",
   },
@@ -117,6 +142,7 @@ const REASONS = [
       "The 5 Strain Probiotic+ is made in the same UK factory as human supplements. Containing only the purest active ingredients to help even the most sensitive of dogs.",
       "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO.",
     ],
+    bold: ["same UK factory as human supplements", "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO"],
     img: A + "replo-cab151e6.jpg",
   },
   {
@@ -126,6 +152,7 @@ const REASONS = [
       "All that ends with the 5 Strain Probiotic+, just add a daily dose to your dog's diet to see the benefits.",
       "Just 10 seconds a day is all it takes for a lifetime happy paws and skin.",
     ],
+    bold: ["small fortune at the vet", "just add a daily dose", "Just 10 seconds a day"],
     video: "/lp/videos/10reasons-988e548931e14d5cb4b2085b692e72a5.mp4",
   },
   {
@@ -136,6 +163,7 @@ const REASONS = [
       "So we offer a 100% money back guarantee.",
       "If after 90 days you don't feel they have helped, just let us know, and we'll give you a full refund.",
     ],
+    bold: ["100% money back guarantee", "full refund"],
   },
 ];
 
@@ -265,7 +293,7 @@ export default function FiveReasonsPawsAdvertorial() {
             {r.img && <img src={r.img} alt="" className="mt-4 aspect-square w-full rounded-2xl object-cover" />}
             {r.video && <video src={r.video} className="mt-4 aspect-square w-full rounded-2xl object-cover" muted loop playsInline autoPlay controls preload="metadata" />}
             <div className="mt-4 space-y-3">
-              {r.lines.map((l, i) => <p key={i} className="text-[17px] leading-[1.7]" style={{ color: "#2A2A2A" }}>{l}</p>)}
+              {r.lines.map((l, i) => <p key={i} className="text-[17px] leading-[1.7]" style={{ color: "#2A2A2A" }}>{boldify(l, r.bold)}</p>)}
             </div>
             {r.cta && <div className="mt-6"><Cta label={r.cta} onClick={() => scrollToBuybox(`reason-${r.n}-cta`)} /></div>}
 
