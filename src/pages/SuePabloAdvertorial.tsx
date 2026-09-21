@@ -391,8 +391,8 @@ export default function SuePabloAdvertorial() {
       {/* hero: Sue's personal, native story about Pablo */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
         <div className="flex items-center gap-2.5">
-          <img src="/lp/pablo-night.jpg" alt="Pablo, an apricot cockapoo" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "50% 42%" }} />
-          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · Pablo's mum · Updated today</p>
+          <img src="/lp/sue.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 22%" }} />
+          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · dog mum of three · Updated today</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
@@ -400,7 +400,7 @@ export default function SuePabloAdvertorial() {
         <img src="/lp/pablo-sofa.jpg" alt="Sue and Pablo on the sofa" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 42%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my apricot cockapoo. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue, and this cheeky boy is Pablo, my apricot cockapoo. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
+          <p>I'm Sue, and I've got a houseful of dogs. This cheeky boy is Pablo, one of mine, an apricot cockapoo, and he's the one this story is about. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
           <p>We tried everything. The sprays, the wipes, the vinegar soaks, the pricey baked chews, more vet trips than I care to count. Nothing ever lasted more than a week or two.</p>
           <p>Then one evening a friend asked me something that stuck: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And honestly, I couldn't believe what was in them.</p>
           <p>I switched Pablo onto a pure powder instead, and within a few weeks the licking just stopped. So here are the 10 things I worked out along the way, in case your dog is anything like Pablo.</p>
