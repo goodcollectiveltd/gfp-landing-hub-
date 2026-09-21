@@ -9,6 +9,7 @@ import EightReasonsAdvertorial from "@/pages/EightReasonsAdvertorial";
 import FiveReasonsAllergyAdvertorial from "@/pages/FiveReasonsAllergyAdvertorial";
 import CheckThePacketAdvertorial from "@/pages/CheckThePacketAdvertorial";
 import TenReasonsFillerAdvertorial from "@/pages/TenReasonsFillerAdvertorial";
+import FiveReasonsPawsAdvertorial from "@/pages/FiveReasonsPawsAdvertorial";
 import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -64,6 +65,7 @@ export default function App() {
       <Route path="/p/5-reasons" element={<FiveReasonsAllergyAdvertorial />} />
       <Route path="/p/check-the-packet" element={<CheckThePacketAdvertorial />} />
       <Route path="/p/checkthelabel" element={<TenReasonsFillerAdvertorial />} />
+      <Route path="/p/5reasons" element={<FiveReasonsPawsAdvertorial />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />
