@@ -60,7 +60,7 @@ function CircleCheck({ color = INK }: { color?: string }) {
 
 function Cta({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="mul w-full rounded-full px-6 py-[18px] text-center text-[16px] font-extrabold uppercase tracking-[0.03em] text-white shadow-[0_6px_16px_rgba(239,22,18,0.28)] transition-transform hover:scale-[1.01]" style={{ background: RED }}>
+    <button onClick={onClick} className="mul w-full rounded-full px-6 py-[17px] text-center text-[15px] font-bold uppercase tracking-[0.06em] text-white shadow-[0_5px_14px_rgba(239,22,18,0.25)] transition-transform hover:scale-[1.01]" style={{ background: RED }}>
       {label}
     </button>
   );
@@ -72,7 +72,7 @@ function ReviewCard({ img, quote, name }: { img: string; quote: string; name: st
       <img src={img} alt="" className="mx-auto h-40 w-40 rounded-full object-cover" />
       <div className="mt-3 text-center"><Stars size={22} /></div>
       <blockquote className="mt-4 whitespace-pre-line text-[17px] leading-relaxed" style={{ color: BLACK }}>{quote}</blockquote>
-      <p className="mul mt-5 text-center text-[17px] font-extrabold" style={{ color: INK }}>{name}</p>
+      <p className="mul mt-5 text-center text-[16px] font-semibold" style={{ color: INK }}>{name}</p>
       <p className="mt-1 text-center text-[15px] font-semibold" style={{ color: GREEN }}>Verified Buyer</p>
     </div>
   );
@@ -228,7 +228,7 @@ export default function FiveReasonsPawsAdvertorial() {
       <style>{`
         .mul{font-family:'Poppins',system-ui,sans-serif}
         .gfp-bb-host .gfp-bb__cta.push-btn{display:block;width:100%;border:none;background:transparent;padding:0;cursor:pointer}
-        .gfp-bb-host .push-btn__surface{display:flex;align-items:center;justify-content:center;gap:.25rem;width:100%;background:var(--gfp-bb-accent);color:var(--gfp-bb-accent-contrast);border-radius:999px;font-family:var(--heading-font-stack);font-weight:800;line-height:1.15;box-shadow:0 6px 16px rgba(239,22,18,.28)}
+        .gfp-bb-host .push-btn__surface{display:flex;align-items:center;justify-content:center;gap:.35rem;width:100%;background:var(--gfp-bb-accent);color:var(--gfp-bb-accent-contrast);border-radius:999px;font-family:var(--heading-font-stack);font-weight:700;line-height:1.15;box-shadow:0 5px 14px rgba(239,22,18,.25)}
       `}</style>
 
       {/* header */}
@@ -245,15 +245,15 @@ export default function FiveReasonsPawsAdvertorial() {
       <img src={A + "replo-fa7ce357.jpg"} alt="Formulated with Dr Kishan Vara MRCVS" className="w-full object-cover" />
       <div className="mx-auto max-w-2xl px-5 pt-5">
         <p className="whitespace-nowrap text-left text-[11px] font-bold uppercase tracking-[0.1em]" style={{ color: MUTE }}>Formulated with Dr Kishan Vara MRCVS</p>
-        <h1 className="mul mt-3 text-[30px] font-extrabold leading-[1.12]" style={{ color: INK }}>
+        <h1 className="mul mt-3 text-[29px] font-bold leading-[1.1] tracking-[-0.02em]" style={{ color: INK }}>
           5 Reasons Dogs Who Won't Stop Licking Their Paws Are Turning to 5 Strain Probiotic+
         </h1>
         <p className="mt-4 text-[17px] leading-[1.6]" style={{ color: "#333" }}>
           The simple solution to itchy, yeasty, inflamed dogs for 21,374 dogs and counting.
         </p>
         <div className="mt-5"><Cta label="Save 45% + FREE SHIPPING" onClick={() => scrollToBuybox("hero-cta")} /></div>
-        <p className="mul mt-4 flex items-center justify-center gap-2 text-[16px] font-extrabold" style={{ color: INK }}>
-          <Stars size={18} /> Loved by 21,374 Dogs
+        <p className="mul mt-4 flex items-center justify-center gap-2 text-[15px] font-semibold" style={{ color: INK }}>
+          <Stars size={17} /> Loved by 21,374 Dogs
         </p>
       </div>
 
@@ -261,7 +261,7 @@ export default function FiveReasonsPawsAdvertorial() {
       <div className="mx-auto max-w-2xl px-5">
         {REASONS.map((r) => (
           <section key={r.n} className="mt-14">
-            <h2 className="mul text-[25px] font-extrabold uppercase leading-[1.12] tracking-[-0.01em] sm:text-[28px]" style={{ color: INK }}>{r.n}. {r.title}</h2>
+            <h2 className="mul text-[22px] font-bold uppercase leading-[1.2] tracking-[0.01em] sm:text-[25px]" style={{ color: INK }}>{r.n}. {r.title}</h2>
             {r.img && <img src={r.img} alt="" className="mt-4 aspect-square w-full rounded-2xl object-cover" />}
             {r.video && <video src={r.video} className="mt-4 aspect-square w-full rounded-2xl object-cover" muted loop playsInline autoPlay controls preload="metadata" />}
             <div className="mt-4 space-y-3">
@@ -292,9 +292,9 @@ export default function FiveReasonsPawsAdvertorial() {
         {/* rating + best seller */}
         <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span className="flex items-center gap-2"><Stars size={18} color={RED} /><span className="text-[14px] font-semibold" style={{ color: MUTE }}>20,000+ bought</span></span>
-          <span className="mul rounded-md px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white" style={{ background: RED }}>Best Seller</span>
+          <span className="mul rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white" style={{ background: RED }}>Best Seller</span>
         </div>
-        <h2 className="mul mt-2 text-[30px] font-extrabold leading-[1.05]" style={{ color: INK }}>5 Strain Probiotic+</h2>
+        <h2 className="mul mt-2 text-[27px] font-bold leading-[1.05] tracking-[-0.01em]" style={{ color: INK }}>5 Strain Probiotic+</h2>
 
         {/* PDP benefit bullets: text left, outline check right */}
         <ul className="mt-5">
@@ -310,7 +310,7 @@ export default function FiveReasonsPawsAdvertorial() {
 
       {/* REVIEWS */}
       <section className="mx-auto mt-16 max-w-2xl px-5">
-        <h2 className="mul text-center text-[28px] font-extrabold leading-tight sm:text-[32px]" style={{ color: INK }}>Reviews from real customers</h2>
+        <h2 className="mul text-center text-[25px] font-bold leading-[1.15] tracking-[-0.01em] sm:text-[29px]" style={{ color: INK }}>Reviews from real customers</h2>
         <p className="mt-3 text-center text-[16px]" style={{ color: MUTE }}>Over 20,000 dogs helped and 4,500+ reviews</p>
         <div className="mt-6"><ReviewCard img={REVIEWS[ri].img} quote={REVIEWS[ri].quote} name={REVIEWS[ri].name} /></div>
         <div className="mt-4 flex items-center justify-center gap-4">
@@ -323,7 +323,7 @@ export default function FiveReasonsPawsAdvertorial() {
 
       {/* FAQ */}
       <section className="mx-auto mt-16 max-w-2xl px-5">
-        <h2 className="mul text-center text-[28px] font-extrabold leading-tight sm:text-[32px]" style={{ color: INK }}>You asked. We answer.</h2>
+        <h2 className="mul text-center text-[25px] font-bold leading-[1.15] tracking-[-0.01em] sm:text-[29px]" style={{ color: INK }}>You asked. We answer.</h2>
         <p className="mt-3 text-center text-[16px]" style={{ color: MUTE }}>Everything You Need To Know</p>
         <div className="mt-6">{FAQS.map(([q, a]) => <Accordion key={q} q={q} a={a} />)}</div>
       </section>
