@@ -1,5 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
+import { BUYBOX_HTML } from "@/data/fiveReasonsBuyBox";
+
+const hostStyle = {
+  "--color-scheme-text": "19,19,21",
+  "--color-scheme-accent-1": "239,22,18",
+  "--color-scheme-accent-1-contrast": "255,255,255",
+  "--main-font-stack": "'Inter',system-ui,sans-serif",
+  "--heading-font-stack": "'Poppins',system-ui,sans-serif",
+  "--heading-font-weight": "700",
+} as CSSProperties;
 
 // Visual + word-for-word rebuild of the live goodforpets.co/pages/5reasons Replo page.
 // Route: /p/5reasons. Design tokens (Mulish + Inter, red #EF1612, white bg, full-bleed hero,
@@ -22,33 +33,7 @@ const STAR = "#F5A623";
 const CARD = "#F2F2F2";
 const A = "/lp/5reasons/";
 
-// Buy-box rules engine, ported verbatim from the live PDP (GFP-Theme assets/gfp-buy-box.js).
-// Real data pulled from the live product page's data-gfp-bb-data JSON: each tub tier is its own
-// Shopify variant; the subscription plan is chosen by supply-days = capsPerTub*qty / capsPerDay[size],
-// picking the closest plan cadence <= supply days.
-const BB = {
-  capsPerTub: 90,
-  capsPerDay: { small: 1, medium: 2, large: 3 } as Record<string, number>,
-  singlePrice: 4499, // RRP of one tub, in pence
-  tiers: [
-    { qty: 1, variantId: "57197308674392", title: "1 Tub", oncePrice: 4499, subFirstPrice: 3149 },
-    { qty: 2, variantId: "57197308707160", title: "2 Tubs", oncePrice: 7649, subFirstPrice: 5354 },
-    { qty: 3, variantId: "57197308739928", title: "3 Tubs", oncePrice: 10797, subFirstPrice: 7558 },
-  ],
-  plans: [
-    { id: "693194850648", days: 30 }, { id: "693194883416", days: 45 }, { id: "693194916184", days: 60 },
-    { id: "693194785112", days: 90 }, { id: "693275427160", days: 120 }, { id: "693275361624", days: 180 },
-    { id: "693275394392", days: 270 },
-  ],
-};
-const SIZES = [{ key: "small", name: "Small", sub: "Up to 25kg" }, { key: "medium", name: "Medium", sub: "25–40kg" }, { key: "large", name: "Large", sub: "Over 40kg" }];
 const PDP_BULLETS = ["Calms itchy skin & paw-licking", "Soothes gunky, irritated ears", "Firmer stools & stronger digestion"];
-
-function money(cents: number) { const v = cents / 100; return "£" + (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2)); }
-function supplyDays(qty: number, size: string) { return Math.round((BB.capsPerTub * qty) / BB.capsPerDay[size]); }
-function planFor(qty: number, size: string) { const d = supplyDays(qty, size); let fit = BB.plans[0]; for (const p of BB.plans) if (p.days <= d) fit = p; return fit; }
-function perDay(cents: number, qty: number, size: string) { return "£" + (cents / 100 / supplyDays(qty, size)).toFixed(2); }
-function savePct(eff: number, qty: number) { return Math.round((1 - eff / (BB.singlePrice * qty)) * 100 / 5) * 5; }
 
 /* ---------- shared ---------- */
 
@@ -64,28 +49,11 @@ function Stars({ size = 20, color = STAR }: { size?: number; color?: string }) {
   );
 }
 
-function RedCheck() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 16 16" className="shrink-0" aria-hidden>
-      <circle cx="8" cy="8" r="8" fill={RED} />
-      <path d="M4.5 8.2l2.2 2.2L11.5 5.6" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function CircleCheck({ color = INK }: { color?: string }) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.7" className="shrink-0" aria-hidden>
       <circle cx="12" cy="12" r="10" />
       <path d="M8 12.4l2.6 2.6L16 9.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function DogIcon({ h, color }: { h: number; color: string }) {
-  return (
-    <svg width={h * 1.15} height={h} viewBox="0 0 576 512" fill={color} aria-hidden>
-      <path d="M309.6 158.5 328 128h39.6c9.6 0 19 3 26.8 8.7L432 164.7l4.9-9.7c8.1-16.3 24.8-26.6 43-26.6H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H488l-.6 1.2c-2.4 4.9-5.4 9.4-8.7 13.6L478 421.2c0 26.5-21.5 48-48 48H400c-26.5 0-48-21.5-48-48V352H240v96c0 26.5-21.5 48-48 48H160c-26.5 0-48-21.5-48-48V279.6c-30-22.6-49.7-58-49.9-98.1L60.9 116.5C40.6 106.2 24.6 89 15.8 68.2L1.3 33.8C-2.1 25.6 1.7 16.2 9.8 12.8s17.6 .4 21 8.5L45.3 55.8c5.3 12.5 14.9 22.7 27.1 28.8L127.9 112h32.9l50.4-77.6c8.1-12.2 21.8-19.6 36.4-19.6c24.1 0 43.7 19.6 43.7 43.7v65.9l8.8-6.7c3.1-2.4 5.7-5.3 7.6-8.7z" />
     </svg>
   );
 }
@@ -178,9 +146,6 @@ const GALLERY = [
   "2ec90033-1292-4d55-821c-2a5bc8304ac9.jpg", "3d154570-9d16-4e6d-97ad-3a59c631a05f.jpg",
 ].map((f) => A + f);
 
-const BENEFITS = ["Soothes Paw Licking & Itchy Skin", "Helps Clear Gunky Ears", "Firmer Stools & Less Scooting", "Supports Healthy Yeast Balance"];
-
-const WHAT_TO_EXPECT = ["replo-af1fd2af.jpg", "replo-b927a7dc.jpg", "replo-cab151e6.jpg", "replo-1eb7dd54.jpg", "replo-c8459dde.jpg", "replo-b4648855.jpg"].map((f) => A + f);
 
 const REVIEWS = [
   { img: A + "replo-c923c442.jpg", name: "Katie S.", quote: "\"My dog was on the baked chews but saw the advert saying non-baked chews are better. She was still having itchy ears on the baked chews.\n\nTwo and a half weeks on these and the difference is already massive. Since I adopted her in 2018 I've spent so much on steroids, ear drops and ear cleaning at the vet.\n\nHer ears are now practically clean and there's no itching at all.\"" },
@@ -204,17 +169,14 @@ const FAQS: [string, string][] = [
 /* ---------- page ---------- */
 
 export default function FiveReasonsPawsAdvertorial() {
-  const [size, setSize] = useState("small");
-  const [tierQty, setTierQty] = useState(2);
-  const [sub, setSub] = useState(true);
   const [gi, setGi] = useState(0);
   const [ri, setRi] = useState(0);
-  const [tab, setTab] = useState(0);
+  const bbRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap";
+    link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap";
     document.head.appendChild(link);
     document.title = "5 Reasons Dogs Who Won't Stop Licking Their Paws Are Turning to 5 Strain Probiotic+";
     initTracking();
@@ -222,27 +184,52 @@ export default function FiveReasonsPawsAdvertorial() {
     return () => { document.head.removeChild(link); };
   }, []);
 
+  // Inject the live buy box markup, load its own CSS + JS (which fills prices/plans), and route
+  // the cross-domain form submit to the Shopify cart permalink (variant + selected selling plan).
+  useEffect(() => {
+    const host = bbRef.current;
+    if (!host) return;
+    host.innerHTML = BUYBOX_HTML;
+    if (!document.querySelector("link[data-gfp-bb-css]")) {
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "/lp/5reasons/bb/gfp-buy-box.css";
+      l.setAttribute("data-gfp-bb-css", "");
+      document.head.appendChild(l);
+    }
+    const form = host.querySelector("[data-gfp-bb-form]") as HTMLFormElement | null;
+    const onSubmit = (e: Event) => {
+      e.preventDefault();
+      const variant = (host.querySelector("[data-gfp-bb-variant-input]") as HTMLInputElement | null)?.value;
+      const planEl = host.querySelector("[data-gfp-bb-plan-input]") as HTMLInputElement | null;
+      const planId = planEl && !planEl.disabled ? planEl.value : "";
+      if (!variant) return;
+      const base = `https://goodforpets.co/cart/${variant}:1`;
+      const url = planId ? `${base}?selling_plan=${planId}` : base;
+      track("CTAClick", { placement: "buybox", content_ids: ["5-strain-probiotic"], content_type: "product" });
+      track("InitiateCheckout", { placement: "buybox", content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+" });
+      window.location.href = withAttribution(url);
+    };
+    form?.addEventListener("submit", onSubmit);
+    const s = document.createElement("script");
+    s.src = "/lp/5reasons/bb/gfp-buy-box.js";
+    s.async = true;
+    document.body.appendChild(s);
+    return () => { form?.removeEventListener("submit", onSubmit); try { document.body.removeChild(s); } catch { /* noop */ } };
+  }, []);
+
   function scrollToBuybox(where: string) {
     track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
     document.getElementById("buybox")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-  const tier = BB.tiers.find((t) => t.qty === tierQty)!;
-  const ctaCents = sub ? tier.subFirstPrice : tier.oncePrice;
-  const plan = sub ? planFor(tierQty, size) : null;
-
-  function addToCart(where: string) {
-    const base = `https://goodforpets.co/cart/${tier.variantId}:1`;
-    const url = plan ? `${base}?selling_plan=${plan.id}` : base;
-    track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
-    track("InitiateCheckout", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: tierQty, value: ctaCents / 100, currency: "GBP" });
-    window.location.href = withAttribution(url);
-  }
-
-  const TABS = ["Benefits", "Ingredients", "Directions & Dosage", "What to expect"];
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: BLACK }}>
-      <style>{`.mul{font-family:'Mulish',system-ui,sans-serif}`}</style>
+      <style>{`
+        .mul{font-family:'Poppins',system-ui,sans-serif}
+        .gfp-bb-host .gfp-bb__cta.push-btn{display:block;width:100%;border:none;background:transparent;padding:0;cursor:pointer}
+        .gfp-bb-host .push-btn__surface{display:flex;align-items:center;justify-content:center;gap:.25rem;width:100%;background:var(--gfp-bb-accent);color:var(--gfp-bb-accent-contrast);border-radius:999px;font-family:var(--heading-font-stack);font-weight:800;line-height:1.15;box-shadow:0 6px 16px rgba(239,22,18,.28)}
+      `}</style>
 
       {/* header */}
       <header className="flex items-center justify-between border-b border-black/10 px-5 py-4">
@@ -257,7 +244,7 @@ export default function FiveReasonsPawsAdvertorial() {
       {/* HERO */}
       <img src={A + "replo-fa7ce357.jpg"} alt="Formulated with Dr Kishan Vara MRCVS" className="w-full object-cover" />
       <div className="mx-auto max-w-2xl px-5 pt-5">
-        <p className="text-center text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: MUTE }}>Formulated with Dr Kishan Vara MRCVS</p>
+        <p className="whitespace-nowrap text-left text-[11px] font-bold uppercase tracking-[0.1em]" style={{ color: MUTE }}>Formulated with Dr Kishan Vara MRCVS</p>
         <h1 className="mul mt-3 text-[30px] font-extrabold leading-[1.12]" style={{ color: INK }}>
           5 Reasons Dogs Who Won't Stop Licking Their Paws Are Turning to 5 Strain Probiotic+
         </h1>
@@ -284,7 +271,7 @@ export default function FiveReasonsPawsAdvertorial() {
 
             {r.n === 1 && (
               <div className="mt-12">
-                <ReviewCard img={A + "replo-c3892abd.jpg"} quote={"\"My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked.\n\nSaw the advert, thought I'd give it a go. Within a week it started working and three weeks later there's no paw licking at all.\n\nThe vet was costing me £140 every two weeks. This is £33 and lasts two months. I don't work for these guys, I just wanted people to know.\""} name="Chris B." />
+                <ReviewCard img={A + "replo-c3892abd.jpg"} quote={"\"My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything, including the vet. Nothing worked.\n\nSaw the advert, gave it a go, and three weeks later there's no paw licking at all.\n\nThe vet was £140 every two weeks. This is £33 and lasts two months. I just wanted people to know.\""} name="Chris B." />
               </div>
             )}
           </section>
@@ -316,96 +303,9 @@ export default function FiveReasonsPawsAdvertorial() {
           ))}
         </ul>
 
-        {/* How big is your dog? */}
-        <h3 className="mul mt-7 text-[22px] font-extrabold" style={{ color: INK }}>How big is your dog?</h3>
-        <div className="mt-3 grid grid-cols-3 gap-3">
-          {SIZES.map((s) => {
-            const sel = size === s.key;
-            return (
-              <button key={s.key} onClick={() => setSize(s.key)} className="flex flex-col items-center justify-end rounded-2xl px-2 py-4 transition-colors"
-                style={{ border: `2px solid ${sel ? RED : "rgba(0,0,0,0.15)"}`, background: sel ? "#FEF3F2" : "#fff" }}>
-                <DogIcon h={s.key === "small" ? 28 : s.key === "medium" ? 36 : 44} color={sel ? RED : INK} />
-                <span className="mul mt-2 text-[17px] font-extrabold" style={{ color: sel ? RED : INK }}>{s.name}</span>
-                <span className="text-[12px]" style={{ color: MUTE }}>{s.sub}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* subscribe / one-time toggle */}
-        <div className="mt-5 grid grid-cols-2 gap-1 rounded-full border p-1" style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-          {([["Subscribe & Save", true], ["One-time", false]] as [string, boolean][]).map(([label, val]) => {
-            const sel = sub === val;
-            return (
-              <button key={label} onClick={() => setSub(val)} className="mul rounded-full py-2.5 text-center text-[16px] font-extrabold transition-colors"
-                style={sel ? { background: "#FEECEB", color: RED, boxShadow: `inset 0 0 0 2px ${RED}` } : { color: MUTE }}>{label}</button>
-            );
-          })}
-        </div>
-
-        {/* choose your supply */}
-        <h3 className="mul mt-7 text-[22px] font-extrabold" style={{ color: INK }}>Choose your supply</h3>
-        <div className="mt-4 space-y-4">
-          {BB.tiers.map((t) => {
-            const sel = tierQty === t.qty;
-            const price = sub ? t.subFirstPrice : t.oncePrice;
-            const compare = sub ? t.oncePrice : (BB.singlePrice * t.qty > t.oncePrice ? BB.singlePrice * t.qty : 0);
-            const sp = savePct(price, t.qty);
-            return (
-              <div key={t.qty} className="relative">
-                {sp > 0 && <span className="mul absolute -top-3 right-4 z-10 rounded-md px-3 py-1 text-[12px] font-extrabold uppercase text-white" style={{ background: RED }}>Save {sp}%</span>}
-                <button onClick={() => setTierQty(t.qty)} className="flex w-full items-center gap-3 rounded-2xl px-4 py-4 text-left transition-colors"
-                  style={{ border: `2px solid ${sel ? RED : "rgba(0,0,0,0.15)"}`, background: sel ? "#FEF3F2" : "#fff" }}>
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2" style={{ borderColor: sel ? RED : "#CBD5E1" }}>{sel && <span className="h-3 w-3 rounded-full" style={{ background: RED }} />}</span>
-                  <span className="flex-1">
-                    <span className="mul block text-[19px] font-extrabold" style={{ color: INK }}>{t.title}</span>
-                    <span className="block text-[14px]" style={{ color: MUTE }}>{supplyDays(t.qty, size)}-day supply</span>
-                  </span>
-                  <span className="text-right">
-                    <span className="whitespace-nowrap">
-                      {compare > 0 && <span className="mr-1 text-[14px] line-through" style={{ color: MUTE }}>{money(compare)}</span>}
-                      <span className="mul text-[22px] font-extrabold" style={{ color: INK }}>{money(price)}</span>
-                    </span>
-                    <span className="block text-[13px]" style={{ color: MUTE }}>{perDay(price, t.qty, size)}/day</span>
-                  </span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-
-        {sub && plan && <p className="mt-4 text-[14px]" style={{ color: MUTE }}>Delivered every {plan.days} days · pause, skip or cancel anytime</p>}
-
-        <button onClick={() => addToCart("buybox")} className="mul mt-5 w-full rounded-full px-6 py-[18px] text-center text-[18px] font-extrabold text-white shadow-[0_6px_16px_rgba(239,22,18,0.28)] transition-transform hover:scale-[1.01]" style={{ background: RED }}>
-          Add to Cart&nbsp;&nbsp;— {money(ctaCents)}
-        </button>
-        <p className="mt-3 flex items-center justify-center gap-2 text-[14px] font-semibold" style={{ color: INK }}>
-          <svg width="15" height="15" viewBox="0 0 16 16" fill={INK} aria-hidden><path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" /></svg>
-          90-Day Money-Back Guarantee
-        </p>
-
-        {/* Julie C */}
-        <div className="mt-6 rounded-2xl p-5" style={{ background: CARD }}>
-          <Stars size={18} />
-          <p className="mt-2 text-[16px] leading-relaxed" style={{ color: BLACK }}>I started these 2 weeks ago and today I actually saw a difference no more paw licking or chewing. I cleaned her ears out today and nothing in there either.</p>
-          <p className="mul mt-3 text-[16px] font-extrabold" style={{ color: INK }}>- Julie C. <span className="ml-1 text-[12px] font-semibold" style={{ color: MUTE }}>VERIFIED CUSTOMER</span></p>
-        </div>
-      </section>
-
-      {/* TABS */}
-      <section className="mx-auto mt-14 max-w-2xl px-5">
-        <div className="flex gap-4 overflow-x-auto border-b" style={{ borderColor: "rgba(0,0,0,0.12)" }}>
-          {TABS.map((t, i) => (
-            <button key={t} onClick={() => setTab(i)} className="mul shrink-0 border-b-2 px-1 pb-3 text-[16px] font-bold transition-colors"
-              style={{ borderColor: tab === i ? RED : "transparent", color: tab === i ? INK : MUTE }}>{t}</button>
-          ))}
-        </div>
-        <div className="pt-5 text-[16px] leading-relaxed" style={{ color: BLACK }}>
-          {tab === 0 && <ul className="space-y-3">{BENEFITS.map((b) => <li key={b} className="flex items-center gap-3 font-semibold" style={{ color: INK }}><RedCheck /> {b}</li>)}</ul>}
-          {tab === 1 && <div className="space-y-2"><p>A 5-strain live probiotic complex (L. plantarum, L. acidophilus, L. brevis, B. lactis, L. rhamnosus), a chicory-root prebiotic (inulin/FOS, 250mg) and a 6-enzyme digestive complex (150mg).</p><p className="text-[14px]" style={{ color: MUTE }}>No chemicals, no grains, no meats, no unhealthy fillers, non-GMO. Made in the UK to human-supplement standard.</p></div>}
-          {tab === 2 && <p>Give one capsule per 25kg of body weight, once a day. Twist it open and sprinkle the powder over food, or give it whole. Takes about 10 seconds a day.</p>}
-          {tab === 3 && <div className="flex gap-3 overflow-x-auto pb-1">{WHAT_TO_EXPECT.map((w) => <img key={w} src={w} alt="What to expect" className="h-44 w-44 shrink-0 rounded-2xl object-cover" />)}</div>}
-        </div>
+        {/* Live PDP buy box, injected verbatim (size selector, supply tiers, CTA + tabs).
+            Filled by the theme's own gfp-buy-box.js from the embedded data. */}
+        <div ref={bbRef} className="gfp-bb-host mt-7" style={hostStyle} />
       </section>
 
       {/* REVIEWS */}
