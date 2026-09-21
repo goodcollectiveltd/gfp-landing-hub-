@@ -18,13 +18,17 @@ const BODY = "#4B4B4B";
 const MUTE = "#8A8A8A";
 const PAGE_BG = "#F4F4F5";
 const CARD_BG = "#FFFFFF";
-const PRODUCT_URL = "https://goodforpets.co/products/5-strain-probiotic";
 const A = "/lp/5reasons/"; // asset dir
 
-function goToProduct(placement: string) {
-  track("CTAClick", { placement, content_ids: ["5-strain-probiotic"], content_type: "product" });
-  track("InitiateCheckout", { placement, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: 1 });
-  window.location.href = withAttribution(PRODUCT_URL);
+// The current product on Shopify. The PDP itself can't be iframed (X-Frame-Options:
+// DENY), so the buy box adds the real product to the live Shopify cart via a cart
+// permalink, exactly like the golden page (probioticPlusPage.ts). Variant + 90-day
+// Subscribe & Save plan are the ≤25kg 1-tub combo; quantity carries the tub tier.
+const CART_VARIANT = "57197308674392"; // 5 Strain Probiotic+ (≤25kg)
+const SUB_PLAN = "693194785112";       // Subscribe & Save, delivered every 90 days
+function cartUrl(qty: string, subscribe: boolean) {
+  const base = `https://goodforpets.co/cart/${CART_VARIANT}:${qty}`;
+  return subscribe ? `${base}?selling_plan=${SUB_PLAN}` : base;
 }
 
 /* ---------- shared ---------- */
@@ -50,10 +54,10 @@ function Check({ color = "#2FA84F" }: { color?: string }) {
   );
 }
 
-function RedButton({ label, where, className = "" }: { label: string; where: string; className?: string }) {
+function RedButton({ label, onClick, className = "" }: { label: string; onClick: () => void; className?: string }) {
   return (
     <button
-      onClick={() => goToProduct(where)}
+      onClick={onClick}
       className={`adv-heading w-full rounded-full px-6 py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg transition-transform hover:scale-[1.01] ${className}`}
       style={{ background: RED }}
     >
@@ -206,6 +210,16 @@ export default function FiveReasonsPawsAdvertorial() {
   const TABS = ["Benefits", "Ingredients", "Directions & Dosage", "What to expect"];
   const rv = REVIEWS[ri];
 
+  function scrollToBuybox(where: string) {
+    track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
+    document.getElementById("buybox")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function addToCart(where: string) {
+    track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
+    track("InitiateCheckout", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: Number(plan) });
+    window.location.href = withAttribution(cartUrl(plan, sub));
+  }
+
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: INK, background: PAGE_BG }}>
       <style>{`
@@ -228,7 +242,7 @@ export default function FiveReasonsPawsAdvertorial() {
           The simple solution to itchy, yeasty, inflamed dogs for 21,374 dogs and counting.
         </p>
         <img src={A + "replo-fa7ce357.jpg"} alt="Happy dog with 5 Strain Probiotic+" className="mt-5 w-full rounded-2xl object-cover shadow-sm" />
-        <div className="mt-5"><RedButton label="Save 45% + FREE SHIPPING" where="hero-cta" /></div>
+        <div className="mt-5"><RedButton label="Save 45% + FREE SHIPPING" onClick={() => scrollToBuybox("hero-cta")} /></div>
         <p className="mt-3 flex items-center justify-center gap-2 text-sm font-bold" style={{ color: INK }}>
           <Stars size={16} /> Loved by 21,374 Dogs
         </p>
@@ -264,13 +278,13 @@ export default function FiveReasonsPawsAdvertorial() {
                 <p key={i} className="text-[16px] leading-relaxed" style={{ color: BODY }}>{l}</p>
               ))}
             </div>
-            {r.cta && <div className="mt-4"><RedButton label={r.cta} where={`reason-${r.n}-cta`} /></div>}
+            {r.cta && <div className="mt-4"><RedButton label={r.cta} onClick={() => scrollToBuybox(`reason-${r.n}-cta`)} /></div>}
           </article>
         ))}
       </section>
 
       {/* BUY BOX */}
-      <section className="mx-auto mt-12 max-w-2xl px-5">
+      <section id="buybox" className="mx-auto mt-12 max-w-2xl px-5 scroll-mt-4">
         <div className="overflow-hidden rounded-3xl bg-white shadow-lg">
           {/* gallery */}
           <div className="p-4">
@@ -344,7 +358,7 @@ export default function FiveReasonsPawsAdvertorial() {
               </button>
             </div>
 
-            <div className="mt-5"><RedButton label="Add To Cart" where="buybox" /></div>
+            <div className="mt-5"><RedButton label="Add To Cart" onClick={() => addToCart("buybox")} /></div>
             <p className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold" style={{ color: INK }}>
               <svg width="13" height="13" viewBox="0 0 16 16" fill={NAVY} aria-hidden><path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" /></svg>
               90 DAY MONEY BACK GUARANTEE
@@ -420,7 +434,7 @@ export default function FiveReasonsPawsAdvertorial() {
       </section>
 
       {/* CLOSING CTA */}
-      <section className="mx-auto mt-12 max-w-2xl px-5"><RedButton label="Save 45% + FREE SHIPPING" where="closing-cta" /></section>
+      <section className="mx-auto mt-12 max-w-2xl px-5"><RedButton label="Save 45% + FREE SHIPPING" onClick={() => scrollToBuybox("closing-cta")} /></section>
 
       {/* FOOTER */}
       <footer className="mt-14 px-5 py-10 text-center" style={{ background: NAVY }}>
