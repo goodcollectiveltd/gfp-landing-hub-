@@ -59,7 +59,7 @@ function Cta({ label = "SAVE 45% + FREE SHIPPING →", where = "cta" }: { label?
       <a
         href={PRODUCT_URL}
         onClick={(e) => { e.preventDefault(); goToProduct(where); }}
-        className="adv-heading w-full max-w-md rounded-full px-8 py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg transition-transform hover:scale-[1.02]"
+        className="adv-heading w-full max-w-md rounded-full px-8 py-4 text-center text-base font-bold uppercase tracking-wide text-white shadow-lg transition-transform hover:scale-[1.02]"
         style={{ background: ORANGE }}
       >
         {label}
@@ -360,12 +360,12 @@ export default function TenReasonsFillerAdvertorial() {
     <div className="min-h-screen pb-24" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: INK, background: PAGE_BG }}>
       <style>{`
         .adv-heading { font-family: 'Poppins', system-ui, sans-serif; }
-        .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 800; }
+        .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
       `}</style>
 
       {/* honest scarcity banner (real: sold out every restock) */}
       <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
-        <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
+        <p className="adv-heading text-sm font-bold uppercase tracking-wide text-white">
           ⚡ Only 13 left in stock ⚡
         </p>
       </div>
@@ -377,12 +377,15 @@ export default function TenReasonsFillerAdvertorial() {
 
       {/* hero: headline + byline + top testimonial */}
       <section className="mx-auto max-w-2xl px-6 pt-6 text-center">
-        <h1 className="adv-display text-[28px] leading-[1.12] sm:text-4xl" style={{ color: INK }}>
+        <h1 className="adv-display text-[27px] leading-[1.1] sm:text-[34px]" style={{ color: INK }}>
           10 Reasons Why UK Dog Parents Are Ditching Expensive Probiotic Chews For <span style={{ color: ORANGE }}>Sprinkle Capsules</span>
         </h1>
         <div className="mt-4 flex items-center justify-center gap-2.5">
           <img src="/lp/vet-james-hansen.jpg" alt="Dr James Hansen MRCVS" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "62% 26%" }} />
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Dr James Hansen, MRCVS · Verified ✓ · Updated today</p>
+        </div>
+        <div className="mt-3 flex items-center justify-center gap-2 text-[13px] font-semibold" style={{ color: INK }}>
+          <Stars size={15} /> 4.8/5 · 20,000+ dogs helped
         </div>
         <p className="mt-4 text-[15px] italic leading-relaxed" style={{ color: BODY }}>
           “Better than anything I tried from the vets.” <span className="not-italic font-semibold" style={{ color: INK }}>· Felix K.</span>
@@ -407,7 +410,7 @@ export default function TenReasonsFillerAdvertorial() {
         {REASONS.map((r) => (
           <Fragment key={r.n}>
             <article>
-              <h3 className="adv-display text-2xl uppercase leading-tight" style={{ color: INK }}>
+              <h3 className="adv-display text-[21px] uppercase leading-[1.22] tracking-[0.01em] sm:text-[23px]" style={{ color: INK }}>
                 <span style={{ color: ORANGE }}>{r.n}.</span> {r.title}
               </h3>
               {r.slider ? (
@@ -489,8 +492,8 @@ export default function TenReasonsFillerAdvertorial() {
             <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: ORANGE }}>From just 28p a day</p>
             <h2 className="adv-display mt-2 text-3xl leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
             <p className="mt-2 text-[15px] leading-relaxed" style={{ color: BODY }}>with free 48-hour shipping.</p>
-            <p className="mt-4 adv-heading text-sm font-extrabold uppercase tracking-wide" style={{ color: ORANGE }}>⚡ Only 13 left in this batch</p>
-            <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-3 block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
+            <p className="mt-4 adv-heading text-sm font-bold uppercase tracking-wide" style={{ color: ORANGE }}>⚡ Only 13 left in this batch</p>
+            <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("offer"); }} className="adv-heading mt-3 block w-full rounded-full py-4 text-center text-base font-bold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
               Get the Pure Powder →
             </a>
             <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-bold" style={{ color: INK }}>
@@ -514,7 +517,7 @@ export default function TenReasonsFillerAdvertorial() {
           <p className="adv-heading text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.6)" }}>Stock warning</p>
           <h2 className="adv-display mt-2 text-2xl leading-tight">Our last batch sold out in days</h2>
           <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-white/85">We make it in small, filler-free batches, and it sells out on every restock. Get yours while this one lasts.</p>
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("stock-warning"); }} className="adv-heading mt-5 inline-block rounded-full px-8 py-4 text-base font-extrabold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("stock-warning"); }} className="adv-heading mt-5 inline-block rounded-full px-8 py-4 text-base font-bold uppercase tracking-wide text-white shadow-lg" style={{ background: ORANGE }}>
             Claim 45% Off Today →
           </a>
         </div>
@@ -535,7 +538,7 @@ export default function TenReasonsFillerAdvertorial() {
       {/* STICKY CTA BAR */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/95 backdrop-blur transition-transform duration-300" style={{ transform: showSticky ? "translateY(0)" : "translateY(110%)" }}>
         <div className="mx-auto max-w-2xl px-4 py-3">
-          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-extrabold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Them Relief Today →</a>
+          <a href={PRODUCT_URL} onClick={(e) => { e.preventDefault(); goToProduct("sticky"); }} className="adv-heading block w-full rounded-full py-4 text-center text-base font-bold uppercase tracking-wide text-white shadow-md" style={{ background: ORANGE }}>Give Them Relief Today →</a>
         </div>
       </div>
     </div>
