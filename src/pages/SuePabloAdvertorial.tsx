@@ -391,16 +391,18 @@ export default function SuePabloAdvertorial() {
       {/* hero: Sue's personal, native story about Pablo */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
         <div className="flex items-center gap-2.5">
-          <img src="/lp/ugc-5.jpg" alt="Pablo, an apricot cockapoo" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 20%" }} />
+          <img src="/lp/pablo-night.jpg" alt="Pablo, an apricot cockapoo" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "50% 42%" }} />
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · Pablo's mum · Updated today</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
         </h1>
-        <img src="/lp/ugc-5.jpg" alt="Pablo, my apricot cockapoo, after the switch" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 18%" }} />
-        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Pablo, my apricot cockapoo, back to his happy self.</p>
-        <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue, and this cheeky boy is Pablo, my apricot cockapoo. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
+        <img src="/lp/pablo-sofa.jpg" alt="Sue and Pablo on the sofa" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 42%" }} />
+        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my apricot cockapoo. He's my shadow.</p>
+        <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>I'm Sue, and this cheeky boy is Pablo, my apricot cockapoo. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
+        <img src="/lp/pablo-night.jpg" alt="Pablo licking his paw on the bed at night" className="mt-4 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" />
+        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>This was most nights. Pablo, mid-lick, when he should have been fast asleep.</p>
+        <div className="mt-4 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
           <p>We tried everything. The sprays, the wipes, the vinegar soaks, the pricey baked chews, more vet trips than I care to count. Nothing ever lasted more than a week or two.</p>
           <p>Then one evening a friend asked me something that stuck: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And honestly, I couldn't believe what was in them.</p>
           <p>I switched Pablo onto a pure powder instead, and within a few weeks the licking just stopped. So here are the 10 things I worked out along the way, in case your dog is anything like Pablo.</p>
