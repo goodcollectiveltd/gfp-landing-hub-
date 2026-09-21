@@ -399,10 +399,8 @@ export default function SuePabloAdvertorial() {
         </h1>
         <img src="/lp/pablo-sofa.jpg" alt="Sue and Pablo on the sofa" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 42%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my apricot cockapoo. He's my shadow.</p>
-        <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>I'm Sue, and this cheeky boy is Pablo, my apricot cockapoo. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
-        <img src="/lp/pablo-night.jpg" alt="Pablo licking his paw on the bed at night" className="mt-4 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" />
-        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>This was most nights. Pablo, mid-lick, when he should have been fast asleep.</p>
-        <div className="mt-4 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
+        <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
+          <p>I'm Sue, and this cheeky boy is Pablo, my apricot cockapoo. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
           <p>We tried everything. The sprays, the wipes, the vinegar soaks, the pricey baked chews, more vet trips than I care to count. Nothing ever lasted more than a week or two.</p>
           <p>Then one evening a friend asked me something that stuck: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And honestly, I couldn't believe what was in them.</p>
           <p>I switched Pablo onto a pure powder instead, and within a few weeks the licking just stopped. So here are the 10 things I worked out along the way, in case your dog is anything like Pablo.</p>
