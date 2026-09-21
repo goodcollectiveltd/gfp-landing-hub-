@@ -395,7 +395,7 @@ export default function SuePabloAdvertorial() {
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · Pablo's mum · Updated today</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
-          I gave my cockapoo Pablo a new probiotic for his paw licking. Then I <span style={{ color: ORANGE }}>read the label on the old one.</span>
+          I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
         </h1>
         <img src="/lp/ugc-5.jpg" alt="Pablo, my apricot cockapoo, after the switch" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 18%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Pablo, my apricot cockapoo, back to his happy self.</p>
