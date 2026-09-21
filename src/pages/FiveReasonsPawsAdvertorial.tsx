@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { initTracking, track, withAttribution } from "@/lib/tracking";
 
 // WORD-FOR-WORD rebuild of the live goodforpets.co/pages/5reasons Replo page.
@@ -17,7 +17,6 @@ const INK = "#1C1C2E";
 const BODY = "#4B4B4B";
 const MUTE = "#8A8A8A";
 const PAGE_BG = "#F4F4F5";
-const CARD_BG = "#FFFFFF";
 const A = "/lp/5reasons/"; // asset dir
 
 // The current product on Shopify. The PDP itself can't be iframed (X-Frame-Options:
