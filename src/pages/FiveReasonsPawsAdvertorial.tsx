@@ -22,12 +22,33 @@ const STAR = "#F5A623";
 const CARD = "#F2F2F2";
 const A = "/lp/5reasons/";
 
-const CART_VARIANT = "57197308674392"; // 5 Strain Probiotic+ (≤25kg)
-const SUB_PLAN = "693194785112";       // Subscribe & Save, delivered every 90 days
-function cartUrl(qty: string, subscribe: boolean) {
-  const base = `https://goodforpets.co/cart/${CART_VARIANT}:${qty}`;
-  return subscribe ? `${base}?selling_plan=${SUB_PLAN}` : base;
-}
+// Buy-box rules engine, ported verbatim from the live PDP (GFP-Theme assets/gfp-buy-box.js).
+// Real data pulled from the live product page's data-gfp-bb-data JSON: each tub tier is its own
+// Shopify variant; the subscription plan is chosen by supply-days = capsPerTub*qty / capsPerDay[size],
+// picking the closest plan cadence <= supply days.
+const BB = {
+  capsPerTub: 90,
+  capsPerDay: { small: 1, medium: 2, large: 3 } as Record<string, number>,
+  singlePrice: 4499, // RRP of one tub, in pence
+  tiers: [
+    { qty: 1, variantId: "57197308674392", title: "1 Tub", oncePrice: 4499, subFirstPrice: 3149 },
+    { qty: 2, variantId: "57197308707160", title: "2 Tubs", oncePrice: 7649, subFirstPrice: 5354 },
+    { qty: 3, variantId: "57197308739928", title: "3 Tubs", oncePrice: 10797, subFirstPrice: 7558 },
+  ],
+  plans: [
+    { id: "693194850648", days: 30 }, { id: "693194883416", days: 45 }, { id: "693194916184", days: 60 },
+    { id: "693194785112", days: 90 }, { id: "693275427160", days: 120 }, { id: "693275361624", days: 180 },
+    { id: "693275394392", days: 270 },
+  ],
+};
+const SIZES = [{ key: "small", name: "Small", sub: "Up to 25kg" }, { key: "medium", name: "Medium", sub: "25–40kg" }, { key: "large", name: "Large", sub: "Over 40kg" }];
+const PDP_BULLETS = ["Calms itchy skin & paw-licking", "Soothes gunky, irritated ears", "Firmer stools & stronger digestion"];
+
+function money(cents: number) { const v = cents / 100; return "£" + (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2)); }
+function supplyDays(qty: number, size: string) { return Math.round((BB.capsPerTub * qty) / BB.capsPerDay[size]); }
+function planFor(qty: number, size: string) { const d = supplyDays(qty, size); let fit = BB.plans[0]; for (const p of BB.plans) if (p.days <= d) fit = p; return fit; }
+function perDay(cents: number, qty: number, size: string) { return "£" + (cents / 100 / supplyDays(qty, size)).toFixed(2); }
+function savePct(eff: number, qty: number) { return Math.round((1 - eff / (BB.singlePrice * qty)) * 100 / 5) * 5; }
 
 /* ---------- shared ---------- */
 
@@ -52,9 +73,26 @@ function RedCheck() {
   );
 }
 
-function Cta({ label, onClick, rounded = "rounded-lg" }: { label: string; onClick: () => void; rounded?: string }) {
+function CircleCheck({ color = INK }: { color?: string }) {
   return (
-    <button onClick={onClick} className={`mul w-full ${rounded} px-6 py-4 text-center text-[17px] font-extrabold uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.01]`} style={{ background: RED }}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.7" className="shrink-0" aria-hidden>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 12.4l2.6 2.6L16 9.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function DogIcon({ h, color }: { h: number; color: string }) {
+  return (
+    <svg width={h * 1.15} height={h} viewBox="0 0 576 512" fill={color} aria-hidden>
+      <path d="M309.6 158.5 328 128h39.6c9.6 0 19 3 26.8 8.7L432 164.7l4.9-9.7c8.1-16.3 24.8-26.6 43-26.6H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H488l-.6 1.2c-2.4 4.9-5.4 9.4-8.7 13.6L478 421.2c0 26.5-21.5 48-48 48H400c-26.5 0-48-21.5-48-48V352H240v96c0 26.5-21.5 48-48 48H160c-26.5 0-48-21.5-48-48V279.6c-30-22.6-49.7-58-49.9-98.1L60.9 116.5C40.6 106.2 24.6 89 15.8 68.2L1.3 33.8C-2.1 25.6 1.7 16.2 9.8 12.8s17.6 .4 21 8.5L45.3 55.8c5.3 12.5 14.9 22.7 27.1 28.8L127.9 112h32.9l50.4-77.6c8.1-12.2 21.8-19.6 36.4-19.6c24.1 0 43.7 19.6 43.7 43.7v65.9l8.8-6.7c3.1-2.4 5.7-5.3 7.6-8.7z" />
+    </svg>
+  );
+}
+
+function Cta({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="mul w-full rounded-full px-6 py-[18px] text-center text-[16px] font-extrabold uppercase tracking-[0.03em] text-white shadow-[0_6px_16px_rgba(239,22,18,0.28)] transition-transform hover:scale-[1.01]" style={{ background: RED }}>
       {label}
     </button>
   );
@@ -142,12 +180,6 @@ const GALLERY = [
 
 const BENEFITS = ["Soothes Paw Licking & Itchy Skin", "Helps Clear Gunky Ears", "Firmer Stools & Less Scooting", "Supports Healthy Yeast Balance"];
 
-const PLANS = [
-  { key: "1", name: "1 Tub", price: "£31.49", was: "", badge: "" },
-  { key: "2", name: "2 Tubs", price: "£53.54", was: "£90.00", badge: "MOST POPULAR · SAVE 15%" },
-  { key: "3", name: "3 Tubs", price: "£75.58", was: "£135.00", badge: "BEST VALUE · SAVE 20%" },
-];
-
 const WHAT_TO_EXPECT = ["replo-af1fd2af.jpg", "replo-b927a7dc.jpg", "replo-cab151e6.jpg", "replo-1eb7dd54.jpg", "replo-c8459dde.jpg", "replo-b4648855.jpg"].map((f) => A + f);
 
 const REVIEWS = [
@@ -172,8 +204,8 @@ const FAQS: [string, string][] = [
 /* ---------- page ---------- */
 
 export default function FiveReasonsPawsAdvertorial() {
-  const [weight, setWeight] = useState(0);
-  const [plan, setPlan] = useState("1");
+  const [size, setSize] = useState("small");
+  const [tierQty, setTierQty] = useState(2);
   const [sub, setSub] = useState(true);
   const [gi, setGi] = useState(0);
   const [ri, setRi] = useState(0);
@@ -194,14 +226,19 @@ export default function FiveReasonsPawsAdvertorial() {
     track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
     document.getElementById("buybox")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+  const tier = BB.tiers.find((t) => t.qty === tierQty)!;
+  const ctaCents = sub ? tier.subFirstPrice : tier.oncePrice;
+  const plan = sub ? planFor(tierQty, size) : null;
+
   function addToCart(where: string) {
+    const base = `https://goodforpets.co/cart/${tier.variantId}:1`;
+    const url = plan ? `${base}?selling_plan=${plan.id}` : base;
     track("CTAClick", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product" });
-    track("InitiateCheckout", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: Number(plan) });
-    window.location.href = withAttribution(cartUrl(plan, sub));
+    track("InitiateCheckout", { placement: where, content_ids: ["5-strain-probiotic"], content_type: "product", content_name: "5 Strain Probiotic+", num_items: tierQty, value: ctaCents / 100, currency: "GBP" });
+    window.location.href = withAttribution(url);
   }
 
   const TABS = ["Benefits", "Ingredients", "Directions & Dosage", "What to expect"];
-  const subFreq = ["0 - 25kg 1 tub (delivered every 90 days)", "25 - 40kg 1 tub (delivered every 60 days)", "40kg+ 1 tub (delivered every 45 days)"][weight];
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Inter', system-ui, sans-serif", color: BLACK }}>
@@ -220,11 +257,11 @@ export default function FiveReasonsPawsAdvertorial() {
       {/* HERO */}
       <img src={A + "replo-fa7ce357.jpg"} alt="Formulated with Dr Kishan Vara MRCVS" className="w-full object-cover" />
       <div className="mx-auto max-w-2xl px-5 pt-5">
-        <p className="text-center text-[16px] font-semibold" style={{ color: INK }}>Formulated with Dr Kishan Vara MRCVS</p>
-        <h1 className="mul mt-3 text-[34px] font-extrabold leading-[1.06]" style={{ color: INK }}>
+        <p className="text-center text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: MUTE }}>Formulated with Dr Kishan Vara MRCVS</p>
+        <h1 className="mul mt-3 text-[30px] font-extrabold leading-[1.12]" style={{ color: INK }}>
           5 Reasons Dogs Who Won't Stop Licking Their Paws Are Turning to 5 Strain Probiotic+
         </h1>
-        <p className="mt-4 text-[18px] leading-relaxed" style={{ color: BLACK }}>
+        <p className="mt-4 text-[17px] leading-[1.6]" style={{ color: "#333" }}>
           The simple solution to itchy, yeasty, inflamed dogs for 21,374 dogs and counting.
         </p>
         <div className="mt-5"><Cta label="Save 45% + FREE SHIPPING" onClick={() => scrollToBuybox("hero-cta")} /></div>
@@ -236,18 +273,18 @@ export default function FiveReasonsPawsAdvertorial() {
       {/* REASONS + Chris B after reason 1 */}
       <div className="mx-auto max-w-2xl px-5">
         {REASONS.map((r) => (
-          <section key={r.n} className="mt-12">
-            <h2 className="mul text-[32px] font-extrabold uppercase leading-[1.08]" style={{ color: INK }}>{r.n}. {r.title}</h2>
-            {r.img && <img src={r.img} alt="" className="mt-5 aspect-square w-full rounded-xl object-cover" />}
-            {r.video && <video src={r.video} className="mt-5 aspect-square w-full rounded-xl object-cover" muted loop playsInline autoPlay controls preload="metadata" />}
-            <div className="mt-5 space-y-4">
-              {r.lines.map((l, i) => <p key={i} className="text-[19px] font-bold leading-relaxed" style={{ color: BLACK }}>{l}</p>)}
+          <section key={r.n} className="mt-14">
+            <h2 className="mul text-[25px] font-extrabold uppercase leading-[1.12] tracking-[-0.01em] sm:text-[28px]" style={{ color: INK }}>{r.n}. {r.title}</h2>
+            {r.img && <img src={r.img} alt="" className="mt-4 aspect-square w-full rounded-2xl object-cover" />}
+            {r.video && <video src={r.video} className="mt-4 aspect-square w-full rounded-2xl object-cover" muted loop playsInline autoPlay controls preload="metadata" />}
+            <div className="mt-4 space-y-3">
+              {r.lines.map((l, i) => <p key={i} className="text-[17px] leading-[1.7]" style={{ color: "#2A2A2A" }}>{l}</p>)}
             </div>
             {r.cta && <div className="mt-6"><Cta label={r.cta} onClick={() => scrollToBuybox(`reason-${r.n}-cta`)} /></div>}
 
             {r.n === 1 && (
               <div className="mt-12">
-                <ReviewCard img={A + "review.jpg"} quote={"\"My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked.\n\nSaw the advert, thought I'd give it a go. Within a week it started working and three weeks later there's no paw licking at all.\n\nThe vet was costing me £140 every two weeks. This is £33 and lasts two months. I don't work for these guys, I just wanted people to know.\""} name="Chris B." />
+                <ReviewCard img={A + "replo-c3892abd.jpg"} quote={"\"My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked.\n\nSaw the advert, thought I'd give it a go. Within a week it started working and three weeks later there's no paw licking at all.\n\nThe vet was costing me £140 every two weeks. This is £33 and lasts two months. I don't work for these guys, I just wanted people to know.\""} name="Chris B." />
               </div>
             )}
           </section>
@@ -265,72 +302,86 @@ export default function FiveReasonsPawsAdvertorial() {
           ))}
         </div>
 
-        <div className="mt-5 flex items-center gap-2"><Stars size={20} color={RED} /><span className="mul text-[16px] font-extrabold" style={{ color: INK }}>4,537 Reviews</span></div>
-        <h2 className="mul mt-2 text-[38px] font-extrabold leading-none" style={{ color: INK }}>5 Strain Probiotic+</h2>
-        <p className="mt-3 text-[19px]" style={{ color: BLACK }}>Human-grade microbiome support for your dog.</p>
+        {/* rating + best seller */}
+        <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="flex items-center gap-2"><Stars size={18} color={RED} /><span className="text-[14px] font-semibold" style={{ color: MUTE }}>20,000+ bought</span></span>
+          <span className="mul rounded-md px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white" style={{ background: RED }}>Best Seller</span>
+        </div>
+        <h2 className="mul mt-2 text-[30px] font-extrabold leading-[1.05]" style={{ color: INK }}>5 Strain Probiotic+</h2>
 
-        <ul className="mt-6 space-y-3">
-          {BENEFITS.map((b) => <li key={b} className="flex items-center gap-3 text-[18px] font-semibold" style={{ color: INK }}><RedCheck /> {b}</li>)}
+        {/* PDP benefit bullets: text left, outline check right */}
+        <ul className="mt-5">
+          {PDP_BULLETS.map((b, i) => (
+            <li key={b} className="flex items-center justify-between gap-3 py-3 text-[17px]" style={{ color: INK, borderTop: i ? "1px solid rgba(0,0,0,0.08)" : undefined }}>{b} <CircleCheck /></li>
+          ))}
         </ul>
 
-        {/* dosage calculator */}
-        <p className="mul mt-8 text-[22px] font-bold" style={{ color: INK }}>Dog Dosage Calculator:</p>
+        {/* How big is your dog? */}
+        <h3 className="mul mt-7 text-[22px] font-extrabold" style={{ color: INK }}>How big is your dog?</h3>
         <div className="mt-3 grid grid-cols-3 gap-3">
-          {["0-25kg", "25-40kg", "40kg+"].map((w, i) => (
-            <button key={w} onClick={() => setWeight(i)} className="rounded-xl border-2 py-3 text-[16px] font-semibold transition-colors"
-              style={{ borderColor: weight === i ? INK : "rgba(0,0,0,0.18)", color: INK, borderWidth: weight === i ? 3 : 2 }}>{w}</button>
-          ))}
-        </div>
-
-        {/* reset divider */}
-        <div className="mt-8 flex items-center gap-3">
-          <span className="h-px flex-1" style={{ background: "rgba(0,0,0,0.2)" }} />
-          <span className="mul text-[18px] font-extrabold uppercase" style={{ color: INK }}>Your 90-Day Microbiome Reset</span>
-          <span className="h-px flex-1" style={{ background: "rgba(0,0,0,0.2)" }} />
-        </div>
-
-        {/* plans */}
-        <div className="mt-5 space-y-4">
-          {PLANS.map((p) => (
-            <div key={p.key} className="relative">
-              {p.badge && <span className="mul absolute -top-3 right-3 z-10 rounded-md px-3 py-1 text-[12px] font-extrabold uppercase text-white" style={{ background: RED }}>{p.badge}</span>}
-              <button onClick={() => setPlan(p.key)} className="flex w-full items-center gap-3 rounded-2xl border bg-white px-4 py-3 text-left"
-                style={{ borderColor: plan === p.key ? INK : "rgba(0,0,0,0.15)", borderWidth: plan === p.key ? 3 : 1 }}>
-                <img src={GALLERY[0]} alt="" className="h-14 w-14 shrink-0 rounded-lg object-cover" />
-                <span className="mul flex-1 text-[20px] font-extrabold" style={{ color: INK }}>{p.name}</span>
-                <span className="text-right">
-                  <span className="mul block text-[22px] font-extrabold" style={{ color: INK }}>{p.price}</span>
-                  {p.was && <span className="text-[15px] line-through" style={{ color: RED }}>{p.was}</span>}
-                </span>
+          {SIZES.map((s) => {
+            const sel = size === s.key;
+            return (
+              <button key={s.key} onClick={() => setSize(s.key)} className="flex flex-col items-center justify-end rounded-2xl px-2 py-4 transition-colors"
+                style={{ border: `2px solid ${sel ? RED : "rgba(0,0,0,0.15)"}`, background: sel ? "#FEF3F2" : "#fff" }}>
+                <DogIcon h={s.key === "small" ? 28 : s.key === "medium" ? 36 : 44} color={sel ? RED : INK} />
+                <span className="mul mt-2 text-[17px] font-extrabold" style={{ color: sel ? RED : INK }}>{s.name}</span>
+                <span className="text-[12px]" style={{ color: MUTE }}>{s.sub}</span>
               </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* subscribe / one-time */}
-        <div className="mt-5 space-y-3">
-          <button onClick={() => setSub(true)} className="w-full rounded-2xl border bg-white p-5 text-left" style={{ borderColor: sub ? INK : "rgba(0,0,0,0.15)", borderWidth: sub ? 3 : 1 }}>
-            <span className="flex items-center gap-3">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full border-2" style={{ borderColor: INK }}>{sub && <span className="h-3.5 w-3.5 rounded-full" style={{ background: INK }} />}</span>
-              <span className="mul text-[19px] font-extrabold" style={{ color: INK }}>Subscribe &amp; Save Extra 30%</span>
-            </span>
-            <ul className="mt-3 space-y-1.5 pl-9 text-[15px]" style={{ color: MUTE }}>
-              <li className="list-disc">{subFreq}</li>
-              <li className="list-disc">20% off every order after that</li>
-              <li className="list-disc">Free 48hr shipping on every order</li>
-              <li className="list-disc">Easily pause or cancel anytime</li>
-            </ul>
-          </button>
-          <button onClick={() => setSub(false)} className="flex w-full items-center gap-3 rounded-2xl border bg-white p-5 text-left" style={{ borderColor: !sub ? INK : "rgba(0,0,0,0.15)", borderWidth: !sub ? 3 : 1 }}>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full border-2" style={{ borderColor: !sub ? INK : "#BBB" }}>{!sub && <span className="h-3.5 w-3.5 rounded-full" style={{ background: INK }} />}</span>
-            <span className="mul text-[19px] font-extrabold" style={{ color: INK }}>One-time purchase</span>
-          </button>
+        {/* subscribe / one-time toggle */}
+        <div className="mt-5 grid grid-cols-2 gap-1 rounded-full border p-1" style={{ borderColor: "rgba(0,0,0,0.15)" }}>
+          {([["Subscribe & Save", true], ["One-time", false]] as [string, boolean][]).map(([label, val]) => {
+            const sel = sub === val;
+            return (
+              <button key={label} onClick={() => setSub(val)} className="mul rounded-full py-2.5 text-center text-[16px] font-extrabold transition-colors"
+                style={sel ? { background: "#FEECEB", color: RED, boxShadow: `inset 0 0 0 2px ${RED}` } : { color: MUTE }}>{label}</button>
+            );
+          })}
         </div>
 
-        <div className="mt-5"><Cta label="Add To Cart" onClick={() => addToCart("buybox")} rounded="rounded-full" /></div>
-        <p className="mul mt-3 flex items-center justify-center gap-2 text-[14px] font-extrabold uppercase" style={{ color: INK }}>
+        {/* choose your supply */}
+        <h3 className="mul mt-7 text-[22px] font-extrabold" style={{ color: INK }}>Choose your supply</h3>
+        <div className="mt-4 space-y-4">
+          {BB.tiers.map((t) => {
+            const sel = tierQty === t.qty;
+            const price = sub ? t.subFirstPrice : t.oncePrice;
+            const compare = sub ? t.oncePrice : (BB.singlePrice * t.qty > t.oncePrice ? BB.singlePrice * t.qty : 0);
+            const sp = savePct(price, t.qty);
+            return (
+              <div key={t.qty} className="relative">
+                {sp > 0 && <span className="mul absolute -top-3 right-4 z-10 rounded-md px-3 py-1 text-[12px] font-extrabold uppercase text-white" style={{ background: RED }}>Save {sp}%</span>}
+                <button onClick={() => setTierQty(t.qty)} className="flex w-full items-center gap-3 rounded-2xl px-4 py-4 text-left transition-colors"
+                  style={{ border: `2px solid ${sel ? RED : "rgba(0,0,0,0.15)"}`, background: sel ? "#FEF3F2" : "#fff" }}>
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2" style={{ borderColor: sel ? RED : "#CBD5E1" }}>{sel && <span className="h-3 w-3 rounded-full" style={{ background: RED }} />}</span>
+                  <span className="flex-1">
+                    <span className="mul block text-[19px] font-extrabold" style={{ color: INK }}>{t.title}</span>
+                    <span className="block text-[14px]" style={{ color: MUTE }}>{supplyDays(t.qty, size)}-day supply</span>
+                  </span>
+                  <span className="text-right">
+                    <span className="whitespace-nowrap">
+                      {compare > 0 && <span className="mr-1 text-[14px] line-through" style={{ color: MUTE }}>{money(compare)}</span>}
+                      <span className="mul text-[22px] font-extrabold" style={{ color: INK }}>{money(price)}</span>
+                    </span>
+                    <span className="block text-[13px]" style={{ color: MUTE }}>{perDay(price, t.qty, size)}/day</span>
+                  </span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {sub && plan && <p className="mt-4 text-[14px]" style={{ color: MUTE }}>Delivered every {plan.days} days · pause, skip or cancel anytime</p>}
+
+        <button onClick={() => addToCart("buybox")} className="mul mt-5 w-full rounded-full px-6 py-[18px] text-center text-[18px] font-extrabold text-white shadow-[0_6px_16px_rgba(239,22,18,0.28)] transition-transform hover:scale-[1.01]" style={{ background: RED }}>
+          Add to Cart&nbsp;&nbsp;— {money(ctaCents)}
+        </button>
+        <p className="mt-3 flex items-center justify-center gap-2 text-[14px] font-semibold" style={{ color: INK }}>
           <svg width="15" height="15" viewBox="0 0 16 16" fill={INK} aria-hidden><path d="M8 0l6 2.5v4.2c0 4-2.6 7.6-6 9.3-3.4-1.7-6-5.3-6-9.3V2.5z" /></svg>
-          90 Day Money Back Guarantee
+          90-Day Money-Back Guarantee
         </p>
 
         {/* Julie C */}
@@ -359,21 +410,21 @@ export default function FiveReasonsPawsAdvertorial() {
 
       {/* REVIEWS */}
       <section className="mx-auto mt-16 max-w-2xl px-5">
-        <h2 className="mul text-center text-[34px] font-extrabold leading-tight" style={{ color: INK }}>Reviews from real customers</h2>
-        <p className="mt-3 text-center text-[18px]" style={{ color: BLACK }}>Over 20,000 dogs helped and 4,500+ reviews</p>
+        <h2 className="mul text-center text-[28px] font-extrabold leading-tight sm:text-[32px]" style={{ color: INK }}>Reviews from real customers</h2>
+        <p className="mt-3 text-center text-[16px]" style={{ color: MUTE }}>Over 20,000 dogs helped and 4,500+ reviews</p>
         <div className="mt-6"><ReviewCard img={REVIEWS[ri].img} quote={REVIEWS[ri].quote} name={REVIEWS[ri].name} /></div>
         <div className="mt-4 flex items-center justify-center gap-4">
           <button aria-label="Previous" onClick={() => setRi((p) => (p - 1 + REVIEWS.length) % REVIEWS.length)} className="flex h-11 w-11 items-center justify-center rounded-full border-2 text-lg" style={{ borderColor: INK, color: INK }}>←</button>
           <span className="text-[13px] font-semibold" style={{ color: MUTE }}>{ri + 1} / {REVIEWS.length}</span>
           <button aria-label="Next" onClick={() => setRi((p) => (p + 1) % REVIEWS.length)} className="flex h-11 w-11 items-center justify-center rounded-full border-2 text-lg" style={{ borderColor: INK, color: INK }}>→</button>
         </div>
-        <div className="mt-8"><Cta label="Save 45% Today →" onClick={() => scrollToBuybox("reviews-cta")} rounded="rounded-full" /></div>
+        <div className="mt-8"><Cta label="Save 45% Today →" onClick={() => scrollToBuybox("reviews-cta")} /></div>
       </section>
 
       {/* FAQ */}
       <section className="mx-auto mt-16 max-w-2xl px-5">
-        <h2 className="mul text-center text-[34px] font-extrabold leading-tight" style={{ color: INK }}>You asked. We answer.</h2>
-        <p className="mt-3 text-center text-[18px]" style={{ color: BLACK }}>Everything You Need To Know</p>
+        <h2 className="mul text-center text-[28px] font-extrabold leading-tight sm:text-[32px]" style={{ color: INK }}>You asked. We answer.</h2>
+        <p className="mt-3 text-center text-[16px]" style={{ color: MUTE }}>Everything You Need To Know</p>
         <div className="mt-6">{FAQS.map(([q, a]) => <Accordion key={q} q={q} a={a} />)}</div>
       </section>
 
