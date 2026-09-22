@@ -380,7 +380,7 @@ export default function SuePabloAdvertorial() {
           the page reads as her own post. Small upfront advertorial tag keeps it honest. */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
         <div className="flex items-center gap-2.5">
-          <img src="/lp/sue.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 22%" }} />
+          <img src="/lp/pablo-hero.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "24% 40%" }} />
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue Walker · @sue.walker8 · September 2026</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
