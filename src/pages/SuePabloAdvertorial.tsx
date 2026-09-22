@@ -379,10 +379,7 @@ export default function SuePabloAdvertorial() {
       {/* hero: Sue's personal, native story about Pablo. No brand header/stock bar —
           the page reads as her own post. Small upfront advertorial tag keeps it honest. */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
-        <span className="inline-block rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: MUTE, borderColor: "#E6E6E6" }}>
-          Advertorial
-        </span>
-        <div className="mt-4 flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5">
           <img src="/lp/sue.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 22%" }} />
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue Walker · @sue.walker8 · September 2026</p>
         </div>
