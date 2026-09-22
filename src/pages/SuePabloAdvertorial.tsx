@@ -384,7 +384,7 @@ export default function SuePabloAdvertorial() {
         </span>
         <div className="mt-4 flex items-center gap-2.5">
           <img src="/lp/sue.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 22%" }} />
-          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · dog mum of three · September 2026</p>
+          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue Walker · @sue.walker8 · September 2026</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
