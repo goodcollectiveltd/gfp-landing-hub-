@@ -276,13 +276,22 @@ export default function CheckThePacketAdvertorial() {
       <style>{`
         .adv-heading { font-family: 'Poppins', system-ui, sans-serif; }
         .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 800; }
+        /* half the track is a duplicate of the first half, so -50% loops seamlessly */
+        @keyframes adv-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .adv-ticker { animation: adv-scroll 26s linear infinite; }
+        @media (prefers-reduced-motion: reduce) { .adv-ticker { animation: none; } }
       `}</style>
 
-      {/* honest scarcity banner (real: sold out every restock) */}
-      <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
-        <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
-          ⚡ Only 13 left in stock ⚡
-        </p>
+      {/* Rescue ticker. Replaced a "13 left in stock" counter that was not tied to real inventory,
+          which is the invented scarcity the brand rules out. This is a standing fact instead. */}
+      <div className="w-full overflow-hidden py-2.5" style={{ background: NAVY }}>
+        <div className="adv-ticker flex w-max">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <p key={i} className="adv-heading whitespace-nowrap px-10 text-sm font-extrabold uppercase tracking-wide text-white">
+              🐾 51% of profits donated to animal rescue
+            </p>
+          ))}
+        </div>
       </div>
 
       {/* logo */}
@@ -299,7 +308,7 @@ export default function CheckThePacketAdvertorial() {
         <h1 className="adv-display mt-3 text-[30px] leading-[1.1] sm:text-4xl" style={{ color: INK }}>
           Don't Give Your Dog Probiotics Until You've <span style={{ color: ORANGE }}>Checked the Back of the Packet</span>
         </h1>
-        <img src="/lp/hero-label-tubs.jpg" alt="Three different dog-probiotic tubs stacked, each ingredients label listing glycerine and fillers" className="mt-5 aspect-square w-full rounded-2xl object-cover shadow-sm" />
+        <img src="/lp/hero-label-in-hand.jpg" alt="The back of a dog-probiotic tub held in one hand, showing the Product Facts panel and the Composition underneath listing potato starch and glycerine first" className="mt-5 aspect-square w-full rounded-2xl object-cover shadow-sm" />
         <p className="mt-5 text-[17px] leading-relaxed" style={{ color: BODY }}>
           Most are packed with fillers to make them easy to sell. <span className="adv-heading font-bold" style={{ color: INK }}>Here's what to look for, and what we did differently</span> 👇
         </p>
