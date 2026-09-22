@@ -393,8 +393,8 @@ export default function SuePabloAdvertorial() {
           <p>I tried everything. Sprays, wipes, vet after vet, and the pricey "probiotic" chews everyone swears by. Nothing lasted a week.</p>
           <p>Then a friend asked me one question: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. The first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria? A tiny pinch, right at the bottom.</p>
           <figure>
-            <img src="/lp/hero-label-tubs.jpg" alt="Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first" className="w-full rounded-2xl object-cover shadow-sm" />
-            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: fillers up top, the probiotics right at the bottom.</figcaption>
+            <img src="/lp/chew-label.jpg" alt="The back of a dog probiotic chew tub: composition lists potato starch and glycerine first" className="w-full rounded-2xl object-cover shadow-sm" />
+            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: potato starch and glycerine top the list. The probiotic is a tiny additive.</figcaption>
           </figure>
           <p>I was furious. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a fortune to feed him the very sugar and filler that keeps that itch raging. No wonder nothing worked.</p>
           <p>So I binned the chews and switched him to a pure powder. No fillers. Just the good bacteria. Within weeks, the licking stopped. Here's everything I found out.</p>
