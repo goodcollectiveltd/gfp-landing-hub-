@@ -400,10 +400,11 @@ export default function SuePabloAdvertorial() {
         <img src="/lp/pablo-sofa.jpg" alt="Sue and Pablo on the sofa" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 42%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my apricot cockapoo. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue, and I've got a houseful of dogs. This cheeky boy is Pablo, one of mine, an apricot cockapoo, and he's the one this story is about. For the best part of two years he licked and chewed his paws raw every single evening. You could set your watch by it.</p>
-          <p>We tried everything. The sprays, the wipes, the vinegar soaks, the pricey baked chews, more vet trips than I care to count. Nothing ever lasted more than a week or two.</p>
-          <p>Then one evening a friend asked me something that stuck: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And honestly, I couldn't believe what was in them.</p>
-          <p>I switched Pablo onto a pure powder instead, and within a few weeks the licking just stopped. So here are the 10 things I worked out along the way, in case your dog is anything like Pablo.</p>
+          <p>I'm Sue, and I've got a houseful of dogs. This is Pablo, my apricot cockapoo. For nearly two years he chewed his paws raw every single evening. You could set your watch by it.</p>
+          <p>We tried it all. Sprays, wipes, vet trips, and those pricey "probiotic" chews everyone swears by. Nothing ever lasted more than a week.</p>
+          <p>Then a friend asked me, <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And the first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria were a tiny pinch, right at the bottom.</p>
+          <p>It floored me. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a small fortune to feed him sugar and padding, with barely any of the one thing that actually helps. No wonder it never stuck.</p>
+          <p>So I switched him to a pure powder instead. No fillers, just the good bacteria. Within a few weeks the licking stopped. Here are the 10 things I worked out along the way.</p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-[13px] font-semibold" style={{ color: INK }}>
           <Stars size={15} /> 4.8/5 · 20,000+ dogs helped
@@ -417,7 +418,7 @@ export default function SuePabloAdvertorial() {
 
       {/* TLDR */}
       <p className="mx-auto mt-8 max-w-2xl px-6 text-center text-[15px] font-semibold leading-relaxed" style={{ color: INK }}>
-        <span style={{ color: ORANGE }}>What I found on the label:</span> most chews are mostly glycerine, starch and grains, with the actual probiotics thrown in as an afterthought. Pablo's old ones were no different.
+        <span style={{ color: ORANGE }}>The short version:</span> those chews are mostly filler, the probiotic is an afterthought, and you pay a fortune per serving for it. Pablo's pure powder is the opposite. Here's the difference, point by point.
       </p>
 
       {/* early CTA */}
