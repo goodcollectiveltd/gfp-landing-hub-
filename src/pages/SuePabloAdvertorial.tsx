@@ -376,23 +376,15 @@ export default function SuePabloAdvertorial() {
         .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
       `}</style>
 
-      {/* honest scarcity banner (real: sold out every restock) */}
-      <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
-        <p className="adv-heading text-sm font-bold uppercase tracking-wide text-white">
-          ⚡ Only 13 left in stock ⚡
-        </p>
-      </div>
-
-      {/* logo */}
-      <header className="flex items-center justify-center border-b border-black/5 bg-white px-6 py-3">
-        <img src="/lp/logo-brand.png" alt="Good For Pets" className="h-9 w-auto sm:h-10" />
-      </header>
-
-      {/* hero: Sue's personal, native story about Pablo */}
+      {/* hero: Sue's personal, native story about Pablo. No brand header/stock bar —
+          the page reads as her own post. Small upfront advertorial tag keeps it honest. */}
       <section className="mx-auto max-w-2xl px-6 pt-6">
-        <div className="flex items-center gap-2.5">
+        <span className="inline-block rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: MUTE, borderColor: "#E6E6E6" }}>
+          Advertorial
+        </span>
+        <div className="mt-4 flex items-center gap-2.5">
           <img src="/lp/sue.jpg" alt="Sue" className="h-9 w-9 rounded-full object-cover" style={{ objectPosition: "28% 22%" }} />
-          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · dog mum of three · Updated today</p>
+          <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue · dog mum of three · September 2026</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
@@ -411,7 +403,7 @@ export default function SuePabloAdvertorial() {
           <p>So I switched him to a pure powder instead. No fillers, just the good bacteria. Within a few weeks the licking stopped. Here are the 10 things I worked out along the way.</p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-[13px] font-semibold" style={{ color: INK }}>
-          <Stars size={15} /> 4.8/5 · 20,000+ dogs helped
+          <Stars size={15} /> Rated 4.8/5 by thousands of dog owners
         </div>
       </section>
 
@@ -425,8 +417,11 @@ export default function SuePabloAdvertorial() {
         <span style={{ color: ORANGE }}>The short version:</span> those chews are mostly filler, the probiotic is an afterthought, and you pay a fortune per serving for it. Pablo's pure powder is the opposite. Here's the difference, point by point.
       </p>
 
-      {/* early CTA */}
-      <div id="top-cta" className="mx-auto mt-6 max-w-2xl px-6"><Cta label="SEE WHAT I SWITCHED PABLO TO →" where="hero-cta" /></div>
+      {/* early CTA — honest, soft scarcity lives here now, not a fake counter up top */}
+      <div id="top-cta" className="mx-auto mt-6 max-w-2xl px-6">
+        <Cta label="SEE WHAT I SWITCHED PABLO TO →" where="hero-cta" />
+        <p className="mt-3 text-center text-xs font-semibold" style={{ color: MUTE }}>Heads up: it sells out most restocks.</p>
+      </div>
 
       {/* THE 10 REASONS */}
       <section className="mx-auto mt-12 max-w-2xl space-y-10 px-6">
