@@ -391,10 +391,10 @@ export default function SuePabloAdvertorial() {
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
           <p>I'm Sue. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single night, until the skin split and bled.</p>
           <p>I tried everything. Sprays, wipes, vet after vet, and the pricey "probiotic" chews everyone swears by. Nothing lasted a week.</p>
-          <p>Then a friend asked me one question: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. The first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria? A tiny pinch, right at the bottom.</p>
+          <p>Then a friend asked me one question: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. Not the "Product Facts" up top, the <b style={{ color: INK }}>Composition</b> underneath, where ingredients go in order of weight. First came potato starch. Then <b style={{ color: INK }}>glycerine</b>, a sweetener. The good bacteria weren't even in it, just a tiny additive at the very bottom.</p>
           <figure>
             <img src="/lp/chew-label.jpg" alt="The back of a dog probiotic chew tub: composition lists potato starch and glycerine first" className="w-full rounded-2xl object-cover shadow-sm" />
-            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: potato starch and glycerine top the list. The probiotic is a tiny additive.</figcaption>
+            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: read the Composition, not the Product Facts. By weight it's potato starch, then glycerine. The probiotic is just an additive.</figcaption>
           </figure>
           <p>I was furious. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a fortune to feed him the very sugar and filler that keeps that itch raging. No wonder nothing worked.</p>
           <p>So I binned the chews and switched him to a pure powder. No fillers. Just the good bacteria. Within weeks, the licking stopped. Here's everything I found out.</p>
