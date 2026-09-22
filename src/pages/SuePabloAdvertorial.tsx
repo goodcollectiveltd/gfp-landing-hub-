@@ -253,7 +253,7 @@ const REASONS: Reason[] = [
     n: 1, title: "So I switched Pablo to this instead",
     bold: ["pure, human-grade powder", "no fillers", "sprinkle it over dinner"],
     body: "After reading that label, I found the opposite of a chew: pure, human-grade powder, with no fillers, no glycerine and no grains. Just five strains of good bacteria, a prebiotic and gut enzymes. You twist a capsule open and sprinkle it over dinner. Here is everything it changed for Pablo.",
-    img: "/lp/tub-capsules-spill.jpg", imgAlt: "The 5 Strain Probiotic+ tub with its pure-powder capsules spilling out", imgCaption: "5 Strain Probiotic+: pure powder in a twist-open capsule, nothing else.",
+    img: "/lp/pablo-product.jpg", imgAlt: "Pablo the springer spaniel leaning on the kitchen counter beside the 5 Strain Probiotic+ tub", imgCaption: "Pablo and his 5 Strain Probiotic+. He knows the tub means dinner.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
