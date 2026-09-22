@@ -276,22 +276,14 @@ export default function CheckThePacketAdvertorial() {
       <style>{`
         .adv-heading { font-family: 'Poppins', system-ui, sans-serif; }
         .adv-display { font-family: 'Poppins', system-ui, sans-serif; font-weight: 800; }
-        /* half the track is a duplicate of the first half, so -50% loops seamlessly */
-        @keyframes adv-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .adv-ticker { animation: adv-scroll 26s linear infinite; }
-        @media (prefers-reduced-motion: reduce) { .adv-ticker { animation: none; } }
       `}</style>
 
-      {/* Rescue ticker. Replaced a "13 left in stock" counter that was not tied to real inventory,
-          which is the invented scarcity the brand rules out. This is a standing fact instead. */}
-      <div className="w-full overflow-hidden py-2.5" style={{ background: NAVY }}>
-        <div className="adv-ticker flex w-max">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <p key={i} className="adv-heading whitespace-nowrap px-10 text-sm font-extrabold uppercase tracking-wide text-white">
-              🐾 51% of profits donated to animal rescue
-            </p>
-          ))}
-        </div>
+      {/* Static rescue banner. Replaced a "13 left in stock" counter that was not tied to real
+          inventory (the invented scarcity the brand rules out) with a standing fact. */}
+      <div className="w-full px-4 py-2.5 text-center" style={{ background: NAVY }}>
+        <p className="adv-heading text-sm font-extrabold uppercase tracking-wide text-white">
+          🐾 51% of Profits Donated 🐾
+        </p>
       </div>
 
       {/* logo */}
