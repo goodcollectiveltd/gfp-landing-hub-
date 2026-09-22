@@ -386,7 +386,7 @@ export default function SuePabloAdvertorial() {
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I read the back of Pablo's "probiotic" chews. <span style={{ color: ORANGE }}>What's really inside</span> made my stomach turn.
         </h1>
-        <img src="/lp/pablo-hero.jpg" alt="Sue and Pablo the springer spaniel" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 30%" }} />
+        <img src="/lp/pablo-hero-ad.jpg" alt="Sue on the sofa with Pablo the springer spaniel" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 35%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my springer spaniel. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
           <p>I'm Sue. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single night, until the skin split and bled.</p>
