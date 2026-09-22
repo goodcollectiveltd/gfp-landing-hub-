@@ -250,10 +250,10 @@ type Reason = {
 
 const REASONS: Reason[] = [
   {
-    n: 1, title: "Chews are full of nasties (just read the label)",
-    bold: ["thrown in as an afterthought", "We changed that.", "Pure, human-grade powder"],
-    body: "Glycerine, starches, grains, oils, fats. That is what most probiotic chews are really made of, with the actual probiotics thrown in as an afterthought. We changed that. Pure, human-grade powder. Nothing to hide, and nothing your dog does not need.",
-    img: "/lp/hero-label-tubs.jpg", imgAlt: "Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first", imgCaption: "Check the label: fillers up top, the probiotics right at the bottom.",
+    n: 1, title: "So I switched Pablo to this instead",
+    bold: ["pure, human-grade powder", "no fillers", "sprinkle it over dinner"],
+    body: "After reading that label, I found the opposite of a chew: pure, human-grade powder, with no fillers, no glycerine and no grains. Just five strains of good bacteria, a prebiotic and gut enzymes. You twist a capsule open and sprinkle it over dinner. Here is everything it changed for Pablo.",
+    img: "/lp/tub-capsules-spill.jpg", imgAlt: "The 5 Strain Probiotic+ tub with its pure-powder capsules spilling out", imgCaption: "5 Strain Probiotic+: pure powder in a twist-open capsule, nothing else.",
     proof: "“They really work. We used all sorts before and they were useless.” · Rob C.",
   },
   {
@@ -403,6 +403,10 @@ export default function SuePabloAdvertorial() {
           <p>I'm Sue, and I've got a houseful of dogs. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single evening. You could set your watch by it.</p>
           <p>We tried it all. Sprays, wipes, vet trips, and those pricey "probiotic" chews everyone swears by. Nothing ever lasted more than a week.</p>
           <p>Then a friend asked me, <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And the first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria were a tiny pinch, right at the bottom.</p>
+          <figure>
+            <img src="/lp/hero-label-tubs.jpg" alt="Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first" className="w-full rounded-2xl object-cover shadow-sm" />
+            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: fillers up top, the probiotics right at the bottom.</figcaption>
+          </figure>
           <p>It floored me. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a small fortune to feed him sugar and padding, with barely any of the one thing that actually helps. No wonder it never stuck.</p>
           <p>So I switched him to a pure powder instead. No fillers, just the good bacteria. Within a few weeks the licking stopped. Here are the 10 things I worked out along the way.</p>
         </div>
