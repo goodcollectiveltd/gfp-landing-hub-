@@ -389,7 +389,14 @@ export default function SuePabloAdvertorial() {
         <img src="/lp/pablo-hero-ad.jpg" alt="Sue on the sofa with Pablo the springer spaniel" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 35%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my springer spaniel. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single night, until the skin split and bled.</p>
+          <p>I'm Sue. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single night, until the skin split and bled. His ears were just as bad, red and weeping.</p>
+          <figure>
+            <div className="grid grid-cols-2 gap-2">
+              <img src="/lp/pablo-paw.jpg" alt="Pablo's paw, red and saliva-stained between the pads from constant licking" className="aspect-square w-full rounded-xl object-cover shadow-sm" />
+              <img src="/lp/pablo-ear.jpg" alt="Pablo's ear, inflamed, sore and losing hair" className="aspect-square w-full rounded-xl object-cover shadow-sm" style={{ objectPosition: "50% 40%" }} />
+            </div>
+            <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>His paw and his ear. This was Pablo most weeks. It broke my heart.</figcaption>
+          </figure>
           <p>I tried everything. Sprays, wipes, vet after vet, and the pricey "probiotic" chews everyone swears by. Nothing lasted a week.</p>
           <p>Then a friend asked me one question: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. Not the "Product Facts" up top, the <b style={{ color: INK }}>Composition</b> underneath, what they're actually made of. Starch. <b style={{ color: INK }}>Glycerine</b>, a sweetener. Bean flours. Yeast. That is the bulk of the chew, and not one of those helps your dog. For an itchy dog like Pablo, they are the exact wrong things to feed him.</p>
           <figure>
