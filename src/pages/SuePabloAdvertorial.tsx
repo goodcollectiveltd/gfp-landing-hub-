@@ -384,20 +384,20 @@ export default function SuePabloAdvertorial() {
           <p className="text-xs font-semibold" style={{ color: MUTE }}>By Sue Walker · @sue.walker8 · September 2026</p>
         </div>
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
-          I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
+          I read the back of Pablo's "probiotic" chews. <span style={{ color: ORANGE }}>What's really inside</span> made my stomach turn.
         </h1>
         <img src="/lp/pablo-hero.jpg" alt="Sue and Pablo the springer spaniel" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 30%" }} />
         <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my springer spaniel. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue, and I've got a houseful of dogs. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single evening. You could set your watch by it.</p>
-          <p>We tried it all. Sprays, wipes, vet trips, and those pricey "probiotic" chews everyone swears by. Nothing ever lasted more than a week.</p>
-          <p>Then a friend asked me, <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And the first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria were a tiny pinch, right at the bottom.</p>
+          <p>I'm Sue. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single night, until the skin split and bled.</p>
+          <p>I tried everything. Sprays, wipes, vet after vet, and the pricey "probiotic" chews everyone swears by. Nothing lasted a week.</p>
+          <p>Then a friend asked me one question: <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. The first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria? A tiny pinch, right at the bottom.</p>
           <figure>
             <img src="/lp/hero-label-tubs.jpg" alt="Three dog-probiotic tubs with ingredient labels showing glycerine and fillers listed first" className="w-full rounded-2xl object-cover shadow-sm" />
             <figcaption className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>See for yourself: fillers up top, the probiotics right at the bottom.</figcaption>
           </figure>
-          <p>It floored me. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a small fortune to feed him sugar and padding, with barely any of the one thing that actually helps. No wonder it never stuck.</p>
-          <p>So I switched him to a pure powder instead. No fillers, just the good bacteria. Within a few weeks the licking stopped. Here are the 10 things I worked out along the way.</p>
+          <p>I was furious. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a fortune to feed him the very sugar and filler that keeps that itch raging. No wonder nothing worked.</p>
+          <p>So I binned the chews and switched him to a pure powder. No fillers. Just the good bacteria. Within weeks, the licking stopped. Here's everything I found out.</p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-[13px] font-semibold" style={{ color: INK }}>
           <Stars size={15} /> Rated 4.8/5 by thousands of dog owners
