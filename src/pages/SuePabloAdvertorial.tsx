@@ -6,7 +6,7 @@ import { initTracking, track, withAttribution } from "@/lib/tracking";
 //
 // Same 10 key points, comparison grid, offer, reviews, stock warning and FAQ as
 // /p/checkthelabel — but the hero + lead-in are rewritten as a personal, native, first-person
-// story from "Sue", who gave the powder to her apricot cockapoo Pablo and found the difference.
+// story from "Sue", who gave the powder to her springer spaniel Pablo and found the difference.
 // Author-persona advertorial (keep the advertorial disclaimer). Colour system: ORANGE = CTAs only.
 
 const ORANGE = "#EF3824"; // CTAs / brand red only
@@ -397,10 +397,10 @@ export default function SuePabloAdvertorial() {
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14] sm:text-[31px]" style={{ color: INK }}>
           I finally found out <span style={{ color: ORANGE }}>the truth behind probiotic chews.</span> Here's what's really in them.
         </h1>
-        <img src="/lp/pablo-sofa.jpg" alt="Sue and Pablo on the sofa" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 42%" }} />
-        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my apricot cockapoo. He's my shadow.</p>
+        <img src="/lp/pablo-hero.jpg" alt="Sue and Pablo the springer spaniel" className="mt-5 aspect-[4/5] w-full rounded-2xl object-cover shadow-sm" style={{ objectPosition: "center 30%" }} />
+        <p className="mt-2 text-xs font-semibold" style={{ color: MUTE }}>Me and Pablo, my springer spaniel. He's my shadow.</p>
         <div className="mt-5 space-y-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-          <p>I'm Sue, and I've got a houseful of dogs. This is Pablo, my apricot cockapoo. For nearly two years he chewed his paws raw every single evening. You could set your watch by it.</p>
+          <p>I'm Sue, and I've got a houseful of dogs. This is Pablo, my springer spaniel. For nearly two years he chewed his paws raw every single evening. You could set your watch by it.</p>
           <p>We tried it all. Sprays, wipes, vet trips, and those pricey "probiotic" chews everyone swears by. Nothing ever lasted more than a week.</p>
           <p>Then a friend asked me, <b style={{ color: INK }}>"Have you actually read the back of those chews?"</b> So I did. And the first ingredient wasn't the probiotic. It was <b style={{ color: INK }}>glycerine</b>, a sweetener. Then starch. Then grains. The good bacteria were a tiny pinch, right at the bottom.</p>
           <p>It floored me. Pablo's itch <b style={{ color: INK }}>starts in his gut</b>, and I'd been paying a small fortune to feed him sugar and padding, with barely any of the one thing that actually helps. No wonder it never stuck.</p>
