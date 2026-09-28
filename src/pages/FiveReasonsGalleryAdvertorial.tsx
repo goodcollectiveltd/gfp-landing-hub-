@@ -92,7 +92,7 @@ function B({ children }: { children: ReactNode }) {
 /* ---------- hero gallery ---------- */
 
 const HERO_SLIDES = [
-  { src: "/lp/hero-tub.jpg", alt: "The 5 Strain Probiotic+ tub", overlay: true },
+  { src: "/lp/hero-tub.jpg", alt: "The 5 Strain Probiotic+ tub" },
   { src: "/lp/tub-capsules-spill.jpg", alt: "5 Strain Probiotic+ tub with its sprinkle capsules" },
   { src: "/lp/sprinkle-on-food.jpg", alt: "Sprinkling the pure powder over a dog's dinner" },
   { src: "/lp/ugc-1.jpg", alt: "A happy dog on the grass beside the 5 Strain Probiotic+ tub" },
@@ -111,26 +111,6 @@ function HeroGallery() {
         {HERO_SLIDES.map((s) => (
           <div key={s.src} className="relative aspect-square w-full shrink-0 snap-center">
             <img src={s.src} alt={s.alt} className="h-full w-full object-cover" />
-            {s.overlay && (
-              <div className="absolute inset-0 flex flex-col justify-between p-5 text-white">
-                <div className="max-w-[56%]">
-                  <p className="adv-display text-[27px] leading-[1.05]">Pure powder.<br />Nothing else.</p>
-                  <p className="mt-2 text-[12.5px] font-medium leading-snug text-white/90">
-                    5 billion live bacteria. <b>No glycerine, starch or grains.</b>
-                  </p>
-                </div>
-                <div>
-                  <span className="adv-heading inline-block rounded-full bg-white px-3.5 py-1.5 text-[14px] font-bold" style={{ color: RED }}>
-                    20,000+ dogs helped
-                  </span>
-                  <div className="mt-2.5 flex gap-1.5">
-                    {["UK made", "Vet formulated", "90-day guarantee"].map((b) => (
-                      <span key={b} className="whitespace-nowrap rounded-full border border-white/70 px-2 py-1 text-[9.5px] font-bold uppercase tracking-wide">{b}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -266,6 +246,18 @@ export default function FiveReasonsGalleryAdvertorial() {
 
       <div className="mx-auto max-w-xl">
         <HeroGallery />
+
+        {/* trust strip (kept off the photos so nothing sits on top of the product) */}
+        <div className="flex items-center justify-between gap-2 border-b px-5 py-3" style={{ borderColor: "#EDE5DA" }}>
+          <span className="flex items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold" style={{ color: INK }}>
+            <Stars size={13} /> 20,000+ dogs helped
+          </span>
+          <span className="flex gap-1">
+            {["UK made"].map((b) => (
+              <span key={b} className="whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide" style={{ borderColor: NAVY, color: NAVY }}>{b}</span>
+            ))}
+          </span>
+        </div>
 
         {/* title + byline + opener */}
         <section className="px-5 pt-5">
