@@ -261,7 +261,7 @@ export default function FiveReasonsGalleryAdvertorial() {
         {/* title + byline + opener */}
         <section className="px-5 pt-5">
           <h1 id="headline" className="adv-display text-[28px] leading-[1.13]" style={{ color: NAVY }}>
-            5 Reasons Your Itchy Dog Needs This Probiotic, Not Another Cream
+            5 Reasons Your Itchy Dog Needs This Probiotic, Not Another Chew
           </h1>
           <div className="mt-4 flex items-center gap-3">
             <img src="/lp/vet-kishan.jpg" alt="Dr Kishan Vara MRCVS" className="h-11 w-11 shrink-0 rounded-full object-cover" />
