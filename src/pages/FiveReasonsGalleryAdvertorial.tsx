@@ -189,8 +189,7 @@ const BENEFITS = [
 const STRAINS = ["L. plantarum", "L. acidophilus", "L. brevis", "B. lactis", "L. rhamnosus"];
 
 const TIMELINE: [string, string, string][] = [
-  ["Weeks 1-2", "Settling in", "The good bacteria move in. Slightly softer stools at first are normal, the gut is waking up."],
-  ["Weeks 2-4", "First signs", "Firmer stools, less wind, a calmer tummy. This is usually when you start to notice."],
+  ["Weeks 2-4", "First signs", "Firmer stools, less wind, a calmer tummy. The good bacteria are settling in."],
   ["Weeks 4-8", "Real change", "Less licking and scratching, calmer ears. Quieter nights, for both of you."],
   ["Day 90", "The full picture", "Calm skin, steady digestion, a happier dog. The longer they stay on it, the better it gets."],
 ];
@@ -261,10 +260,7 @@ export default function FiveReasonsGalleryAdvertorial() {
 
         {/* title + byline + opener */}
         <section className="px-5 pt-5">
-          <p className="adv-heading text-[12px] font-bold uppercase tracking-[0.08em]" style={{ color: RED }}>
-            For the licking, the scratching, the ears
-          </p>
-          <h1 id="headline" className="adv-display mt-2 text-[28px] leading-[1.13]" style={{ color: NAVY }}>
+          <h1 id="headline" className="adv-display text-[28px] leading-[1.13]" style={{ color: NAVY }}>
             5 Reasons Your Itchy Dog Needs This Probiotic, Not Another Cream
           </h1>
           <div className="mt-4 flex items-center gap-3">
@@ -275,26 +271,17 @@ export default function FiveReasonsGalleryAdvertorial() {
             </div>
           </div>
 
-          <div className="mt-5">
-            <p className="text-[17px] font-semibold leading-[1.55]" style={{ color: INK }}>
-              You know the sound. The licking at 3am. The scratching that wakes the house. The ears you can smell before you see them.
-            </p>
-            <P>
-              You've tried the creams, the sprays, the ear drops and the vet bills. It settles for a week, then it's back. And every time, you feel like you're letting them down.
-            </P>
-            <P>
-              Here's what most owners are never told: <B>so much of that itch starts in the gut, not the skin.</B> Treat the skin and it keeps coming back. Support the gut and you're working on the cause.
-            </P>
-            <P>That's exactly what 5 Strain Probiotic+ is built to do. Here's why 20,000+ dog owners made the switch.</P>
-          </div>
+          <p className="mt-4 text-[16.5px] leading-[1.6]" style={{ color: BODY }}>
+            The 3am licking. The scratching. The ears you can smell before you see them. <B>So much of that itch starts in the gut, not the skin</B>, which is why creams never last. 5 Strain Probiotic+ supports it at the source with 5 billion live bacteria from five named strains.
+          </p>
         </section>
 
         {/* 1. benefits */}
-        <section className="px-5 pt-11">
+        <section className="px-5 pt-10">
           <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling 5 Strain Probiotic+ over a dog's dinner" className="aspect-[4/3] w-full rounded-2xl object-cover" />
           <ReasonHeading n={1}>One Daily Sprinkle for Every Symptom You're Fighting</ReasonHeading>
           <P>
-            Itchy dogs rarely have just one problem. In our customer survey, <B>77% of dogs had two or more</B>: the licking and the ears, the scratching and the tummy. One capsule over dinner supports them all, from the gut out.
+            Itchy dogs rarely have just one problem: <B>77% of our customers' dogs had two or more.</B> One capsule over dinner supports them all.
           </P>
           <div className="mt-4 grid grid-cols-2 gap-2">
             {BENEFITS.map((b) => (
@@ -306,33 +293,22 @@ export default function FiveReasonsGalleryAdvertorial() {
         </section>
 
         {/* 2. before/after gallery */}
-        <section className="pt-12">
+        <section className="pt-10">
           <div className="px-5">
             <ReasonHeading n={2}>Real Dogs. Real Owners' Photos. Real Change.</ReasonHeading>
             <P>
-              Paws licked raw. Ears you can smell across the room. Skin no cream ever fixed. <B>These aren't models or stock photos.</B> They're our customers' own dogs, before and after.
+              <B>No models, no stock photos.</B> Just our customers' own dogs, before and after.
             </P>
           </div>
           <div className="mt-4"><BeforeAfterGallery /></div>
-          <div className="mx-5 mt-5 flex items-center justify-center gap-3 rounded-2xl px-4 py-3 text-center" style={{ background: CARD }}>
-            <div>
-              <p className="adv-display text-[20px] leading-none" style={{ color: RED }}>20,000+</p>
-              <p className="mt-1 text-[11.5px] font-semibold" style={{ color: MUTE }}>dogs helped</p>
-            </div>
-            <span className="h-8 w-px" style={{ background: "#E7E0D6" }} />
-            <div>
-              <p className="adv-display text-[20px] leading-none" style={{ color: RED }}>4,000+</p>
-              <p className="mt-1 text-[11.5px] font-semibold" style={{ color: MUTE }}>five-star reviews</p>
-            </div>
-          </div>
         </section>
 
         {/* 3. formula */}
-        <section className="px-5 pt-12">
+        <section className="px-5 pt-10">
           <img src="/lp/capsule-open.jpg" alt="An opened 5 Strain Probiotic+ capsule showing the pure powder" className="aspect-[4/3] w-full rounded-2xl object-cover" />
           <ReasonHeading n={3}>5 Billion Live Bacteria. Five Named Strains. Zero Padding.</ReasonHeading>
           <P>
-            Most chews won't tell you which strains they use, or how much. We print every one. <B>Five clinically-studied strains</B>, chicory-root inulin to feed them, and six enzymes to help your dog actually digest their dinner.
+            Most chews won't say which strains they use, or how much. <B>We print every one</B>, plus a prebiotic to feed them and six enzymes for digestion.
           </P>
           <div className="mt-4 overflow-hidden rounded-2xl" style={{ background: CARD }}>
             <div className="px-4 py-4 text-center" style={{ background: NAVY }}>
@@ -360,13 +336,14 @@ export default function FiveReasonsGalleryAdvertorial() {
         </section>
 
         {/* 4. timeline */}
-        <section className="px-5 pt-12">
+        <section className="px-5 pt-10">
           <img src="/lp/ugc-1.jpg" alt="A happy, comfortable dog next to the 5 Strain Probiotic+ tub" className="aspect-[4/3] w-full rounded-2xl object-cover" />
           <ReasonHeading n={4}>Real Change in Weeks, Judged Over 90 Days</ReasonHeading>
           <P>
-            No overnight miracle promises. Most owners see a calmer tummy first, then <B>less licking and scratching around weeks 4 to 8</B>. The dogs that do best are the ones who get it every single day.
+            No overnight miracles. Most owners see <B>less licking and scratching by weeks 4 to 8.</B> The key is giving it every single day.
           </P>
-          <ol className="relative mt-5 space-y-4 pl-7">
+          <div className="mt-5"><CtaButton label="Start your 90 days risk-free" where="timeline-cta" /></div>
+          <ol className="relative mt-6 space-y-4 pl-7">
             <span className="absolute bottom-2 left-[7px] top-2 w-0.5" style={{ background: "#E7DFD4" }} aria-hidden />
             {TIMELINE.map(([when, title, body]) => (
               <li key={when} className="relative">
@@ -378,32 +355,23 @@ export default function FiveReasonsGalleryAdvertorial() {
               </li>
             ))}
           </ol>
-          <div className="mt-6"><CtaButton label="Start your 90 days risk-free" where="timeline-cta" /></div>
-          <p className="mt-2 text-center text-[12.5px] font-semibold" style={{ color: MUTE }}>If it doesn't help, you don't pay.</p>
         </section>
 
         {/* 5. no fillers */}
-        <section className="px-5 pt-12">
+        <section className="px-5 pt-10">
           <figure>
             <img src="/lp/chew-label.jpg" alt="The Composition on a typical probiotic chew tub: potato starch and glycerine listed first" className="aspect-[4/3] w-full rounded-2xl object-cover" style={{ objectPosition: "center 55%" }} />
             <figcaption className="mt-2 text-[12px] font-semibold" style={{ color: MUTE }}>A typical probiotic chew. Read the Composition: starch and glycerine first.</figcaption>
           </figure>
           <ReasonHeading n={5}>No Glycerine. No Starch. No Baking. Just What Works.</ReasonHeading>
           <P>
-            Turn a probiotic chew over and read the Composition. Potato starch. Glycerine. Flours. Yeast. <B>That's what you've been paying for.</B> No wonder so many owners feel like marketing victims.
-          </P>
-          <P>
-            5 Strain Probiotic+ is the opposite: <B>pure, human-grade powder in a vegan capsule</B>, cold-filled and never baked, made in the UK to GMP standards. Twist it open, sprinkle it on dinner, done. Even fussy dogs don't notice.
-          </P>
-          <P>
-            And <B>51% of our profits go to animal rescue</B>, so every tub helps your dog and a dog who has no one.
+            Read the Composition on most chews: starch, glycerine, flours, yeast. <B>Ours is pure, human-grade powder in a vegan capsule</B>, cold-filled and never baked, made in the UK. And 51% of our profits go to animal rescue.
           </P>
         </section>
 
         {/* reviews */}
-        <section className="px-5 pt-12">
-          <h2 className="adv-display text-center text-[22px]" style={{ color: NAVY }}>Don't just take our word for it</h2>
-          <p className="mt-1.5 flex items-center justify-center gap-2 text-[13.5px] font-semibold" style={{ color: INK }}>
+        <section className="px-5 pt-10">
+          <p className="flex items-center justify-center gap-2 text-[13.5px] font-semibold" style={{ color: INK }}>
             <Stars size={14} /> 4,000+ five-star reviews
           </p>
           <div className="mt-4 space-y-3">
@@ -421,7 +389,7 @@ export default function FiveReasonsGalleryAdvertorial() {
         </section>
 
         {/* offer box */}
-        <section className="px-5 pt-12">
+        <section className="px-5 pt-10">
           <div className="overflow-hidden rounded-3xl shadow-lg" style={{ background: CARD }}>
             <p className="adv-heading py-2.5 text-center text-[12.5px] font-bold uppercase tracking-wide text-white" style={{ background: RED }}>
               Save up to 45% + free UK shipping
@@ -441,7 +409,6 @@ export default function FiveReasonsGalleryAdvertorial() {
                   "Supports itchy skin, paws, ears and tummies from the gut out",
                   "5 billion live bacteria, zero glycerine, starch or grains",
                   "Sprinkles over dinner, even fussy dogs eat it",
-                  "For all ages, breeds and sizes. Pause or cancel anytime",
                 ].map((t) => (
                   <li key={t} className="flex items-start gap-2.5 text-[14.5px] leading-snug" style={{ color: INK }}>
                     <span className="mt-0.5"><TickDot bg={NAVY} /></span>
@@ -450,13 +417,9 @@ export default function FiveReasonsGalleryAdvertorial() {
                 ))}
               </ul>
               <div className="mt-5"><CtaButton label="Try it risk-free →" where="offer-box" /></div>
-              <div className="mt-4 rounded-2xl px-4 py-3 text-center" style={{ background: CREAM }}>
-                <p className="adv-heading text-[14px] font-bold" style={{ color: NAVY }}>90-day money-back guarantee</p>
-                <p className="mt-0.5 text-[13px] leading-snug" style={{ color: BODY }}>No questions asked. If it doesn't help, you don't pay.</p>
-              </div>
-              <div className="mt-3 flex justify-center gap-4 text-[12.5px] font-semibold" style={{ color: BODY }}>
-                <span>🚚 Free 48hr shipping</span>
-                <span>🐾 51% to rescue</span>
+              <div className="mt-4 space-y-1 text-center text-[13px] font-semibold" style={{ color: BODY }}>
+                <p>✅ 90-day money-back guarantee</p>
+                <p>🚚 Free 48hr UK shipping on subscription</p>
               </div>
             </div>
           </div>
