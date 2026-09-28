@@ -11,6 +11,7 @@ import CheckThePacketAdvertorial from "@/pages/CheckThePacketAdvertorial";
 import TenReasonsFillerAdvertorial from "@/pages/TenReasonsFillerAdvertorial";
 import FiveReasonsPawsAdvertorial from "@/pages/FiveReasonsPawsAdvertorial";
 import SuePabloAdvertorial from "@/pages/SuePabloAdvertorial";
+import FiveReasonsGalleryAdvertorial from "@/pages/FiveReasonsGalleryAdvertorial";
 import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
@@ -68,6 +69,7 @@ export default function App() {
       <Route path="/p/checkthelabel" element={<TenReasonsFillerAdvertorial />} />
       <Route path="/p/5reasons" element={<FiveReasonsPawsAdvertorial />} />
       <Route path="/p/pablo" element={<SuePabloAdvertorial />} />
+      <Route path="/p/5-reasons-gallery" element={<FiveReasonsGalleryAdvertorial />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="*" element={<NotFound />} />
