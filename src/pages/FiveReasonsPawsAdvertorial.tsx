@@ -139,10 +139,11 @@ const REASONS = [
   {
     n: 3, title: "IT'S SUITABLE FOR ALL DOGS - EVEN SENSITIVE ONES",
     lines: [
-      "The 5 Strain Probiotic+ is made in the same UK factory as human supplements. Containing only the purest active ingredients to help even the most sensitive of dogs.",
-      "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO.",
+      "Most probiotic chews are bulked out with glycerine, starch and flours just to hold their shape. None of it does a thing for your dog.",
+      "The 5 Strain Probiotic+ is the opposite: pure powder, made in the same UK factory as human supplements, containing only the purest active ingredients to help even the most sensitive of dogs.",
+      "No glycerine, no starch, no chemicals, no grains, no meats, no unhealthy fillers and non-GMO.",
     ],
-    bold: ["same UK factory as human supplements", "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO"],
+    bold: ["glycerine, starch and flours", "pure powder", "same UK factory as human supplements", "No glycerine, no starch, no chemicals, no grains, no meats, no unhealthy fillers and non-GMO"],
     img: A + "replo-cab151e6.jpg",
   },
   {
@@ -261,7 +262,7 @@ export default function FiveReasonsPawsAdvertorial() {
 
       {/* banner (replaces the cloned shop header, whose menu/search/cart icons did nothing) */}
       <div className="px-4 py-2.5 text-center" style={{ background: "#282C5F" }}>
-        <p className="mul text-[12.5px] font-bold uppercase tracking-[0.05em] text-white">🐾 Zero fillers · 90-day money-back guarantee</p>
+        <p className="mul text-[12.5px] font-bold uppercase tracking-[0.05em] text-white">🐾 Trusted by 20,000+ UK owners</p>
       </div>
 
       {/* HERO */}
