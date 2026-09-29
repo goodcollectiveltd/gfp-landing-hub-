@@ -121,7 +121,7 @@ const REASONS = [
     n: 1, title: "DOG OWNERS ACTUALLY SEE RESULTS",
     lines: [
       "Thousands of owners report less paw licking, calmer skin and firmer poos after using the 5 Strain Probiotic+.",
-      "In a recent survey 93% of customers said our 5 Strain Probiotic+ to helped with skin issues.",
+      "In a recent survey 93% of customers said our 5 Strain Probiotic+ helped with skin issues.",
     ],
     bold: ["less paw licking, calmer skin and firmer poos", "93% of customers"],
     img: A + "replo-d83ca05c.jpg",
@@ -130,29 +130,33 @@ const REASONS = [
     n: 2, title: "DIRECTLY TARGET RELENTLESS PAW LICKING",
     lines: [
       "The 5 Strain Probiotic+ helps end relentless paw licking by supporting the root causes: the gut microbiome, immune system and yeast balance.",
-      "It helps itchy paws, inflamed paws and even smelly paws.",
+      "And because it's pure powder, not a chew bulked out with starch and glycerine, every dose goes straight to work on itchy, inflamed and even smelly paws.",
     ],
-    bold: ["end relentless paw licking", "the gut microbiome, immune system and yeast balance"],
+    bold: ["end relentless paw licking", "the gut microbiome, immune system and yeast balance", "pure powder, not a chew bulked out with starch and glycerine"],
     cta: "END THE LICK FROM WITHIN 👉",
     video: "/lp/videos/10reasons-1432d7b21f7c43229918508ca5d5f1db.mp4",
   },
   {
-    n: 3, title: "IT'S SUITABLE FOR ALL DOGS - EVEN SENSITIVE ONES",
+    n: 3, title: "CHEWS ARE FULL OF FILLERS. OURS IS PURE, POTENT POWDER",
     lines: [
-      "The 5 Strain Probiotic+ is made in the same UK factory as human supplements. Containing only the purest active ingredients to help even the most sensitive of dogs.",
-      "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO.",
+      "Turn a probiotic chew over and read the Composition. Potato starch, glycerine, flours, yeast. Most of what you're paying for is padding, and none of it helps an itchy dog.",
+      "So we built the opposite: a pure, potent powder with 5 billion live bacteria from 5 named strains, a prebiotic and 6 digestive enzymes. Nothing else.",
+      "It's made in the same UK factory as human supplements, so it's gentle enough for even the most sensitive dogs. No grains, no meat, no fillers and non-GMO.",
     ],
-    bold: ["same UK factory as human supplements", "No chemicals, no grains, no meats, no unhealthy fillers and non-GMO"],
-    img: A + "replo-cab151e6.jpg",
+    bold: ["Potato starch, glycerine, flours, yeast", "pure, potent powder", "5 billion live bacteria", "Nothing else.", "same UK factory as human supplements"],
+    img: "/lp/chew-label.jpg",
+    imgPos: "center 55%",
+    caption: "A typical probiotic chew. Read the Composition, not the front.",
+    compare: true,
   },
   {
     n: 4, title: "IT'S EASY TO GIVE AND IMPOSSIBLE TO MESS UP",
     lines: [
       "You've tried wipes, sprays, vinegar soaks and probably given away a small fortune at the vet along the way.",
-      "All that ends with the 5 Strain Probiotic+, just add a daily dose to your dog's diet to see the benefits.",
+      "All that ends with the 5 Strain Probiotic+. No chews to bribe with, no pills to hide: just twist a capsule and sprinkle the pure powder over dinner.",
       "Just 10 seconds a day is all it takes for a lifetime happy paws and skin.",
     ],
-    bold: ["small fortune at the vet", "just add a daily dose", "Just 10 seconds a day"],
+    bold: ["small fortune at the vet", "sprinkle the pure powder over dinner", "Just 10 seconds a day"],
     video: "/lp/videos/10reasons-988e548931e14d5cb4b2085b692e72a5.mp4",
   },
   {
@@ -259,15 +263,10 @@ export default function FiveReasonsPawsAdvertorial() {
         .gfp-bb-host .push-btn__surface{display:flex;align-items:center;justify-content:center;gap:.35rem;width:100%;background:var(--gfp-bb-accent);color:var(--gfp-bb-accent-contrast);border-radius:999px;font-family:var(--heading-font-stack);font-weight:700;line-height:1.15;box-shadow:0 5px 14px rgba(239,22,18,.25)}
       `}</style>
 
-      {/* header */}
-      <header className="flex items-center justify-between border-b border-black/10 px-5 py-4">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" aria-hidden><path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" /></svg>
-        <img src={A + "GFP-New_Logo-Rduced_1.png"} alt="Good For Pets" className="h-8 w-auto" />
-        <div className="flex items-center gap-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" aria-hidden><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" aria-hidden><path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8a3 3 0 016 0" /></svg>
-        </div>
-      </header>
+      {/* banner (replaces the cloned shop header, whose menu/search/cart icons did nothing) */}
+      <div className="px-4 py-2.5 text-center" style={{ background: RED }}>
+        <p className="mul text-[12.5px] font-bold uppercase tracking-[0.05em] text-white">🐾 Zero fillers · 90-day money-back guarantee</p>
+      </div>
 
       {/* HERO */}
       <img src={A + "replo-fa7ce357.jpg"} alt="Formulated with Dr Kishan Vara MRCVS" className="w-full object-cover" />
@@ -277,7 +276,7 @@ export default function FiveReasonsPawsAdvertorial() {
           5 Reasons Dogs Who Won't Stop Licking Their Paws Are Turning to 5 Strain Probiotic+
         </h1>
         <p className="mt-4 text-[17px] leading-[1.6]" style={{ color: "#333" }}>
-          The simple solution to itchy, yeasty, inflamed dogs for 21,374 dogs and counting.
+          Not another filler-packed chew. A pure, potent powder helping itchy, yeasty, inflamed dogs: 21,374 and counting.
         </p>
         <div className="mt-5"><Cta label="Save 45% + FREE SHIPPING" onClick={() => scrollToBuybox("hero-cta")} /></div>
         <p className="mul mt-4 flex items-center justify-center gap-2 text-[15px] font-semibold" style={{ color: INK }}>
@@ -290,11 +289,26 @@ export default function FiveReasonsPawsAdvertorial() {
         {REASONS.map((r) => (
           <section key={r.n} className="mt-14">
             <h2 className="mul text-[22px] font-bold uppercase leading-[1.2] tracking-[0.01em] sm:text-[25px]" style={{ color: INK }}>{r.n}. {r.title}</h2>
-            {r.img && <img src={r.img} alt="" className="mt-4 aspect-square w-full rounded-2xl object-cover" />}
+            {r.img && <img src={r.img} alt={r.caption ?? ""} className="mt-4 aspect-square w-full rounded-2xl object-cover" style={r.imgPos ? { objectPosition: r.imgPos } : undefined} />}
+            {r.caption && <p className="mt-2 text-[13px] font-semibold" style={{ color: MUTE }}>{r.caption}</p>}
             {r.video && <video src={r.video} className="mt-4 aspect-square w-full rounded-2xl object-cover" muted loop playsInline autoPlay controls preload="metadata" />}
             <div className="mt-4 space-y-3">
               {r.lines.map((l, i) => <p key={i} className="text-[17px] leading-[1.7]" style={{ color: "#2A2A2A" }}>{boldify(l, r.bold)}</p>)}
             </div>
+            {r.compare && (
+              <div className="mt-5 rounded-2xl px-5 py-4" style={{ background: CARD }}>
+                <p className="mul text-[12px] font-bold uppercase tracking-[0.06em]" style={{ color: MUTE }}>In a typical chew</p>
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                  {["Starch", "Glycerine", "Flours", "Yeast"].map((f) => (
+                    <span key={f} className="text-[16px] font-semibold line-through decoration-2" style={{ color: MUTE, textDecorationColor: RED }}>{f}</span>
+                  ))}
+                </div>
+                <div className="mt-3 border-t pt-3" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
+                  <p className="mul text-[12px] font-bold uppercase tracking-[0.06em]" style={{ color: RED }}>In 5 Strain Probiotic+</p>
+                  <p className="mt-1 text-[16px] font-semibold" style={{ color: INK }}>Live cultures, prebiotic, enzymes. That's it.</p>
+                </div>
+              </div>
+            )}
             {r.cta && <div className="mt-6"><Cta label={r.cta} onClick={() => scrollToBuybox(`reason-${r.n}-cta`)} /></div>}
 
             {r.n === 1 && (
