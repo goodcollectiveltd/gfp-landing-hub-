@@ -272,7 +272,7 @@ export default function FiveReasonsGalleryAdvertorial() {
           </div>
 
           <p className="mt-4 text-[16.5px] leading-[1.6]" style={{ color: BODY }}>
-            The 3am licking. The scratching. The ears you can smell before you see them. <B>So much of that itch starts in the gut, not the skin</B>, which is why creams never last. 5 Strain Probiotic+ supports it at the source with 5 billion live bacteria from five named strains.
+            The 3am licking. The scratching. The ears you can smell before you see them. <B>So much of that itch starts in the gut, not the skin</B>, which is why creams never last. 5 Strain Probiotic+ supports it at the source: <B>a pure, potent powder</B> with 5 billion live bacteria from five named strains, and none of the starch and glycerine you'll find in most chews.
           </p>
         </section>
 
@@ -303,14 +303,29 @@ export default function FiveReasonsGalleryAdvertorial() {
           <div className="mt-4"><BeforeAfterGallery /></div>
         </section>
 
-        {/* 3. formula */}
+        {/* 3. chews are filler -> so we made a pure, potent powder */}
         <section className="px-5 pt-10">
-          <img src="/lp/capsule-open.jpg" alt="An opened 5 Strain Probiotic+ capsule showing the pure powder" className="aspect-[4/3] w-full rounded-2xl object-cover" />
-          <ReasonHeading n={3}>5 Billion Live Bacteria. Five Named Strains. Zero Padding.</ReasonHeading>
+          <figure>
+            <img src="/lp/chew-label.jpg" alt="The Composition on a typical probiotic chew tub: potato starch and glycerine listed first" className="aspect-[4/3] w-full rounded-2xl object-cover" style={{ objectPosition: "center 55%" }} />
+            <figcaption className="mt-2 text-[12px] font-semibold" style={{ color: MUTE }}>A typical probiotic chew. Read the Composition, not the front.</figcaption>
+          </figure>
+          <ReasonHeading n={3}>Chews Are Mostly Filler. So We Made a Pure, Potent Powder.</ReasonHeading>
           <P>
-            Most chews won't say which strains they use, or how much. <B>We print every one</B>, plus a prebiotic to feed them and six enzymes for digestion.
+            Turn a probiotic chew over and read the Composition. Potato starch, glycerine, flours, yeast. That's what you're really paying for, and none of it helps an itchy dog. <B>So we cut the lot.</B> What's left is pure, potent powder, every gram of it doing a job.
           </P>
-          <div className="mt-4 overflow-hidden rounded-2xl" style={{ background: CARD }}>
+          <div className="mt-4 rounded-2xl px-4 py-3.5" style={{ background: "#EDE5DA" }}>
+            <p className="text-[11.5px] font-bold uppercase tracking-wide" style={{ color: MUTE }}>In a typical chew</p>
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+              {["Starch", "Glycerine", "Flours", "Yeast"].map((f) => (
+                <span key={f} className="text-[15px] font-semibold line-through decoration-2" style={{ color: MUTE, textDecorationColor: RED }}>{f}</span>
+              ))}
+            </div>
+            <div className="mt-3 border-t pt-3" style={{ borderColor: "#DCD2C5" }}>
+              <p className="text-[11.5px] font-bold uppercase tracking-wide" style={{ color: RED }}>In ours</p>
+              <p className="mt-1 text-[15px] font-semibold" style={{ color: INK }}>Live cultures, prebiotic, enzymes. That's it.</p>
+            </div>
+          </div>
+          <div className="mt-3 overflow-hidden rounded-2xl" style={{ background: CARD }}>
             <div className="px-4 py-4 text-center" style={{ background: NAVY }}>
               <p className="adv-display text-[30px] leading-none text-white">5 billion</p>
               <p className="mt-1.5 text-[12.5px] font-semibold uppercase tracking-wide text-white/75">live bacteria in every capsule</p>
@@ -357,15 +372,24 @@ export default function FiveReasonsGalleryAdvertorial() {
           </ol>
         </section>
 
-        {/* 5. no fillers */}
+        {/* 5. the guarantee (wording from faq.md: "90-day money-back guarantee, no questions asked") */}
         <section className="px-5 pt-10">
-          <figure>
-            <img src="/lp/chew-label.jpg" alt="The Composition on a typical probiotic chew tub: potato starch and glycerine listed first" className="aspect-[4/3] w-full rounded-2xl object-cover" style={{ objectPosition: "center 55%" }} />
-            <figcaption className="mt-2 text-[12px] font-semibold" style={{ color: MUTE }}>A typical probiotic chew. Read the Composition: starch and glycerine first.</figcaption>
-          </figure>
-          <ReasonHeading n={5}>No Glycerine. No Starch. No Baking. Just What Works.</ReasonHeading>
+          <div className="flex items-center gap-5 rounded-2xl px-5 py-6" style={{ background: NAVY }}>
+            <div className="flex h-[104px] w-[104px] shrink-0 flex-col items-center justify-center rounded-full border-4 text-center" style={{ borderColor: RED, background: CREAM }}>
+              <span className="adv-display text-[38px] leading-none" style={{ color: RED }}>90</span>
+              <span className="adv-heading mt-0.5 text-[10px] font-bold uppercase leading-tight tracking-wide" style={{ color: NAVY }}>day<br />guarantee</span>
+            </div>
+            <div className="text-white">
+              <p className="adv-display text-[21px] leading-tight">Money back if it doesn't help</p>
+              <p className="mt-1.5 text-[13.5px] leading-snug text-white/80">No questions asked. You're never stuck with something that didn't work for your dog.</p>
+            </div>
+          </div>
+          <ReasonHeading n={5}>Try It Risk-Free for 90 Days</ReasonHeading>
           <P>
-            Read the Composition on most chews: starch, glycerine, flours, yeast. <B>Ours is pure, human-grade powder in a vegan capsule</B>, cold-filled and never baked, made in the UK. And 51% of our profits go to animal rescue.
+            You've been let down before, so we'll take the risk. Give it a proper go: a full 90 days, every day. <B>If it doesn't help your dog, you don't pay.</B> No questions asked.
+          </P>
+          <P>
+            Made in the UK to GMP standards. And 51% of our profits go to animal rescue, so every tub helps a dog who has no one.
           </P>
         </section>
 
