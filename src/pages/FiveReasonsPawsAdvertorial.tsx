@@ -262,7 +262,7 @@ export default function FiveReasonsPawsAdvertorial() {
 
       {/* banner (replaces the cloned shop header, whose menu/search/cart icons did nothing) */}
       <div className="px-4 py-2.5 text-center" style={{ background: "#282C5F" }}>
-        <p className="mul text-[12.5px] font-bold uppercase tracking-[0.05em] text-white">🐾 Trusted by 20,000+ UK owners</p>
+        <p className="mul text-[12.5px] font-bold uppercase tracking-[0.05em] text-white">🐾 Save up to 45% + Free shipping</p>
       </div>
 
       {/* HERO */}
