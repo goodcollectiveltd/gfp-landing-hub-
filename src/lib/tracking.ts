@@ -1,5 +1,11 @@
 /**
- * Meta Pixel + PostHog + ad/Intelligems attribution passthrough for the public advertorial pages.
+ * PostHog + ad/Intelligems attribution passthrough for the public advertorial pages.
+ *
+ * HARD RULE: these pages NEVER load or fire the store's Meta pixel (3813384208943708), and never send
+ * Meta standard events (PageView, ViewContent, AddToCart, InitiateCheckout, Lead, Purchase) from here.
+ * Firing InitiateCheckout on lander clicks into the store's pixel polluted the account's checkout data.
+ * Meta attribution still works: the ad's fbclid (and UTMs) ride the CTA URL to goodforpets.co, where
+ * the store's own pixel picks them up on the product page and records the real funnel itself.
  *
  * This page is **arm B** of a 3-way Intelligems redirect test that starts at
  * goodforpets.co/pages/10reasons. Arms A and C sit on the Shopify theme (where the
@@ -9,20 +15,15 @@
  *
  * Two attribution jobs, both because cookies do NOT cross from hello.goodforpets.co to
  * goodforpets.co — query params are what survive the hop:
- *   1. Ad click ids (fbclid) + Meta cookies (_fbp/_fbc) + UTMs  -> Meta attribution.
+ *   1. Ad click ids (fbclid) + UTMs  -> picked up by the store's own pixel on arrival.
  *   2. Intelligems bucket (igTg/igId)                            -> split-test attribution.
  *
  * Env overrides (all optional):
- *   VITE_META_PIXEL_ID  Meta (Facebook) Pixel ID
  *   VITE_POSTHOG_KEY    PostHog project token
  *   VITE_POSTHOG_HOST   PostHog ingestion host
  *   VITE_GA4_ID         GA4 Measurement ID (G-XXXXXXX) — optional, secondary
  */
 
-// GFP's live Meta pixel, matching goodforpets.co (Shopify) which records Purchase.
-const DEFAULT_PIXEL_ID = "3813384208943708";
-// `||` (not ??) so an EMPTY env var in the host still falls through to the default.
-const PIXEL_ID = (import.meta.env.VITE_META_PIXEL_ID as string | undefined) || (import.meta.env.PROD ? DEFAULT_PIXEL_ID : undefined);
 const GA4_ID = (import.meta.env.VITE_GA4_ID as string | undefined) || undefined;
 
 // PostHog — the SAME project the Shopify store and quiz funnel report to, so arms A/B/C
@@ -51,17 +52,15 @@ type PostHogLike = {
   get_distinct_id?: () => string | undefined;
 };
 type AnyWin = typeof window & {
-  fbq?: (...a: unknown[]) => void;
   gtag?: (...a: unknown[]) => void;
   dataLayer?: unknown[];
   posthog?: PostHogLike;
 };
 
-/** Call once on page mount: persist attribution + IG bucket, boot the pixel, PostHog, GA4. */
+/** Call once on page mount: persist attribution + IG bucket, boot PostHog (+ GA4 if set). No Meta pixel. */
 export function initTracking() {
   captureAttribution();
   captureIntelligemsSession();
-  initMetaPixel();
   initPostHog();
   initGA4();
 }
@@ -100,7 +99,7 @@ export function getAttribution(): Record<string, string> {
  */
 export function getIntelligemsProps(): Record<string, string> {
   const a = getAttribution();
-  const props: Record<string, string> = { ig_arm: IG_ARM };
+  const props: Record<string, string> = { ig_arm: IG_ARM, lp_path: window.location.pathname };
   if (a.igTg) props.ig_test_group = a.igTg;
   if (a.igId) props.ig_id = a.igId;
   try {
@@ -110,16 +109,10 @@ export function getIntelligemsProps(): Record<string, string> {
   return props;
 }
 
-function getCookie(name: string): string {
-  const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
-  return m ? decodeURIComponent(m.pop() as string) : "";
-}
-
 /**
- * Append captured attribution (UTMs, fbclid, **igTg/igId**) + Meta browser cookies
- * (_fbp/_fbc) to an outbound Shopify URL. This is what lets BOTH Meta attribute the sale
- * and Intelligems credit the order to arm B once the visitor is back on goodforpets.co.
- * Use on every CTA link.
+ * Append captured attribution (UTMs, fbclid, **igTg/igId**) to an outbound Shopify URL, plus
+ * lp=<page path> so the store side can tell which lander sent the visitor. The store's pixel reads
+ * fbclid on arrival (Meta attribution); Intelligems credits the order to its arm. Use on every CTA.
  */
 export function withAttribution(url: string): string {
   try {
@@ -127,8 +120,7 @@ export function withAttribution(url: string): string {
     for (const [k, v] of Object.entries(getAttribution())) {
       if (!u.searchParams.has(k)) u.searchParams.set(k, v);
     }
-    const fbp = getCookie("_fbp"); if (fbp) u.searchParams.set("fbp", fbp);
-    const fbc = getCookie("_fbc"); if (fbc) u.searchParams.set("fbc", fbc);
+    if (!u.searchParams.has("lp")) u.searchParams.set("lp", window.location.pathname);
     // PostHog visitor id, so a Shopify-side Purchase pixel can stitch the sale back to THIS
     // landing-page visitor. Checkout is a different root domain, so PostHog's .goodforpets.co
     // cookie can't follow — the id must ride the URL, then be read by the pixel (identify()).
@@ -138,20 +130,6 @@ export function withAttribution(url: string): string {
     } catch { /* ignore */ }
     return u.toString();
   } catch { return url; }
-}
-
-function initMetaPixel() {
-  if (!PIXEL_ID) return;
-  const w = window as AnyWin;
-  /* eslint-disable */
-  (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
-    if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
-    if (!f._fbq) f._fbq = n; n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
-    t = b.createElement(e); t.async = true; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
-  })(w, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
-  /* eslint-enable */
-  w.fbq!("init", PIXEL_ID);
-  w.fbq!("track", "PageView");
 }
 
 /**
@@ -205,16 +183,12 @@ function initGA4() {
   w.gtag("config", GA4_ID);
 }
 
-const META_STANDARD = new Set(["Lead", "InitiateCheckout", "CompleteRegistration", "ViewContent", "Purchase"]);
-
-/** Fire an event to Meta Pixel + PostHog + GA4 (whichever are configured). */
+/**
+ * Fire an event to PostHog (+ GA4 if configured). Never to Meta: see the hard rule at the top.
+ * Event names are kept for PostHog continuity (e.g. "InitiateCheckout" = clicked through to the store).
+ */
 export function track(event: string, params: Record<string, unknown> = {}) {
   const w = window as AnyWin;
-  if (PIXEL_ID && w.fbq) {
-    if (META_STANDARD.has(event)) w.fbq("track", event, params);
-    else w.fbq("trackCustom", event, params);
-  }
-  // PostHog gets every event too, so CTA clicks are segmentable by test arm.
   w.posthog?.capture?.(event, params);
   if (GA4_ID && w.gtag) w.gtag("event", event, params);
 }
