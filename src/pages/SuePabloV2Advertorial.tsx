@@ -254,10 +254,10 @@ export default function SuePabloV2Advertorial() {
 
         {/* screen 1: continue the ad's sentence, then the reveal */}
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14]" style={{ color: INK }}>
-          The 'probiotic' I trusted for Pablo wasn't what I thought. <span style={{ color: RED }}>Here's what was really inside.</span>
+          The 'probiotic' I trusted for my dog wasn't what I thought. <span style={{ color: RED }}>Here's what was really inside.</span>
         </h1>
         <p className="mt-3 text-[16.5px] leading-[1.55]" style={{ color: BODY }}>
-          While Pablo licked and scratched, I only ever read the front of his chews. This is the back of a tub just like them.
+          My springer spaniel, Pablo, licked and scratched for months, and I only ever read the front of his chews. This is the back of a tub just like them.
         </p>
 
         <figure className="relative mt-4">
