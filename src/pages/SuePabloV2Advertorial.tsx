@@ -7,7 +7,7 @@ import { initTracking, track, withAttribution } from "@/lib/tracking";
 //   screen 1  the label reveal (what was really inside), mirroring the ad's chew inset
 //   screen 2  why that matters, one symptom beat (Pablo's paw/ear photos)
 //   screen 3  what she switched to, label vs label, first CTA
-//   then      Pablo's real result, 3 verbatim reviews, Kishan, offer, 3-question FAQ
+//   then      Pablo's real result, 3 verbatim reviews, offer, 3-question FAQ (Kishan sits with the switch)
 // Facts: Sue + Pablo are a real customer case study (story confirmed by Will 8 Oct 2026, cards/proof.md:
 // ~18 months on other solutions incl. vets, injections, hypoallergenic food; changes started at 6 weeks,
 // transformed by 12 weeks). Rival label = image-bank chew-label-composition.png (2bn CFU per 2 chews,
@@ -27,19 +27,26 @@ function goToProduct(placement: string) {
   window.location.href = withAttribution(PRODUCT_URL);
 }
 
-function Stars({ size = 15 }: { size?: number }) {
+const STAR_PATH = "M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.8z";
+function Stars({ size = 15, rating = 5 }: { size?: number; rating?: number }) {
   return (
     <span className="inline-flex gap-0.5 align-middle" aria-hidden>
-      {[...Array(5)].map((_, i) => (
-        <svg key={i} width={size} height={size} viewBox="0 0 20 20" fill={RED}>
-          <path d="M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.8z" />
-        </svg>
-      ))}
+      {[...Array(5)].map((_, i) => {
+        const fill = Math.max(0, Math.min(1, rating - i));
+        return (
+          <span key={i} className="relative inline-block" style={{ width: size, height: size }}>
+            <svg width={size} height={size} viewBox="0 0 20 20" fill="#E4DDD3" className="absolute inset-0"><path d={STAR_PATH} /></svg>
+            <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
+              <svg width={size} height={size} viewBox="0 0 20 20" fill={RED}><path d={STAR_PATH} /></svg>
+            </span>
+          </span>
+        );
+      })}
     </span>
   );
 }
 
-function Cta({ label, where }: { label: string; where: string }) {
+function Cta({ label, where, note = "90-day money-back guarantee · From 28p a day" }: { label: string; where: string; note?: string }) {
   return (
     <div>
       <a
@@ -51,7 +58,7 @@ function Cta({ label, where }: { label: string; where: string }) {
         {label}
       </a>
       <p className="mt-2.5 text-center text-[12.5px] font-semibold" style={{ color: MUTE }}>
-        90-day money-back guarantee · As little as 28p a day
+        {note}
       </p>
     </div>
   );
@@ -101,11 +108,11 @@ function rowsFor(basis: Basis): Row[] {
 
 const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
   {
-    quote: "My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked… three weeks later there's no paw licking at all.",
+    quote: "My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked… Within a week it started working and three weeks later there's no paw licking at all.",
     name: "Chris B.", dog: "Bulldog", img: "/lp/review-chris-b.jpeg",
   },
   {
-    quote: "My dog was on the baked chews but saw the advert saying none baked chews are better. She was still having itchy ears on the baked chews… her ears are practically clean and no itching at all",
+    quote: "My dog was on the baked chews but saw the advert saying none baked chews are better. She was still having itchy ears on the baked chews. Been on these for about 2 and a half weeks and saw a massive difference already… her ears are practically clean and no itching at all",
     name: "Katie S.", dog: "Shih Tzu", img: "/lp/review-sherry.jpeg",
   },
   {
@@ -115,18 +122,10 @@ const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
 ];
 
 const FAQS: [string, string][] = [
-  ["What's in it, and what's not?", "One Composition ingredient, chicory inulin (a natural prebiotic), plus 5 billion live bacteria from 5 named strains and a digestive enzyme complex in every capsule. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
+  ["What's in it, and what's not?", "One Composition ingredient, chicory inulin (a natural prebiotic), plus 5 billion live bacteria from 5 named strains and a digestive enzyme complex in every capsule. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
   ["How do I give it to a fussy dog?", "Twist the capsule open and sprinkle the powder over their dinner. No chews to bribe them with and no pills to hide."],
   ["How long until I see a difference?", "Most dogs take 4 to 8 weeks, some 12 to 14. For Pablo the changes started at about 6 weeks. Judge it over 90 days, and if it doesn't help, you get your money back."],
 ];
-
-function ProofStrip({ stacked = false }: { stacked?: boolean }) {
-  return (
-    <p className={`mt-4 flex items-center justify-center text-[13.5px] font-semibold ${stacked ? "flex-col gap-1" : "gap-2"}`} style={{ color: INK }}>
-      <Stars size={14} /> <span>20,000+ UK dog owners have switched</span>
-    </p>
-  );
-}
 
 function VersusCard() {
   const [basis, setBasis] = useState<Basis>("unit");
@@ -179,7 +178,7 @@ function VersusCard() {
                 <div className="h-full rounded-full transition-[width] duration-700 ease-out" style={{ ...bar(r.them, r.max), background: "#B8ADA0" }} />
               </div>
               <span className="text-right text-[13px] font-semibold tabular-nums" style={{ color: BODY }}>{r.themText}</span>
-              <span className="text-[12px] font-bold" style={{ color: NAVY }}>Ours</span>
+              <span className="text-[12px] font-bold" style={{ color: NAVY }}>Pablo's</span>
               <div className="h-2.5 overflow-hidden rounded-full" style={{ background: "#F1ECE5" }}>
                 <div className="h-full rounded-full transition-[width] duration-700 ease-out" style={{ ...bar(r.us, r.max), background: NAVY, transitionDelay: "120ms" }} />
               </div>
@@ -222,7 +221,7 @@ export default function SuePabloV2Advertorial() {
     link.rel = "stylesheet";
     link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap";
     document.head.appendChild(link);
-    document.title = "What was really inside Pablo's probiotic, Good For Pets";
+    document.title = "What was really inside Pablo's chews, Good For Pets";
     initTracking();
     return () => { document.head.removeChild(link); };
   }, []);
@@ -255,10 +254,10 @@ export default function SuePabloV2Advertorial() {
 
         {/* screen 1: continue the ad's sentence, then the reveal */}
         <h1 className="adv-display mt-3 text-[26px] leading-[1.14]" style={{ color: INK }}>
-          The 'probiotic' I trusted for 18 months wasn't what I thought. <span style={{ color: RED }}>Here's what was really inside.</span>
+          The 'probiotic' I trusted for Pablo wasn't what I thought. <span style={{ color: RED }}>Here's what was really inside.</span>
         </h1>
         <p className="mt-3 text-[16.5px] leading-[1.55]" style={{ color: BODY }}>
-          I only ever read the front of Pablo's chews. Then I turned the tub over.
+          While Pablo licked and scratched, I only ever read the front of his chews. This is the back of a tub just like them.
         </p>
 
         <figure className="relative mt-4">
@@ -267,7 +266,7 @@ export default function SuePabloV2Advertorial() {
         </figure>
 
         <P>
-          The Composition lists the heaviest ingredients first. <B>Potato starch. Glycerine. Garbanzo flour. Pea flour. Brewer's yeast.</B> Fourteen ingredients in total. And the "2 billion" on the front? <B>That's for two chews.</B>
+          The Composition lists the heaviest ingredients first. <B>Potato starch. Glycerine. Garbanzo flour. Pea flour. Brewer's yeast.</B> Fourteen ingredients in total. And the big "2 billion"? Read the small print: <B>that's for two chews.</B>
         </P>
 
         {/* screen 2: why it matters, one symptom beat */}
@@ -287,7 +286,7 @@ export default function SuePabloV2Advertorial() {
           <figcaption className="mt-1.5 text-[12.5px] font-semibold" style={{ color: MUTE }}>Pablo's paw and ear, before.</figcaption>
         </figure>
         <P>
-          Pablo's itch starts in his gut, where most of his immune system lives. The chews weren't calming it. Full of fillers like that, <B>they were making it worse.</B>
+          Pablo's itch starts in the gut, where about 70% of the immune system lives. The chews weren't calming it. Full of fillers like that, <B>they were making it worse.</B> And live bacteria only stay alive when they're kept dry, which a soft, glycerine-moist chew isn't.
         </P>
 
         {/* screen 3: what she switched to, label vs label, first CTA */}
@@ -296,11 +295,20 @@ export default function SuePabloV2Advertorial() {
         <P>
           5 Strain Probiotic+ is pure powder in a twist-open capsule. Turn the tub over and the Composition is <B>one ingredient: chicory inulin</B>, a natural prebiotic. Then <B>5 billion live bacteria in every capsule</B>, from five named strains, plus a digestive enzyme complex. You sprinkle it on dinner.
         </P>
+        <P>It's formulated with a UK vet, Dr Kishan Vara. This is what he says about it:</P>
+        <figure className="mt-3 flex items-start gap-3 rounded-xl p-4" style={{ background: CREAM }}>
+          <img src="/lp/vet-kishan.jpg" alt="Dr Kishan Vara MRCVS" className="h-12 w-12 shrink-0 rounded-full object-cover" />
+          <div>
+            <blockquote className="text-[15px] leading-snug" style={{ color: INK }}>
+              &ldquo;&hellip;an excellent proactive choice for dogs with sensitive stomachs, gunky ears, or recurring digestive upset.&rdquo;
+            </blockquote>
+            <figcaption className="adv-heading mt-1.5 text-[12.5px] font-semibold" style={{ color: NAVY }}>Dr Kishan Vara MRCVS</figcaption>
+          </div>
+        </figure>
 
         <VersusCard />
 
         <div id="first-cta" className="mt-6"><Cta label="See Pablo's probiotic →" where="first-cta" /></div>
-        <ProofStrip />
 
         {/* result + proof */}
         <H2>About 6 weeks in, the changes started</H2>
@@ -311,33 +319,22 @@ export default function SuePabloV2Advertorial() {
 
         <h2 className="adv-display mt-10 text-[22px] leading-tight" style={{ color: INK }}>20,000+ UK dog owners have switched</h2>
         <p className="mt-1.5 flex items-center gap-2 text-[13.5px] font-semibold" style={{ color: BODY }}>
-          <Stars size={14} /> Rated 4.6 stars by our customers
+          <Stars size={14} rating={4.6} /> Good For Pets is rated 4.6 stars by its customers
         </p>
         <div className="mt-4 space-y-3">
           {REVIEWS.map((r) => <ReviewCard key={r.name} {...r} />)}
         </div>
 
-        <figure className="mt-6 flex items-center gap-3.5 rounded-xl border border-black/10 p-4">
-          <img src="/lp/vet-kishan.jpg" alt="Dr Kishan Vara MRCVS" className="h-14 w-14 shrink-0 rounded-full object-cover" />
-          <div>
-            <blockquote className="text-[14.5px] italic leading-snug" style={{ color: INK }}>
-              "…an excellent proactive choice for dogs with sensitive stomachs, gunky ears, or recurring digestive upset."
-            </blockquote>
-            <figcaption className="mt-1 text-[12.5px] font-semibold" style={{ color: MUTE }}>Dr Kishan Vara MRCVS, who formulated it with us</figcaption>
-          </div>
-        </figure>
-
         {/* offer (scarcity kept as on the control, per Will) */}
-        <section className="mt-10 overflow-hidden rounded-2xl border border-black/10 text-center shadow-lg">
-          <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the pure powder over a dog's dinner" className="aspect-square w-full object-cover" />
-          <div className="p-6">
-            <p className="text-[12px] font-bold uppercase tracking-[0.18em]" style={{ color: RED }}>From just 28p a day</p>
-            <h2 className="adv-display mt-2 text-[28px] leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
-            <p className="mt-2 text-[14px] font-semibold" style={{ color: BODY }}>Free shipping on subscription</p>
-            <p className="adv-heading mt-4 text-[13px] font-bold uppercase tracking-wide" style={{ color: RED }}>⚡ Only 13 left in this batch</p>
-            <div className="mt-3"><Cta label="Get the pure powder →" where="offer" /></div>
-            <ProofStrip stacked />
-            <p className="mt-2 text-[13px] font-semibold" style={{ color: INK }}>51% of our profits go to dog rescue.</p>
+        <section id="offer" className="mt-10 overflow-hidden rounded-2xl border border-black/10 text-center shadow-lg">
+          <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the pure powder over a dog's dinner" className="aspect-[3/2] w-full object-cover" style={{ objectPosition: "50% 62%" }} />
+          <div className="px-5 pb-5 pt-4">
+            <p className="text-[12px] font-bold uppercase tracking-[0.16em]" style={{ color: RED }}>As little as 28p a day</p>
+            <h2 className="adv-display mt-1 text-[26px] leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
+            <p className="mt-1 text-[14px] font-semibold" style={{ color: BODY }}>Free shipping on subscription</p>
+            <p className="adv-heading mt-2.5 text-[12.5px] font-bold uppercase tracking-wide" style={{ color: RED }}>⚡ Only 13 left in this batch</p>
+            <div className="mt-3"><Cta label="Get the pure powder →" where="offer" note="90-day money-back guarantee" /></div>
+            <p className="mt-2 text-[12.5px] font-semibold" style={{ color: INK }}>51% of our profits go to dog rescue.</p>
           </div>
         </section>
 
