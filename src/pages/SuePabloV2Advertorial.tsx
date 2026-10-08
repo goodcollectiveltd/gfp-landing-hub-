@@ -89,22 +89,24 @@ function Accordion({ q, a }: { q: string; a: string }) {
   );
 }
 
-// Head-to-head, from the two back labels. Rival: 2bn CFU "per 2 soft chews", 3 strains in Additives,
-// 14 Composition ingredients, no enzymes. Ours (CF99045): 5bn CFU per capsule, 5 strains, 1 Composition
-// ingredient, enzyme complex. Toggle compares one chew vs one capsule, or each label's own serving.
-type Basis = "unit" | "serving";
-type Row = { label: string; them: number; us: number; themText: string; usText: string; max: number; badge: string; note?: string };
-function rowsFor(basis: Basis): Row[] {
-  const theirs = basis === "unit" ? 1 : 2;
-  const pct = Math.round((5 / theirs - 1) * 100);
-  return [
-    { label: "Live bacteria", them: theirs, us: 5, themText: `${theirs}bn`, usText: "5bn", max: 5, badge: `${pct}% more`,
-      note: basis === "unit" ? "One chew vs one capsule" : "Their serving (2 chews) vs ours (1 capsule)" },
-    { label: "Probiotic strains", them: 3, us: 5, themText: "3", usText: "5", max: 5, badge: "67% more" },
-    { label: "Ingredients in the Composition", them: 14, us: 1, themText: "14", usText: "1", max: 14, badge: "93% fewer", note: "Fewer is purer. Theirs starts with potato starch and glycerine." },
-    { label: "Digestive enzymes", them: 0, us: 1, themText: "None", usText: "Included", max: 1, badge: "Only ours" },
-  ];
-}
+// Us vs them, from the two back labels. Rival: "2 billion CFUs per 2 soft chews", 3 strains (Additives),
+// 14 Composition ingredients starting potato starch + glycerine, no enzymes. Ours (CF99045 label): 5bn CFU
+// per capsule, 5 named strains, Composition = chicory inulin, enzyme complex.
+type VsRow = { label: string; basis?: string; them: string; us: string; badge: string; themBad?: boolean; why: string };
+const VS_ROWS: VsRow[] = [
+  { label: "Live bacteria", basis: "per chew vs per capsule", them: "1 billion", us: "5 billion", badge: "400% more",
+    why: "Their label says 2 billion for 2 chews, so 1 billion each. Every capsule of ours carries 5 billion." },
+  { label: "Probiotic strains", them: "3", us: "5 named", badge: "67% more",
+    why: "Different strains do different jobs in the gut. Ours lists all five by name on the label." },
+  { label: "First ingredient", them: "Potato starch", us: "Chicory inulin", badge: "Prebiotic", themBad: true,
+    why: "Labels list the heaviest ingredient first. Theirs leads with starch. Ours leads with a prebiotic that feeds the good bacteria." },
+  { label: "Composition ingredients", them: "14", us: "1", badge: "93% fewer",
+    why: "Fourteen ingredients in theirs, mostly fillers like starch, glycerine and flours. One in ours." },
+  { label: "Glycerine", them: "Yes", us: "None", badge: "Filler-free", themBad: true,
+    why: "Glycerine keeps a chew soft and moist. Live bacteria last best kept dry, which is why ours is a powder in a capsule." },
+  { label: "Digestive enzymes", them: "None", us: "Included", badge: "Only ours", themBad: true,
+    why: "Ours adds a digestive enzyme complex to help break down food. Their label lists none." },
+];
 
 const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
   {
@@ -128,66 +130,69 @@ const FAQS: [string, string][] = [
 ];
 
 function VersusCard() {
-  const [basis, setBasis] = useState<Basis>("unit");
   const [shown, setShown] = useState(false);
+  const [open, setOpen] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShown(true); io.disconnect(); } }, { threshold: 0.25 });
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShown(true); io.disconnect(); } }, { threshold: 0.2 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  const rows = rowsFor(basis);
-  const bar = (v: number, max: number) => ({ width: shown ? `${Math.max(v / max, v ? 0.06 : 0) * 100}%` : "0%" });
-  const tabs: [Basis, string][] = [["unit", "Chew vs capsule"], ["serving", "Per serving"]];
+  const cols = "grid grid-cols-[36%_29%_35%]";
   return (
-    <div ref={ref} className="mt-6 rounded-2xl border bg-white p-4" style={{ borderColor: "#E6E0D7" }}>
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <img src="/lp/pablo-v2/chews.jpg" alt="" className="h-9 w-9 rounded-full object-cover" />
-          <span className="text-[12.5px] font-semibold leading-tight" style={{ color: BODY }}>Typical<br />chew</span>
-        </div>
-        <span className="adv-display text-[13px]" style={{ color: MUTE }}>vs</span>
-        <div className="flex items-center gap-2">
-          <img src="/lp/pablo-v2/tub-icon.png" alt="" className="h-11 w-auto object-contain" />
-          <span className="adv-heading text-[12.5px] font-bold leading-tight" style={{ color: NAVY }}>5 Strain<br />Probiotic+</span>
-        </div>
-      </div>
+    <div ref={ref} className="mt-6">
+      <div className="relative">
+        {/* the raised "ours" column */}
+        <div className="pointer-events-none absolute -bottom-2 -top-2 right-0 w-[35%] rounded-2xl shadow-lg" style={{ background: NAVY }} aria-hidden />
 
-      <div className="mt-4 grid grid-cols-2 rounded-full p-1" style={{ background: CREAM }} role="tablist">
-        {tabs.map(([k, label]) => (
-          <button key={k} role="tab" aria-selected={basis === k}
-            onClick={() => { setBasis(k); track("CompareToggle", { basis: k, page: "pablo-v2" }); }}
-            className="adv-heading min-h-[44px] rounded-full text-[13px] font-semibold transition-colors"
-            style={basis === k ? { background: "#fff", color: INK, boxShadow: "0 1px 3px rgba(0,0,0,0.12)" } : { color: BODY }}>
-            {label}
+        {/* header */}
+        <div className={`relative ${cols} items-end pb-3`}>
+          <div />
+          <div className="flex flex-col items-center gap-1.5 px-1 text-center">
+            <img src="/lp/pablo-v2/chews.jpg" alt="" className="h-10 w-10 rounded-full object-cover opacity-80" />
+            <span className="text-[12px] font-semibold leading-tight" style={{ color: MUTE }}>Typical chew</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 px-1 pt-1 text-center">
+            <img src="/lp/pablo-v2/tub-icon.png" alt="" className="h-12 w-auto" />
+            <span className="adv-heading text-[12.5px] font-bold leading-tight text-white">5 Strain Probiotic+</span>
+          </div>
+        </div>
+
+        {/* rows */}
+        {VS_ROWS.map((r, i) => (
+          <button
+            key={r.label}
+            type="button"
+            onClick={() => { setOpen(open === i ? null : i); track("CompareRow", { row: r.label, page: "pablo-v2" }); }}
+            className={`relative ${cols} w-full items-center border-t py-3.5 text-left transition-all duration-500 ease-out`}
+            style={{ borderColor: "#EAE4DB", opacity: shown ? 1 : 0, transform: shown ? "none" : "translateY(10px)", transitionDelay: `${i * 90}ms` }}
+            aria-expanded={open === i}
+          >
+            <span className="pr-2">
+              <span className="adv-heading block text-[14px] font-semibold leading-tight" style={{ color: INK }}>{r.label}</span>
+              {r.basis && <span className="mt-0.5 block text-[11px] leading-tight" style={{ color: MUTE }}>{r.basis}</span>}
+            </span>
+            <span className="flex items-center justify-center gap-1 px-1 text-center text-[13.5px] leading-tight" style={{ color: r.themBad ? "#B4483A" : BODY }}>
+              {r.themBad && <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden className="shrink-0"><path d="M4 4l8 8M12 4l-8 8" stroke="#B4483A" strokeWidth="2.4" strokeLinecap="round" /></svg>}
+              {r.them}
+            </span>
+            <span className="flex flex-col items-center gap-1 px-1 text-center">
+              <span className="adv-heading text-[14.5px] font-bold leading-tight text-white">{r.us}</span>
+              <span className="adv-heading rounded-full px-2 py-0.5 text-[10.5px] font-bold text-white transition-transform duration-500"
+                style={{ background: RED, transform: shown ? "scale(1)" : "scale(0.6)", transitionDelay: `${i * 90 + 250}ms` }}>
+                {r.badge}
+              </span>
+            </span>
+            {open === i && (
+              <span className="col-span-3 mt-3 block rounded-lg px-3 py-2.5 text-[13px] leading-snug" style={{ background: CREAM, color: INK, marginRight: "36%" }}>
+                {r.why}
+              </span>
+            )}
           </button>
         ))}
       </div>
-
-      <div className="mt-1">
-        {rows.map((r, i) => (
-          <div key={r.label} className="py-4" style={i ? { borderTop: "1px solid #EEE9E1" } : undefined}>
-            <div className="flex items-center justify-between gap-3">
-              <span className="adv-heading text-[15px] font-semibold leading-tight" style={{ color: INK }}>{r.label}</span>
-              <span className="adv-heading shrink-0 rounded-full px-2.5 py-1 text-[11.5px] font-bold text-white" style={{ background: RED }}>{r.badge}</span>
-            </div>
-            <div className="mt-3 grid grid-cols-[48px_1fr_64px] items-center gap-x-2.5 gap-y-2">
-              <span className="text-[12px] font-medium" style={{ color: MUTE }}>Chew</span>
-              <div className="h-2.5 overflow-hidden rounded-full" style={{ background: "#F1ECE5" }}>
-                <div className="h-full rounded-full transition-[width] duration-700 ease-out" style={{ ...bar(r.them, r.max), background: "#B8ADA0" }} />
-              </div>
-              <span className="text-right text-[13px] font-semibold tabular-nums" style={{ color: BODY }}>{r.themText}</span>
-              <span className="text-[12px] font-bold" style={{ color: NAVY }}>Pablo's</span>
-              <div className="h-2.5 overflow-hidden rounded-full" style={{ background: "#F1ECE5" }}>
-                <div className="h-full rounded-full transition-[width] duration-700 ease-out" style={{ ...bar(r.us, r.max), background: NAVY, transitionDelay: "120ms" }} />
-              </div>
-              <span className="adv-heading text-right text-[14px] font-bold tabular-nums" style={{ color: INK }}>{r.usText}</span>
-            </div>
-            {r.note && <p className="mt-2 text-[12px] leading-snug" style={{ color: MUTE }}>{r.note}</p>}
-          </div>
-        ))}
-      </div>
+      <p className="mt-5 text-center text-[12px] font-semibold" style={{ color: MUTE }}>Tap any row to see why it matters</p>
     </div>
   );
 }
