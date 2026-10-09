@@ -107,6 +107,9 @@ const VS_ROWS: VsRow[] = [
     why: "Glycerine keeps a chew soft and moist. Live bacteria last best kept dry, which is why ours is a powder in a sealed capsule." },
   { label: "Digestive enzymes", them: "None", us: "Included", badge: "Only ours", themBad: true,
     why: "Ours adds six digestive enzymes to help break down food. The chew label lists none." },
+  // Will, 9 Oct 2026: on average 54% cheaper per serving than a typical chew.
+  { label: "Price", basis: "per serving, on average", them: "Pricier", us: "From 28p a day", badge: "54% cheaper", themBad: true,
+    why: "On average a serving of ours costs 54% less than a typical probiotic chew. Stronger, and cheaper, because you're not paying for filler." },
 ];
 
 // Verbatim (cards/proof.md: shortening is fine, never add words). T15 Katie Swales, T39 Chris B.
