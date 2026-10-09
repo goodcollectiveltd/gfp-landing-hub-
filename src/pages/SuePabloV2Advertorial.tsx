@@ -90,8 +90,9 @@ function Accordion({ q, a }: { q: string; a: string }) {
 }
 
 // Us vs them, from the two back labels. Rival: "2 billion CFUs per 2 soft chews", 3 strains (Additives),
-// 14 Composition ingredients starting potato starch + glycerine, no enzymes. Ours (CF99045 label): 5bn CFU
-// per capsule, 5 named strains, Composition = chicory inulin, enzyme complex.
+// 14 Composition ingredients starting potato starch + glycerine (5 of them starches/flours), no enzymes.
+// Ours (CF99045 label): 5bn CFU per capsule, 5 named strains, chicory inulin first, 6-enzyme complex, plus
+// flavouring, shell and flow agents in Additives. Never say "1 ingredient": Will, 9 Oct 2026, misleading.
 type VsRow = { label: string; basis?: string; them: string; us: string; badge: string; themBad?: boolean; why: string };
 const VS_ROWS: VsRow[] = [
   { label: "Live bacteria", basis: "per chew vs per capsule", them: "1 billion", us: "5 billion", badge: "400% more",
@@ -100,12 +101,12 @@ const VS_ROWS: VsRow[] = [
     why: "Different strains do different jobs in the gut. Ours lists all five by name on the label." },
   { label: "First ingredient", them: "Potato starch", us: "Chicory inulin", badge: "Prebiotic", themBad: true,
     why: "Labels list the heaviest ingredient first. Theirs leads with starch. Ours leads with a prebiotic that feeds the good bacteria." },
-  { label: "Composition ingredients", them: "14", us: "1", badge: "93% fewer",
-    why: "Fourteen ingredients in theirs, mostly fillers like starch, glycerine and flours. One in ours." },
-  { label: "Glycerine", them: "Yes", us: "None", badge: "Filler-free", themBad: true,
+  { label: "Starch and flour fillers", them: "5", us: "None", badge: "Filler-free", themBad: true,
+    why: "Potato starch, garbanzo flour, pea flour, tapioca starch and coconut flour bulk theirs out. Ours has none of them." },
+  { label: "Glycerine", them: "Yes", us: "None", badge: "Kept dry", themBad: true,
     why: "Glycerine keeps a chew soft and moist. Live bacteria last best kept dry, which is why ours is a powder in a capsule." },
   { label: "Digestive enzymes", them: "None", us: "Included", badge: "Only ours", themBad: true,
-    why: "Ours adds a digestive enzyme complex to help break down food. Their label lists none." },
+    why: "Ours adds six digestive enzymes to help break down food. Their label lists none." },
 ];
 
 const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
@@ -124,7 +125,7 @@ const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
 ];
 
 const FAQS: [string, string][] = [
-  ["What's in it, and what's not?", "One Composition ingredient, chicory inulin (a natural prebiotic), plus 5 billion live bacteria from 5 named strains and a digestive enzyme complex in every capsule. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
+  ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
   ["How do I give it to a fussy dog?", "Twist the capsule open and sprinkle the powder over their dinner. No chews to bribe them with and no pills to hide."],
   ["How long until I see a difference?", "Most dogs take 4 to 8 weeks, some 12 to 14. For Pablo the changes started at about 6 weeks. Judge it over 90 days, and if it doesn't help, you get your money back."],
 ];
@@ -271,7 +272,7 @@ export default function SuePabloV2Advertorial() {
         </figure>
 
         <P>
-          The Composition lists the heaviest ingredients first. <B>Potato starch. Glycerine. Garbanzo flour. Pea flour. Brewer's yeast.</B> Fourteen ingredients in total. And the big "2 billion"? Read the small print: <B>that's for two chews.</B>
+          The Composition lists the heaviest ingredients first. <B>Potato starch. Glycerine. Garbanzo flour. Pea flour. Brewer's yeast.</B> Fourteen of them, before you even reach the additives. And the big "2 billion"? Read the small print: <B>that's for two chews.</B>
         </P>
 
         {/* screen 2: why it matters, one symptom beat */}
@@ -298,7 +299,7 @@ export default function SuePabloV2Advertorial() {
         <H2>So I found one with nothing to hide</H2>
         <img src="/lp/pablo-product.jpg" alt="Pablo next to his 5 Strain Probiotic+ tub" className="mt-4 aspect-[4/3] w-full rounded-xl object-cover" style={{ objectPosition: "50% 45%" }} />
         <P>
-          5 Strain Probiotic+ is pure powder in a twist-open capsule. Turn the tub over and the Composition is <B>one ingredient: chicory inulin</B>, a natural prebiotic. Then <B>5 billion live bacteria in every capsule</B>, from five named strains, plus a digestive enzyme complex. You sprinkle it on dinner.
+          5 Strain Probiotic+ is pure powder in a twist-open capsule. Turn the tub over and the first ingredient is <B>chicory inulin</B>, a natural prebiotic. No starch, no flour, no glycerine. Then <B>5 billion live bacteria in every capsule</B>, from five named strains, plus six digestive enzymes. You sprinkle it on dinner.
         </P>
         <P>It's formulated with a UK vet, Dr Kishan Vara. This is what he says about it:</P>
         <figure className="mt-3 flex items-start gap-3 rounded-xl p-4" style={{ background: CREAM }}>
