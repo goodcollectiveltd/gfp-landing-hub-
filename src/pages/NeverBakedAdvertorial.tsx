@@ -9,7 +9,8 @@ import { initTracking, track, withAttribution } from "@/lib/tracking";
 //   screen 2  heat kills the bacteria (claim on file, cards/ad-craft.md: baked, up to 90%), the moist chew
 //   screen 3  ours is never heat-processed, so it arrives alive; Kishan; us-vs-them; first CTA
 //   segment 2 not full of filler: the real rival label, pure powder
-//   then      20,000+ switched, verbatim vs-baked reviews (T15, T10 shortened, T39), offer, FAQ, sign-off
+//   then      20,000+ switched, 2 verbatim reviews (T15, T39), offer, one-line sign-off, FAQ
+// Will, 9 Oct 2026: too text-heavy. Keep it visual: steps card, ticks, captions; no paragraph walls.
 // Facts: CF99045 label (5bn CFU, 5 named strains, chicory inulin first, 6 enzymes; never say "1 ingredient").
 // Rival label = image-bank chew-label-composition.png (2bn per 2 chews, 3 strains, potato starch first).
 // Founder: brother's ulcerative colitis helped by probiotics is why probiotics (CLAUDE.md, confirmed).
@@ -108,15 +109,11 @@ const VS_ROWS: VsRow[] = [
     why: "Ours adds six digestive enzymes to help break down food. The chew label lists none." },
 ];
 
-// Verbatim (cards/proof.md: shortening is fine, never add words). T15 Katie Swales, T10 Tanya Smith, T39 Chris B.
+// Verbatim (cards/proof.md: shortening is fine, never add words). T15 Katie Swales, T39 Chris B.
 const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
   {
     quote: "My dog was on the baked chews but saw the advert saying none baked chews are better. She was still having itchy ears on the baked chews. Been on these for about 2 and a half weeks and saw a massive difference already… her ears are practically clean and no itching at all",
     name: "Katie S.", dog: "Shih Tzu", img: "/lp/review-sherry.jpeg",
-  },
-  {
-    quote: "These are brilliant! I had my boy on said baked prior to seeing these and the slightly helped his ear problems. These are another level completely. What a difference they have made.",
-    name: "Tanya S.", img: "/lp/avatar-tanya.webp",
   },
   {
     quote: "My bulldog licked her paws bald and raw every summer for two and a half years. I tried everything including medication from the vet. Nothing worked… Within a week it started working and three weeks later there's no paw licking at all.",
@@ -127,7 +124,7 @@ const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
 const FAQS: [string, string][] = [
   ["Is it really never heated?", "Never baked and never heat-processed. The bacteria go in as a dry powder and stay sealed in the capsule until you twist it open over your dog's dinner."],
   ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
-  ["How long until I see a difference?", "Skin, paws and ears usually take 4 to 8 weeks, and some dogs 12 to 14. Judge it over 90 days, and if it doesn't help, you get a full refund."],
+  ["How long until I see a difference?", "Skin, paws and ears usually take 4 to 8 weeks, and some dogs 12 to 14. Give it the full 90 days, and if it doesn't help, you get a full refund."],
 ];
 
 function VersusCard() {
@@ -256,75 +253,84 @@ export default function NeverBakedAdvertorial() {
         </div>
 
         {/* screen 1: finish the ad's sentence */}
-        <h1 className="adv-display mt-3 text-[26px] leading-[1.14]" style={{ color: INK }}>
+        <h1 className="adv-display mt-3 text-[27px] leading-[1.14]" style={{ color: INK }}>
           Probiotics are alive. <span style={{ color: RED }}>So why are most dog probiotics baked?</span>
         </h1>
-        <p className="mt-3 text-[16.5px] leading-[1.55]" style={{ color: BODY }}>
-          If your dog has been on probiotic chews for months and they're still scratching, still licking their paws raw, it isn't you. It's what happens to the chew before it ever reaches your cupboard.
+        <p className="mt-2.5 text-[17px] leading-[1.5]" style={{ color: BODY }}>
+          Still scratching after months of probiotic chews? This is why.
         </p>
 
-        <figure className="mt-4">
-          <img src="/lp/chew-squish.jpg" alt="A probiotic chew broken in half" className="aspect-[4/3] w-full rounded-xl object-cover" />
-          <figcaption className="mt-1.5 text-[12.5px] font-semibold" style={{ color: MUTE }}>A typical probiotic chew. Made like a dog treat.</figcaption>
-        </figure>
-
-        {/* screen 2: the heat */}
-        <H2>To make a chew, they bake it</H2>
-        <P>
-          A probiotic is live bacteria. Living things. But to turn it into a soft chew, it gets mixed into a dough and baked, the same way you'd make a dog biscuit. That's most of the tubs on the market.
-        </P>
-        <P>
-          Heat kills bacteria. It's how we sterilise things. <B>Baking can kill up to 90% of them</B> before your dog eats a single chew. And whatever survives then sits in a soft, moist chew, which is the last place live bacteria want to be.
-        </P>
-        <P>
-          So you give one every morning for three months and wonder why nothing's changed. <B>Nothing changed because there was nothing there.</B>
-        </P>
+        {/* screen 2: the heat, shown not told */}
+        <div className="mt-4 overflow-hidden rounded-2xl" style={{ background: CREAM }}>
+          <img src="/lp/chew-squish.jpg" alt="A probiotic chew broken in half" className="aspect-[16/10] w-full object-cover" />
+          <div className="p-4">
+            <p className="adv-heading text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: MUTE }}>How most probiotic chews are made</p>
+            <ol className="mt-3 grid grid-cols-3 gap-2">
+              {["Mixed into a dough", "Baked like a biscuit", "Bacteria killed by the heat"].map((t, i) => (
+                <li key={t} className="rounded-xl bg-white px-2 py-3 text-center">
+                  <span className="adv-display block text-[18px]" style={{ color: i === 2 ? RED : NAVY }}>{i + 1}</span>
+                  <span className="mt-1 block text-[13px] font-semibold leading-tight" style={{ color: INK }}>{t}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-4 flex items-center gap-3">
+              <span className="shrink-0 leading-none" style={{ color: RED }}>
+                <span className="adv-heading block text-[12px] font-bold uppercase tracking-wide">Up to</span>
+                <span className="adv-display block text-[46px]">90%</span>
+              </span>
+              <span className="text-[15px] font-semibold leading-snug" style={{ color: INK }}>of the live bacteria gone before your dog eats a single chew.</span>
+            </div>
+          </div>
+        </div>
+        <p className="adv-display mt-6 text-[21px] leading-[1.25]" style={{ color: INK }}>
+          Months of chews and nothing changed, because there was nothing there.
+        </p>
 
         {/* screen 3: ours */}
         <H2>Ours is never baked. Not once.</H2>
-        <img src="/lp/capsule-open.jpg" alt="Twisting open a 5 Strain Probiotic+ capsule over a dog's dinner" className="mt-4 aspect-[4/3] w-full rounded-xl object-cover" />
-        <P>
-          5 Strain Probiotic+ is never heat-processed. The bacteria go in as a dry powder and stay sealed in the capsule until you twist it open over dinner. So they're <B>still alive when they reach your dog's gut</B>, which is the entire point of a probiotic.
-        </P>
-        <P>
-          That's <B>5 billion live bacteria in every capsule</B>, from five named strains, plus chicory inulin to feed them and six digestive enzymes.
-        </P>
-        <P>It's formulated with a UK vet, Dr Kishan Vara. This is what he says about it:</P>
-        <figure className="mt-3 flex items-start gap-3 rounded-xl p-4" style={{ background: CREAM }}>
+        <img src="/lp/capsule-open.jpg" alt="Twisting open a 5 Strain Probiotic+ capsule over a dog's dinner" className="mt-4 aspect-[16/10] w-full rounded-xl object-cover" />
+        <ul className="mt-4 space-y-2.5">
+          {[
+            <>Never heat-processed, so the bacteria <B>reach the gut alive</B></>,
+            <>Sealed dry in a capsule until you twist it over dinner</>,
+            <><B>5 billion live bacteria</B> from 5 named strains</>,
+          ].map((t, i) => (
+            <li key={i} className="flex items-start gap-3 text-[16.5px] leading-snug" style={{ color: BODY }}>
+              <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden className="mt-0.5 shrink-0"><circle cx="11" cy="11" r="11" fill={NAVY} /><path d="M6.5 11.4l3 3 6-6.4" stroke="#fff" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+        <figure className="mt-5 flex items-start gap-3 rounded-xl p-4" style={{ background: CREAM }}>
           <img src="/lp/vet-kishan.jpg" alt="Dr Kishan Vara MRCVS" className="h-12 w-12 shrink-0 rounded-full object-cover" />
           <div>
             <blockquote className="text-[15px] leading-snug" style={{ color: INK }}>
               &ldquo;&hellip;an excellent proactive choice for dogs with sensitive stomachs, gunky ears, or recurring digestive upset.&rdquo;
             </blockquote>
-            <figcaption className="adv-heading mt-1.5 text-[12.5px] font-semibold" style={{ color: NAVY }}>Dr Kishan Vara MRCVS</figcaption>
+            <figcaption className="adv-heading mt-1.5 text-[12.5px] font-semibold" style={{ color: NAVY }}>Dr Kishan Vara MRCVS, who formulated it with us</figcaption>
           </div>
         </figure>
 
         {/* segment 2: not full of filler */}
         <H2>And it isn't full of filler</H2>
-        <P>
-          Turn a chew tub over. Ingredients are listed heaviest first, and on this one it reads <B>potato starch, glycerine, garbanzo flour, pea flour.</B> Fourteen ingredients before you even reach the bacteria.
-        </P>
-        <img src="/lp/hero-label-in-hand.jpg" alt="The back of a probiotic chew tub: Composition starting potato starch and glycerine" className="mt-4 aspect-square w-full rounded-xl object-cover" style={{ objectPosition: "50% 70%" }} />
-        <P>
-          You're paying for a dog treat with a probiotic stirred in. For an itchy dog, that filler isn't helping, and <B>it might be making things worse.</B> Ours is pure powder: no starch, no flour, no glycerine. You're paying for what does the work.
-        </P>
+        <figure className="mt-4">
+          <img src="/lp/hero-label-in-hand.jpg" alt="The back of a probiotic chew tub: Composition starting potato starch and glycerine" className="aspect-[4/3] w-full rounded-xl object-cover" style={{ objectPosition: "50% 72%" }} />
+          <figcaption className="mt-1.5 text-[12.5px] font-semibold" style={{ color: MUTE }}>The back of a typical chew. First ingredients: potato starch, glycerine, flour.</figcaption>
+        </figure>
+        <P>Ours is pure powder. <B>No starch, no flour, no glycerine.</B></P>
 
         <VersusCard />
 
         <div id="first-cta" className="mt-6"><Cta label="Try the one that's alive →" where="first-cta" /></div>
 
         {/* proof */}
-        <h2 className="adv-display mt-10 text-[22px] leading-tight" style={{ color: INK }}>There's a reason 20,000+ UK dog owners ditched the chews</h2>
+        <h2 className="adv-display mt-10 text-[22px] leading-tight" style={{ color: INK }}>Why 20,000+ UK dog owners ditched the chews</h2>
         <p className="mt-1.5 flex items-center gap-2 text-[13.5px] font-semibold" style={{ color: BODY }}>
-          <Stars size={14} rating={4.6} /> Good For Pets is rated 4.6 stars by its customers
+          <Stars size={14} rating={4.6} /> Rated 4.6 stars by our customers
         </p>
         <div className="mt-4 space-y-3">
           {REVIEWS.map((r) => <ReviewCard key={r.name} {...r} />)}
         </div>
-        <P>
-          Be patient with it. Skin, paws and ears usually take <B>4 to 8 weeks</B>, and some dogs 12 to 14. That's why you get 90 days to judge it.
-        </P>
 
         {/* offer */}
         <section id="offer" className="mt-10 overflow-hidden rounded-2xl border border-black/10 text-center shadow-lg">
@@ -338,14 +344,11 @@ export default function NeverBakedAdvertorial() {
         </section>
 
         {/* founder sign-off */}
-        <section className="mt-10 flex items-start gap-4 rounded-2xl p-5" style={{ background: CREAM }}>
-          <img src="/lp/never-baked/will-rescue.jpg" alt="Will with rescue dogs" className="h-24 w-24 shrink-0 rounded-xl object-cover" style={{ objectPosition: "40% 30%" }} />
-          <div>
-            <p className="text-[15px] leading-[1.55]" style={{ color: INK }}>
-              I started Good For Pets after seeing probiotics help my brother's ulcerative colitis. I wanted one for dogs that actually works. And 51% of our profits go to dog rescue.
-            </p>
-            <p className="adv-heading mt-2 text-[14px] font-bold" style={{ color: NAVY }}>Will Rushmere, founder</p>
-          </div>
+        <section className="mt-8 flex items-center gap-4 rounded-2xl p-4" style={{ background: CREAM }}>
+          <img src="/lp/never-baked/will-rescue.jpg" alt="Will with rescue dogs" className="h-16 w-16 shrink-0 rounded-xl object-cover" style={{ objectPosition: "40% 30%" }} />
+          <p className="text-[14.5px] leading-snug" style={{ color: INK }}>
+            51% of our profits go to dog rescue. <span className="adv-heading font-bold" style={{ color: NAVY }}>Will, founder</span>
+          </p>
         </section>
 
         {/* FAQ */}
