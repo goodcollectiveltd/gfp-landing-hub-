@@ -288,7 +288,14 @@ export default function NeverBakedAdvertorial() {
 
         {/* screen 3: ours */}
         <H2>Ours is never baked. Not once.</H2>
-        <img src="/lp/capsule-open.jpg" alt="Twisting open a 5 Strain Probiotic+ capsule over a dog's dinner" className="mt-4 aspect-[16/10] w-full rounded-xl object-cover" />
+        {/* our own clip: twisting a capsule open and pouring the powder over dinner */}
+        <video
+          src="/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4"
+          poster="/lp/capsule-open.jpg"
+          className="mt-4 aspect-square w-full rounded-xl object-cover"
+          muted loop playsInline autoPlay preload="metadata"
+          aria-label="Twisting open a 5 Strain Probiotic+ capsule and pouring the powder over a dog's dinner"
+        />
         <ul className="mt-4 space-y-2.5">
           {[
             <>Never heat-processed, so the bacteria <B>reach the gut alive</B></>,
