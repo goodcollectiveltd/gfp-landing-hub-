@@ -331,15 +331,14 @@ export default function SuePabloV2Advertorial() {
           {REVIEWS.map((r) => <ReviewCard key={r.name} {...r} />)}
         </div>
 
-        {/* offer (scarcity kept as on the control, per Will) */}
+        {/* offer (no scarcity line: removed by Will, 10 Oct 2026) */}
         <section id="offer" className="mt-10 overflow-hidden rounded-2xl border border-black/10 text-center shadow-lg">
           <img src="/lp/sprinkle-on-food.jpg" alt="Sprinkling the pure powder over a dog's dinner" className="aspect-[3/2] w-full object-cover" style={{ objectPosition: "50% 62%" }} />
           <div className="px-5 pb-5 pt-4">
             <p className="text-[12px] font-bold uppercase tracking-[0.16em]" style={{ color: RED }}>As little as 28p a day</p>
             <h2 className="adv-display mt-1 text-[26px] leading-tight" style={{ color: INK }}>Up to 45% off today</h2>
             <p className="mt-1 text-[14px] font-semibold" style={{ color: BODY }}>Free shipping on subscription</p>
-            <p className="adv-heading mt-2.5 text-[12.5px] font-bold uppercase tracking-wide" style={{ color: RED }}>⚡ Only 13 left in this batch</p>
-            <div className="mt-3"><Cta label="Get the pure powder →" where="offer" note="90-day money-back guarantee" /></div>
+            <div className="mt-4"><Cta label="Get the pure powder →" where="offer" note="90-day money-back guarantee" /></div>
             <p className="mt-2 text-[12.5px] font-semibold" style={{ color: INK }}>51% of our profits go to dog rescue.</p>
           </div>
         </section>
