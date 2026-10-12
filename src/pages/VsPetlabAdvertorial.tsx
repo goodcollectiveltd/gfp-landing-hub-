@@ -49,7 +49,7 @@ function H2({ children }: { children: ReactNode }) {
 }
 
 function P({ children, className = "mt-3" }: { children: ReactNode; className?: string }) {
-  return <p className={`${className} text-[16.5px] leading-[1.6]`} style={{ color: BODY }}>{children}</p>;
+  return <p className={`${className} text-[17px] leading-[1.55]`} style={{ color: BODY }}>{children}</p>;
 }
 
 function Accordion({ q, a }: { q: string; a: string }) {
@@ -109,14 +109,22 @@ function Scorecard() {
 }
 
 const INSIDE = [
-  { name: "PetLab Co Probiotic Chew", unit: "Per 4g chew, all of it eaten", thumb: "/lp/vs-petlab/petlab-thumb.jpg", ours: false, share: "About 7%", bar: "7%",
+  { name: "PetLab Co Probiotic Chew", unit: "Per 4g chew, all of it eaten", thumb: "/lp/vs-petlab/petlab-thumb.jpg", ours: false, share: "About 7%", tile: "~7%", bar: "7%",
     active: ["2 probiotic strains, 3.1bn bacteria", "Prebiotics FOS and GOS, 200mg", "Yeast postbiotic blend, 75mg"],
     restLabel: "The rest of the chew, heaviest first",
     rest: "Glycerine, sweet potato powder, potato starch, chickpea flour, rapeseed oil, dried brewer's yeast, pork liver powder, apple extract, yeast products, sunflower lecithin." },
-  { name: "5 Strain Probiotic+", unit: "Per capsule, the powder your dog eats", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Almost 90%", bar: "89%",
+  { name: "5 Strain Probiotic+", unit: "Per capsule, the powder your dog eats", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Almost 90%", tile: "~90%", bar: "89%",
     active: ["5 named probiotic strains, 5bn bacteria", "Chicory inulin prebiotic, 250mg", "6 digestive enzymes, 150mg"],
     restLabel: "Everything else",
     rest: "Natural flavouring and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
+];
+
+// Verbatim, shortened (cards/proof.md allows trimming, never adding). T15 Katie Swales, T39 Chris B.
+const REVIEWS = [
+  { name: "Katie S.", dog: "Shih Tzu", img: "/lp/review-sherry.jpeg",
+    quote: "My dog was on the baked chews… Been on these for about 2 and a half weeks and saw a massive difference already… her ears are practically clean and no itching at all" },
+  { name: "Chris B.", dog: "Bulldog", img: "/lp/review-chris-b.jpeg",
+    quote: "My bulldog licked her paws bald and raw every summer for two and a half years… Within a week it started working and three weeks later there's no paw licking at all." },
 ];
 
 const FAQS: [string, string][] = [
@@ -161,7 +169,7 @@ export default function VsPetlabAdvertorial() {
         <h1 className="adv-display mt-2.5 text-[26px] leading-[1.14]" style={{ color: INK }}>
           PetLab's chews vs 5 Strain Probiotic+. <span style={{ color: RED }}>What the labels actually say.</span>
         </h1>
-        <P className="mt-2.5">Both tubs turned over, side by side, compared on the numbers that matter for an itchy dog.</P>
+        <P className="mt-2.5">Both tubs turned over. Here's how they compare.</P>
 
         <img src="/lp/vs-petlab/hero.jpg" alt="5 Strain Probiotic+ and PetLab Co Probiotic Chew tubs side by side" className="mt-4 w-full rounded object-cover" />
 
@@ -169,6 +177,8 @@ export default function VsPetlabAdvertorial() {
         <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.08em]" style={{ color: MUTE }}>The scorecard</p>
         <p className="mt-0.5 text-[12.5px]" style={{ color: MUTE }}>Daily dose for a 20kg dog, ongoing subscription prices</p>
         <Scorecard />
+
+        <div id="first-cta" className="mt-6"><Cta label="Try 5 Strain Probiotic+ →" where="first-cta" /></div>
 
         {/* what's inside: both labels, same layout, like for like (Will, 12 Oct 2026: don't imply theirs
             has no probiotics). Shares exclude the bacteria themselves, which neither label weighs.
@@ -180,65 +190,95 @@ export default function VsPetlabAdvertorial() {
             Even the smallest shell that fits (size 1, ~75mg) still gives 81%.
             Weighing the powder from 10 capsules would pin the exact figure. */}
         <H2>What's actually in each one</H2>
-        <P>Both contain probiotics. The difference is how much of each one is doing the work, and what the rest of it is.</P>
-        <div className="mt-4 space-y-3">
+        <P>Both contain probiotics. The question is how much of each one does the work.</P>
+        {/* stat tiles: the headline number for each, as a visual */}
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          {INSIDE.map((x) => (
+            <div key={x.name} className="rounded border p-3 text-center" style={{ borderColor: x.ours ? NAVY : LINE, background: x.ours ? NAVY : "#fff" }}>
+              <img src={x.thumb} alt={x.name} className="mx-auto h-24 w-24 rounded bg-white object-contain" />
+              <p className="adv-display mt-2 text-[30px] leading-none" style={{ color: x.ours ? "#fff" : "#B4483A" }}>{x.tile}</p>
+              <p className="mt-1 text-[12.5px] font-semibold leading-tight" style={{ color: x.ours ? "#C9CBE0" : MUTE }}>active ingredients</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 space-y-3">
           {INSIDE.map((x) => (
             <div key={x.name} className="overflow-hidden rounded border" style={{ borderColor: x.ours ? NAVY : LINE }}>
-              <div className="flex items-center gap-3 px-4 py-3" style={{ background: x.ours ? NAVY : "#FAF8F5" }}>
-                <img src={x.thumb} alt="" className="h-10 w-10 shrink-0 rounded bg-white object-contain" />
-                <div className="min-w-0">
-                  <p className="adv-heading text-[15px] font-bold leading-tight" style={{ color: x.ours ? "#fff" : INK }}>{x.name}</p>
-                  <p className="text-[12px]" style={{ color: x.ours ? "#C9CBE0" : MUTE }}>{x.unit}</p>
-                </div>
+              <div className="flex items-center justify-between gap-3 px-4 py-2.5" style={{ background: x.ours ? NAVY : "#FAF8F5" }}>
+                <p className="adv-heading text-[15px] font-bold leading-tight" style={{ color: x.ours ? "#fff" : INK }}>{x.name}</p>
+                <p className="shrink-0 text-[12px]" style={{ color: x.ours ? "#C9CBE0" : MUTE }}>{x.unit}</p>
               </div>
               <div className="px-4 pb-4 pt-3">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-[13px] font-semibold" style={{ color: INK }}>Active ingredients by weight</span>
-                  <span className="adv-display text-[20px]" style={{ color: x.ours ? NAVY : "#B4483A" }}>{x.share}</span>
-                </div>
-                <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-sm" style={{ background: "#EEE7DD" }}>
+                <div className="h-2.5 w-full overflow-hidden rounded-sm" style={{ background: "#EEE7DD" }}>
                   <div className="h-full" style={{ width: x.bar, background: x.ours ? NAVY : "#B4483A" }} />
                 </div>
                 <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.06em]" style={{ color: MUTE }}>The active part</p>
-                <ul className="mt-1 space-y-0.5 text-[14.5px] leading-snug" style={{ color: INK }}>
+                <ul className="mt-1 space-y-0.5 text-[15.5px] leading-snug" style={{ color: INK }}>
                   {x.active.map((t) => <li key={t}>{t}</li>)}
                 </ul>
                 <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.06em]" style={{ color: MUTE }}>{x.restLabel}</p>
-                <p className="mt-1 text-[14.5px] leading-snug" style={{ color: BODY }}>{x.rest}</p>
+                <p className="mt-1 text-[15.5px] leading-snug" style={{ color: BODY }}>{x.rest}</p>
               </div>
             </div>
           ))}
         </div>
         <p className="mt-2 text-[11.5px] leading-snug" style={{ color: MUTE }}>From each label, counting what your dog actually eats: the whole chew, or the powder from the capsule. Neither label weighs the bacteria, so both percentages leave them out.</p>
-        <P>In a PetLab chew, the probiotics ride along in a treat made mostly of glycerine, sweet potato, starch and flour. In 5 Strain Probiotic+, the prebiotic is the biggest single ingredient and almost everything else is doing a job. Developed with vet partner Dr Kishan Vara.</P>
+        <p className="adv-display mt-6 text-[21px] leading-[1.25]" style={{ color: INK }}>Theirs is mostly treat. Ours is mostly the good stuff.</p>
+
+        {/* our own capsule-pour clip */}
+        <video
+          src="/lp/videos/10reasons-2fbbd795798a4366b3d4794ba7a4796a.mp4"
+          poster="/lp/capsule-open.jpg"
+          className="mt-4 aspect-square w-full rounded object-cover"
+          muted loop playsInline autoPlay preload="metadata"
+          aria-label="Twisting open a 5 Strain Probiotic+ capsule and pouring the powder over a dog's dinner"
+        />
+        <p className="mt-1.5 text-[12.5px] font-semibold" style={{ color: MUTE }}>Twist open, sprinkle on dinner. Developed with vet partner Dr Kishan Vara.</p>
 
         {/* fair to PetLab */}
         <H2>Where PetLab does better</H2>
-        <P>It's a treat, and most dogs will enjoy it more. It fits in a pocket and can be handed out on a walk.</P>
-        <P>5 Strain Probiotic+ is a flavoured powder sprinkled over dinner as a topper. Most dogs eat it without noticing, but it can't be handed out as a treat.</P>
+        <div className="mt-3 overflow-hidden rounded border" style={{ borderColor: LINE }}>
+          {[
+            ["/lp/vs-petlab/petlab-thumb.jpg", "PetLab", "A treat most dogs enjoy, and handy on walks."],
+            ["/lp/vs-petlab/ours-thumb.jpg", "5 Strain Probiotic+", "A flavoured powder topper for dinner. Not a treat."],
+          ].map(([img, who, t], i) => (
+            <div key={who} className={`flex items-center gap-3 px-3 py-3 ${i ? "border-t" : ""}`} style={{ borderColor: "#EFE9E0" }}>
+              <img src={img} alt="" className="h-12 w-12 shrink-0 rounded bg-white object-contain" />
+              <p className="text-[15.5px] leading-snug" style={{ color: INK }}><b>{who}:</b> {t}</p>
+            </div>
+          ))}
+        </div>
 
         {/* verdict */}
         <H2>The verdict</H2>
-        <div className="mt-3 rounded p-4 text-[16px] leading-[1.6]" style={{ background: CREAM, color: INK }}>
-          For a tasty daily treat, PetLab's chew does the job. For a dog that's itching, licking or scratching, where the probiotic has to do the work, 5 Strain Probiotic+ comes out ahead: more strains, digestive enzymes, no fillers, and under a quarter of the price a day. It also comes with a 90-day money-back guarantee.
+        <div className="mt-3 rounded p-4" style={{ background: CREAM }}>
+          <p className="text-[16px]" style={{ color: BODY }}>For a treat: <b style={{ color: INK }}>PetLab</b>.</p>
+          <p className="adv-display mt-1 text-[19px] leading-snug" style={{ color: INK }}>For an itchy dog: 5 Strain Probiotic+</p>
+          <ul className="mt-3 space-y-2">
+            {["5 strains, not 2", "6 digestive enzymes", "No glycerine, starch or flour", "Under a quarter of the price a day", "90-day money-back guarantee"].map((t) => (
+              <li key={t} className="flex items-start gap-2.5 text-[16px] leading-snug" style={{ color: INK }}><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden className="mt-0.5 shrink-0"><circle cx="11" cy="11" r="11" fill={NAVY} /><path d="M6.5 11.4l3 3 6-6.4" stroke="#fff" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg><span>{t}</span></li>
+            ))}
+          </ul>
         </div>
 
-        <div id="first-cta" className="mt-6"><Cta label="Try 5 Strain Probiotic+ →" where="first-cta" /></div>
+        <div className="mt-6"><Cta label="Try 5 Strain Probiotic+ →" where="verdict" /></div>
 
-        {/* proof */}
+        {/* proof, shown with the dogs */}
         <h2 className="adv-display mt-10 text-[20px] leading-tight" style={{ color: INK }}>20,000+ UK dog owners have switched</h2>
         <p className="mt-1.5 text-[13.5px] font-semibold" style={{ color: BODY }}>
           <span style={{ color: RED }}>★★★★★</span> Good For Pets is rated 4.6 stars by its customers
         </p>
-        <figure className="mt-3 rounded border bg-white p-4" style={{ borderColor: LINE }}>
-          <blockquote className="text-[15.5px] leading-[1.6]" style={{ color: INK }}>
-            &ldquo;My dog was on the baked chews but saw the advert saying none baked chews are better. She was still having itchy ears on the baked chews. Been on these for about 2 and a half weeks and saw a massive difference already… her ears are practically clean and no itching at all&rdquo;
-          </blockquote>
-          <figcaption className="mt-2 flex items-center gap-2 text-[12.5px] font-semibold" style={{ color: INK }}>
-            <img src="/lp/review-sherry.jpeg" alt="Katie S.'s dog" className="h-8 w-8 rounded-full object-cover" />
-            Katie S. · <span style={{ color: "#2F7D4F" }}>Verified buyer</span>
-          </figcaption>
-        </figure>
+        <div className="mt-3 space-y-3">
+          {REVIEWS.map((r) => (
+            <figure key={r.name} className="flex gap-3 rounded border bg-white p-3" style={{ borderColor: LINE }}>
+              <img src={r.img} alt={`${r.name}'s ${r.dog}`} className="h-20 w-20 shrink-0 rounded object-cover" />
+              <div className="min-w-0">
+                <blockquote className="text-[15px] leading-[1.5]" style={{ color: INK }}>&ldquo;{r.quote}&rdquo;</blockquote>
+                <figcaption className="mt-1.5 text-[12.5px] font-semibold" style={{ color: INK }}>{r.name} · {r.dog} · <span style={{ color: "#2F7D4F" }}>Verified buyer</span></figcaption>
+              </div>
+            </figure>
+          ))}
+        </div>
 
         {/* offer */}
         <section id="offer" className="mt-9 overflow-hidden rounded border text-center" style={{ borderColor: LINE }}>
