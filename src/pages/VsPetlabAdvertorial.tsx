@@ -116,7 +116,7 @@ const INSIDE = [
   { name: "5 Strain Probiotic+", unit: "Per capsule, the powder your dog eats", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Almost 90%", bar: "89%",
     active: ["5 named probiotic strains, 5bn bacteria", "Chicory inulin prebiotic, 250mg", "6 digestive enzymes, 150mg"],
     restLabel: "Everything else",
-    rest: "Natural flavouring and two flow agents, magnesium stearate and silicon dioxide. Flow agents are tiny amounts of food-grade ingredients that stop the powder clumping, so it pours out of the capsule evenly. They're used in most capsule supplements, including ones made for people. No glycerine, starch or flour." },
+    rest: "Natural flavouring and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
 ];
 
 const FAQS: [string, string][] = [
