@@ -89,11 +89,11 @@ function Scorecard() {
       <div className={cols}>
         <div />
         <div className="flex flex-col items-center gap-1.5 px-1.5 py-3 text-center">
-          <img src="/lp/vs-petlab/petlab-thumb.jpg" alt="PetLab Co Probiotic Chew tub" className="h-11 w-11 rounded object-cover" />
+          <img src="/lp/vs-petlab/petlab-thumb.jpg" alt="PetLab Co Probiotic Chew tub" className="h-12 w-12 rounded bg-white object-contain" />
           <span className="text-[11.5px] font-semibold leading-tight" style={{ color: MUTE }}>PetLab Co chews</span>
         </div>
         <div className="flex flex-col items-center gap-1.5 px-1.5 py-3 text-center" style={{ background: NAVY }}>
-          <img src="/lp/vs-petlab/ours-thumb.jpg" alt="5 Strain Probiotic+ tub" className="h-11 w-11 rounded object-cover" />
+          <img src="/lp/vs-petlab/ours-thumb.jpg" alt="5 Strain Probiotic+ tub" className="h-12 w-12 rounded bg-white object-contain" />
           <span className="adv-heading text-[11.5px] font-bold leading-tight text-white">5 Strain Probiotic+</span>
         </div>
       </div>
@@ -118,7 +118,7 @@ function Scorecard() {
 }
 
 const FAQS: [string, string][] = [
-  ["How was this compared?", "From each brand's own UK label and website. Both are compared for a 20kg dog, which is two PetLab chews or one 5 Strain Probiotic+ capsule a day, at ongoing subscription prices. Prices change, so check before you buy."],
+  ["How was this compared?", "From each brand's own UK label and website. Both are compared on the daily dose each brand recommends for a 20kg dog, at ongoing subscription prices. Prices change, so check before you buy."],
   ["Can a dog switch straight from chews?", "Yes. Give half a capsule's worth for the first 5 to 7 days, then the full amount. Twist the capsule open and sprinkle it over dinner."],
   ["How long until a difference shows?", "Skin, paws and ears usually take 4 to 8 weeks, and some dogs 12 to 14. That's why there are 90 days to judge it, with a full refund if it doesn't help."],
 ];
@@ -165,7 +165,7 @@ export default function VsPetlabAdvertorial() {
 
         {/* scorecard */}
         <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.08em]" style={{ color: MUTE }}>The scorecard</p>
-        <p className="mt-0.5 text-[12.5px]" style={{ color: MUTE }}>20kg dog: two chews vs one capsule a day, ongoing subscription prices</p>
+        <p className="mt-0.5 text-[12.5px]" style={{ color: MUTE }}>Daily dose for a 20kg dog, ongoing subscription prices</p>
         <Scorecard />
 
         {/* theirs */}
