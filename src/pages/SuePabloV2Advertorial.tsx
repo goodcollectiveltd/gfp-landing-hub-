@@ -125,7 +125,7 @@ const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
 ];
 
 const FAQS: [string, string][] = [
-  ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
+  ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
   ["How do I give it to a fussy dog?", "Twist the capsule open and sprinkle the powder over their dinner. No chews to bribe them with and no pills to hide."],
   ["How long until I see a difference?", "Most dogs take 4 to 8 weeks, some 12 to 14. For Pablo the changes started at about 6 weeks. Judge it over 90 days, and if it doesn't help, you get your money back."],
 ];

@@ -126,7 +126,7 @@ const REVIEWS: { quote: string; name: string; dog?: string; img?: string }[] = [
 
 const FAQS: [string, string][] = [
   ["Is it really never heated?", "Never baked and never heat-processed. The bacteria go in as a dry powder and stay sealed in the capsule until you twist it open over your dog's dinner."],
-  ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural chicken flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
+  ["What's in it, and what's not?", "Every capsule has 5 billion live bacteria from 5 named strains, chicory inulin (a natural prebiotic) and a complex of six digestive enzymes. The capsule shell is plant cellulose, and the label's Additives list a little natural flavouring plus magnesium stearate and silicon dioxide to help the powder flow. No starch, no glycerine, no flours, no grains. Made in the UK to GMP standards."],
   ["How long until I see a difference?", "Skin, paws and ears usually take 4 to 8 weeks, and some dogs 12 to 14. Give it the full 90 days, and if it doesn't help, you get a full refund."],
 ];
 

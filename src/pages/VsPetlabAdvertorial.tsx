@@ -116,7 +116,7 @@ const INSIDE = [
   { name: "5 Strain Probiotic+", unit: "Per capsule", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Over 70%", bar: "71%",
     active: ["5 named probiotic strains, 5bn bacteria", "Chicory inulin prebiotic, 250mg", "6 digestive enzymes, 150mg"],
     restLabel: "Everything else",
-    rest: "A plant-based capsule shell, natural chicken flavouring, and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
+    rest: "A plant-based capsule shell, natural flavouring, and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
 ];
 
 const FAQS: [string, string][] = [
