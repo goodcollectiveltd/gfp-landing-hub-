@@ -13,6 +13,7 @@ import FiveReasonsPawsAdvertorial from "@/pages/FiveReasonsPawsAdvertorial";
 import SuePabloAdvertorial from "@/pages/SuePabloAdvertorial";
 import SuePabloV2Advertorial from "@/pages/SuePabloV2Advertorial";
 import NeverBakedAdvertorial from "./pages/NeverBakedAdvertorial";
+import VsPetlabAdvertorial from "./pages/VsPetlabAdvertorial";
 import FiveReasonsGalleryAdvertorial from "@/pages/FiveReasonsGalleryAdvertorial";
 import Showcase from "@/pages/Showcase";
 import Login from "@/pages/Login";
@@ -73,6 +74,7 @@ export default function App() {
       <Route path="/p/pablo" element={<SuePabloAdvertorial />} />
       <Route path="/p/pablo-v2" element={<SuePabloV2Advertorial />} />
       <Route path="/p/never-baked" element={<NeverBakedAdvertorial />} />
+      <Route path="/p/vs-petlab" element={<VsPetlabAdvertorial />} />
       <Route path="/p/5-reasons-gallery" element={<FiveReasonsGalleryAdvertorial />} />
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/showcase" element={<Showcase />} />
