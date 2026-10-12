@@ -109,14 +109,14 @@ function Scorecard() {
 }
 
 const INSIDE = [
-  { name: "PetLab Co Probiotic Chew", unit: "Per 4g chew", thumb: "/lp/vs-petlab/petlab-thumb.jpg", ours: false, share: "About 7%", bar: "7%",
+  { name: "PetLab Co Probiotic Chew", unit: "Per 4g chew, all of it eaten", thumb: "/lp/vs-petlab/petlab-thumb.jpg", ours: false, share: "About 7%", bar: "7%",
     active: ["2 probiotic strains, 3.1bn bacteria", "Prebiotics FOS and GOS, 200mg", "Yeast postbiotic blend, 75mg"],
     restLabel: "The rest of the chew, heaviest first",
     rest: "Glycerine, sweet potato powder, potato starch, chickpea flour, rapeseed oil, dried brewer's yeast, pork liver powder, apple extract, yeast products, sunflower lecithin." },
-  { name: "5 Strain Probiotic+", unit: "Per capsule", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Over 70%", bar: "71%",
+  { name: "5 Strain Probiotic+", unit: "Per capsule, the powder your dog eats", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Almost 90%", bar: "89%",
     active: ["5 named probiotic strains, 5bn bacteria", "Chicory inulin prebiotic, 250mg", "6 digestive enzymes, 150mg"],
     restLabel: "Everything else",
-    rest: "A plant-based capsule shell, natural flavouring, and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
+    rest: "Natural flavouring and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
 ];
 
 const FAQS: [string, string][] = [
@@ -173,7 +173,12 @@ export default function VsPetlabAdvertorial() {
         {/* what's inside: both labels, same layout, like for like (Will, 12 Oct 2026: don't imply theirs
             has no probiotics). Shares exclude the bacteria themselves, which neither label weighs.
             PetLab: 4g chew, FOS 100mg + GOS 100mg + yeast postbiotic 75mg = 275mg, about 7%.
-            Ours: 51g / 90 = about 567mg a capsule, inulin 250mg + enzymes 150mg = 400mg, over 70%. */}
+            Ours (Will, 12 Oct 2026: fair to the top end, defensible): the dog eats the powder, not the shell
+            ("twist open, do not give whole"). 51g / 90 = ~567mg a capsule incl. shell; 400mg of actives needs
+            size 1+. Will (12 Oct 2026): our capsules are size 00, whose HPMC shell is ~118mg, so the powder is
+            ~449mg and inulin 250mg + enzymes 150mg = 89% of it before counting the bacteria ("almost 90%").
+            Even the smallest shell that fits (size 1, ~75mg) still gives 81%.
+            Weighing the powder from 10 capsules would pin the exact figure. */}
         <H2>What's actually in each one</H2>
         <P>Both contain probiotics. The difference is how much of each one is doing the work, and what the rest of it is.</P>
         <div className="mt-4 space-y-3">
@@ -204,7 +209,7 @@ export default function VsPetlabAdvertorial() {
             </div>
           ))}
         </div>
-        <p className="mt-2 text-[11.5px] leading-snug" style={{ color: MUTE }}>From each label. Neither label weighs the bacteria, so both percentages leave them out.</p>
+        <p className="mt-2 text-[11.5px] leading-snug" style={{ color: MUTE }}>From each label, counting what your dog actually eats: the whole chew, or the powder from the capsule. Neither label weighs the bacteria, so both percentages leave them out.</p>
         <P>In a PetLab chew, the probiotics ride along in a treat made mostly of glycerine, sweet potato, starch and flour. In 5 Strain Probiotic+, the prebiotic is the biggest single ingredient and almost everything else is doing a job. Developed with vet partner Dr Kishan Vara.</P>
 
         {/* fair to PetLab */}
