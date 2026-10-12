@@ -52,15 +52,6 @@ function P({ children, className = "mt-3" }: { children: ReactNode; className?: 
   return <p className={`${className} text-[16.5px] leading-[1.6]`} style={{ color: BODY }}>{children}</p>;
 }
 
-function Chip({ children, bad }: { children: ReactNode; bad?: boolean }) {
-  return (
-    <span className="mb-1.5 mr-1.5 inline-block rounded px-2 py-1 text-[13px] font-medium"
-      style={bad ? { background: "#FCEBEB", color: "#791F1F" } : { background: "#E6E7F0", color: NAVY }}>
-      {children}
-    </span>
-  );
-}
-
 function Accordion({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -117,6 +108,17 @@ function Scorecard() {
   );
 }
 
+const INSIDE = [
+  { name: "PetLab Co Probiotic Chew", unit: "Per 4g chew", thumb: "/lp/vs-petlab/petlab-thumb.jpg", ours: false, share: "About 7%", bar: "7%",
+    active: ["2 probiotic strains, 3.1bn bacteria", "Prebiotics FOS and GOS, 200mg", "Yeast postbiotic blend, 75mg"],
+    restLabel: "The rest of the chew, heaviest first",
+    rest: "Glycerine, sweet potato powder, potato starch, chickpea flour, rapeseed oil, dried brewer's yeast, pork liver powder, apple extract, yeast products, sunflower lecithin." },
+  { name: "5 Strain Probiotic+", unit: "Per capsule", thumb: "/lp/vs-petlab/ours-thumb.jpg", ours: true, share: "Over 70%", bar: "71%",
+    active: ["5 named probiotic strains, 5bn bacteria", "Chicory inulin prebiotic, 250mg", "6 digestive enzymes, 150mg"],
+    restLabel: "Everything else",
+    rest: "A plant-based capsule shell, natural chicken flavouring, and two flow agents (magnesium stearate and silicon dioxide). No glycerine, starch or flour." },
+];
+
 const FAQS: [string, string][] = [
   ["How was this compared?", "From each brand's own UK label and website. Both are compared on the daily dose each brand recommends for a 20kg dog, at ongoing subscription prices. Prices change, so check before you buy."],
   ["Can a dog switch straight from chews?", "Yes. Give half a capsule's worth for the first 5 to 7 days, then the full amount. Twist the capsule open and sprinkle it over dinner."],
@@ -168,21 +170,42 @@ export default function VsPetlabAdvertorial() {
         <p className="mt-0.5 text-[12.5px]" style={{ color: MUTE }}>Daily dose for a 20kg dog, ongoing subscription prices</p>
         <Scorecard />
 
-        {/* theirs */}
-        <H2>What's inside PetLab's chew</H2>
-        <P>UK labels list ingredients heaviest first. This one starts:</P>
-        <div className="mt-3">
-          {["1 Glycerine", "2 Sweet potato powder", "3 Potato starch", "4 Chickpea flour", "5 Rapeseed oil"].map((c) => <Chip key={c} bad>{c}</Chip>)}
+        {/* what's inside: both labels, same layout, like for like (Will, 12 Oct 2026: don't imply theirs
+            has no probiotics). Shares exclude the bacteria themselves, which neither label weighs.
+            PetLab: 4g chew, FOS 100mg + GOS 100mg + yeast postbiotic 75mg = 275mg, about 7%.
+            Ours: 51g / 90 = about 567mg a capsule, inulin 250mg + enzymes 150mg = 400mg, over 70%. */}
+        <H2>What's actually in each one</H2>
+        <P>Both contain probiotics. The difference is how much of each one is doing the work, and what the rest of it is.</P>
+        <div className="mt-4 space-y-3">
+          {INSIDE.map((x) => (
+            <div key={x.name} className="overflow-hidden rounded border" style={{ borderColor: x.ours ? NAVY : LINE }}>
+              <div className="flex items-center gap-3 px-4 py-3" style={{ background: x.ours ? NAVY : "#FAF8F5" }}>
+                <img src={x.thumb} alt="" className="h-10 w-10 shrink-0 rounded bg-white object-contain" />
+                <div className="min-w-0">
+                  <p className="adv-heading text-[15px] font-bold leading-tight" style={{ color: x.ours ? "#fff" : INK }}>{x.name}</p>
+                  <p className="text-[12px]" style={{ color: x.ours ? "#C9CBE0" : MUTE }}>{x.unit}</p>
+                </div>
+              </div>
+              <div className="px-4 pb-4 pt-3">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[13px] font-semibold" style={{ color: INK }}>Active ingredients by weight</span>
+                  <span className="adv-display text-[20px]" style={{ color: x.ours ? NAVY : "#B4483A" }}>{x.share}</span>
+                </div>
+                <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-sm" style={{ background: "#EEE7DD" }}>
+                  <div className="h-full" style={{ width: x.bar, background: x.ours ? NAVY : "#B4483A" }} />
+                </div>
+                <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.06em]" style={{ color: MUTE }}>The active part</p>
+                <ul className="mt-1 space-y-0.5 text-[14.5px] leading-snug" style={{ color: INK }}>
+                  {x.active.map((t) => <li key={t}>{t}</li>)}
+                </ul>
+                <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.06em]" style={{ color: MUTE }}>{x.restLabel}</p>
+                <p className="mt-1 text-[14.5px] leading-snug" style={{ color: BODY }}>{x.rest}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        <P className="mt-1.5">That's what holds a soft chew together. The two strains of bacteria come after all of it.</P>
-
-        {/* ours */}
-        <H2>What's inside 5 Strain Probiotic+</H2>
-        <div className="mt-3">
-          {["L. plantarum", "L. acidophilus", "L. brevis", "B. lactis", "L. rhamnosus", "Chicory inulin", "6 digestive enzymes"].map((c) => <Chip key={c}>{c}</Chip>)}
-        </div>
-        <img src="/lp/capsule-open.jpg" alt="Twisting open a 5 Strain Probiotic+ capsule over a dog's dinner" className="mt-3 aspect-[16/10] w-full rounded object-cover" />
-        <P>No glycerine, no starch, no flour. A dry powder in a capsule, twisted open over dinner. Developed with vet partner Dr Kishan Vara.</P>
+        <p className="mt-2 text-[11.5px] leading-snug" style={{ color: MUTE }}>From each label. Neither label weighs the bacteria, so both percentages leave them out.</p>
+        <P>In a PetLab chew, the probiotics ride along in a treat made mostly of glycerine, sweet potato, starch and flour. In 5 Strain Probiotic+, the prebiotic is the biggest single ingredient and almost everything else is doing a job. Developed with vet partner Dr Kishan Vara.</P>
 
         {/* fair to PetLab */}
         <H2>Where PetLab does better</H2>
