@@ -17,12 +17,12 @@ POPPINS = os.path.join(FONTS, "Poppins-Bold.ttf")
 INTER = os.path.join(FONTS, "Inter-Bold.ttf")
 
 S = 2                         # draw at 2x, displayed at 600 wide
-W, H = 600 * S, 118 * S
+W, H = 600 * S, 128 * S
 BOX_W, BOX_H, GAP, RAD = 120 * S, 82 * S, 16 * S, 12 * S
 TOP = 4 * S
 LEFT = (W - (4 * BOX_W + 3 * GAP)) // 2
 DIGIT_PX = 52 * S
-LABEL_PX = 13 * S
+LABEL_PX = 19 * S
 LABELS = ["DAYS", "HOURS", "MINS", "SECS"]
 SS = 4                        # supersample for smooth edges
 
@@ -45,11 +45,11 @@ for i in range(4):
 lab_font = ImageFont.truetype(INTER, LABEL_PX * SS)
 for i, lab in enumerate(LABELS):
     cx = (LEFT + i * (BOX_W + GAP) + BOX_W // 2) * SS
-    tracking = 1.6 * S * SS
+    tracking = 2.0 * S * SS
     widths = [lab_font.getlength(c) for c in lab]
     total = sum(widths) + tracking * (len(lab) - 1)
     x = cx - total / 2
-    y = (TOP + BOX_H + 10 * S) * SS
+    y = (TOP + BOX_H + 9 * S) * SS
     for c, w in zip(lab, widths):
         d.text((x, y), c, font=lab_font, fill=255)
         x += w + tracking
